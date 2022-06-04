@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.conopot">
    <application
-        android:label="conopot"
+        android:label="코노팟"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
