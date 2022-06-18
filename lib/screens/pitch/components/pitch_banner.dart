@@ -55,7 +55,8 @@ class PitchBanner extends StatelessWidget {
                         Text(
                           fitchItem.pitchContext,
                           style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: 14.0,
+
                           ),
                           textAlign: TextAlign.center,
                         ),
