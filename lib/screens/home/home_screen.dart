@@ -1,9 +1,9 @@
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/constants.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/pitch/pitch_choice.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

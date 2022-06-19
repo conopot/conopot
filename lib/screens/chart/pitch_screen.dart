@@ -1,20 +1,20 @@
-import 'package:conopot/constants.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown_option.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FitchScreen extends StatefulWidget {
-  FitchScreen({Key? key}) : super(key: key);
+class PitchScreen extends StatefulWidget {
+  PitchScreen({Key? key}) : super(key: key);
 
   @override
-  State<FitchScreen> createState() => _FitchScreenState();
+  State<PitchScreen> createState() => _PitchScreenState();
 }
 
-class _FitchScreenState extends State<FitchScreen> {
+class _PitchScreenState extends State<PitchScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

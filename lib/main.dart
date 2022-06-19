@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
-import 'package:conopot/firebase_config.dart';
-import 'package:conopot/firebase_options.dart';
+import 'package:conopot/firebase/firebase_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 Future<void> firebaseInit() async {
   /// firebase analytics init
@@ -112,7 +109,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
