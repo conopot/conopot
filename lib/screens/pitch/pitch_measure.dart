@@ -1,8 +1,8 @@
-import 'package:conopot/constants.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/pitch/components/indicator.dart';
 import 'package:conopot/screens/pitch/components/pitch_banner.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 
 class PitchMeasure extends StatefulWidget {

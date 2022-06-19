@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:conopot/constants.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/main_screen.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

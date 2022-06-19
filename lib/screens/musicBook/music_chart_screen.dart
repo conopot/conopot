@@ -1,7 +1,7 @@
-import 'package:conopot/constants.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/screens/musicBook/components/search_list.dart';
-import 'package:conopot/size_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
