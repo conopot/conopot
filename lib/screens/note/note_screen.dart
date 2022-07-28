@@ -497,7 +497,7 @@ Widget UserSetWidget(int setNum, Note note, int userPitch) {
           ),
         ]));
   } else if (setNum == 1) {
-    if (note.pitch != '?') {
+    if (note.pitchNum != 0) {
       return Text(
         pitchNumToString[note.pitchNum],
         style: TextStyle(

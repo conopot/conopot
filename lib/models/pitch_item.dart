@@ -41,6 +41,7 @@ List<PitchItem> pitchItemList = [
 ];
 
 Map pitchNumToString = {
+  0: '?',
   1: '1옥타브 도',
   2: '1옥타브 도#',
   3: '1옥타브 레',

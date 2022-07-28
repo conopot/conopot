@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-
 class NoteSearchList extends StatefulWidget {
   final MusicSearchItemLists musicList;
   const NoteSearchList({super.key, required this.musicList});
@@ -23,7 +22,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
   }
 
   Widget _ListView(BuildContext context) {
-    return  widget.musicList.combinedFoundItems.isNotEmpty
+    return widget.musicList.combinedFoundItems.isNotEmpty
         ? Consumer<NoteData>(
             builder: (context, notedata, child) => Expanded(
               child: ListView.builder(
@@ -49,8 +48,9 @@ class _NoteSearchListState extends State<NoteSearchList> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color:
-                              notedata.selectedIndex == index ? Colors.grey[300] : null,
+                          color: notedata.selectedIndex == index
+                              ? Colors.grey[300]
+                              : null,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         height: 70,
@@ -91,8 +91,8 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                     height: 5,
                                   ),
                                   if (widget.musicList.combinedFoundItems[index]
-                                          .pitch !=
-                                      '?')
+                                          .pitchNum !=
+                                      0)
                                     Row(
                                       children: [
                                         ClipRRect(

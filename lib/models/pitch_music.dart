@@ -6,7 +6,6 @@ class FitchMusic {
   final String ky_singer;
   final String ky_songNumber;
   final String gender;
-  final String pitch;
   final int pitchNum;
 
   FitchMusic({
@@ -17,7 +16,6 @@ class FitchMusic {
     required this.ky_singer,
     required this.ky_songNumber,
     required this.gender,
-    required this.pitch,
     required this.pitchNum,
   });
 }

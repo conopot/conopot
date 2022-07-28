@@ -168,7 +168,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     width: 60,
                   ),
                   SizedBox(width: 10),
-                  _pitchInfo(widget.note.pitch),
+                  _pitchInfo(pitchNumToString[widget.note.pitchNum]),
                 ],
               ),
               SizedBox(height: 10),
@@ -218,7 +218,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           ),
                         ),
                   SizedBox(width: 30),
-                  if (widget.note.pitch != '?')
+                  if (pitchNumToString[widget.note.pitchNum] != '?')
                     Row(
                       children: [
                         Container(
@@ -230,7 +230,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         TextButton(
                           onPressed: () {
                             Provider.of<NoteData>(context, listen: false)
-                                .pitchListenEvent(widget.note.pitch);
+                                .pitchListenEvent();
                             play(pitchNumToCode[widget.note.pitchNum]);
                           },
                           child: Icon(
@@ -288,7 +288,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
         Provider.of<MusicSearchItemLists>(context, listen: false).foundItems;
-        
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -476,7 +476,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ),
             child: Center(
               child: Text(
-                pitch[0] + "옥타브 " + pitch.substring(1, pitch.length),
+                pitch,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),

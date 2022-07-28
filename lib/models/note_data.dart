@@ -5,6 +5,7 @@ import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,29 +32,6 @@ class NoteData extends ChangeNotifier {
           noteJson.map((noteIter) => Note.fromJson(noteIter)).toList();
 
       notes = savedNote;
-
-      //print(notes);
-
-      // //합친 곡 리스트 순회하며 노트에 있는 곡인지 체크
-      // for (int i = 0; i < combinedSongList.length; i++) {
-      //   if (savedNote.contains(combinedSongList[i].tj_songNumber)) {
-      //     String? memo =
-      //         await storage.read(key: combinedSongList[i].tj_songNumber);
-      //     Note note = Note(
-      //         combinedSongList[i].tj_title,
-      //         combinedSongList[i].tj_singer,
-      //         combinedSongList[i].tj_songNumber,
-      //         combinedSongList[i].ky_title,
-      //         combinedSongList[i].ky_singer,
-      //         combinedSongList[i].ky_songNumber,
-      //         combinedSongList[i].gender,
-      //         combinedSongList[i].pitch,
-      //         combinedSongList[i].pitchNum,
-      //         memo!,
-      //         0);
-      //     notes.add(note);
-      //   }
-      // }
     }
 
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
@@ -103,7 +81,7 @@ class NoteData extends ChangeNotifier {
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
       '금영 번호': note.ky_songNumber,
-      '최고음': note.pitch,
+      '최고음': pitchNumToString[note.pitchNum],
       '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
       '메모 여부': note.memo
     });
@@ -114,7 +92,7 @@ class NoteData extends ChangeNotifier {
       'singer': note.tj_singer,
       'TJ_number': note.tj_songNumber,
       'KY_number': note.ky_songNumber,
-      'max_pitch': note.pitch,
+      'max_pitch': pitchNumToString[note.pitchNum],
       'IsMatched': (note.tj_songNumber == note.ky_songNumber),
       'Ismemo': note.memo
     });
@@ -127,7 +105,7 @@ class NoteData extends ChangeNotifier {
       '가수 이름': fitchMusic.tj_singer,
       'TJ 번호': fitchMusic.tj_songNumber,
       '금영 번호': fitchMusic.ky_songNumber,
-      '최고음': fitchMusic.pitch,
+      '최고음': fitchMusic.pitchNum,
       '매칭 여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
     });
 
@@ -137,7 +115,7 @@ class NoteData extends ChangeNotifier {
       'singer': fitchMusic.tj_singer,
       'TJ_number': fitchMusic.tj_songNumber,
       'KY_number': fitchMusic.ky_songNumber,
-      'max_pitch': fitchMusic.pitch,
+      'max_pitch': fitchMusic.pitchNum,
       'IsMatched': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
     });
   }
@@ -149,7 +127,7 @@ class NoteData extends ChangeNotifier {
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
       '금영 번호': note.ky_songNumber,
-      '최고음': note.pitch,
+      '최고음': pitchNumToString[note.pitchNum],
       '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
     });
 
@@ -159,13 +137,13 @@ class NoteData extends ChangeNotifier {
       'singer': note.tj_singer,
       'TJ_number': note.tj_songNumber,
       'KY_number': note.ky_songNumber,
-      'max_pitch': note.pitch,
+      'max_pitch': pitchNumToString[note.pitchNum],
       'IsMatched': (note.tj_songNumber == note.ky_songNumber),
     });
   }
 
   //!event: 곡 상세정보 뷰 - 최고음 들어보기
-  void pitchListenEvent(String pitch) {
+  void pitchListenEvent() {
     Analytics_config.analytics.logEvent('곡 상세정보 뷰 - 최고음 들어보기');
 
     FirebaseAnalytics.instance.logEvent(name: 'note_detail_view__listen_pitch');
@@ -230,7 +208,6 @@ class NoteData extends ChangeNotifier {
         clickedItem.ky_singer,
         clickedItem.ky_songNumber,
         clickedItem.gender,
-        clickedItem.pitch,
         clickedItem.pitchNum,
         memo,
         0);
@@ -260,7 +237,6 @@ class NoteData extends ChangeNotifier {
         '가수 이름': note.tj_singer,
         'TJ 번호': note.tj_songNumber,
         '금영 번호': note.ky_songNumber,
-        '최고음': note.pitch,
         '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
         '메모 여부': note.memo
       });
@@ -270,7 +246,6 @@ class NoteData extends ChangeNotifier {
         'singer': note.tj_singer,
         'TJ_number': note.tj_songNumber,
         'KY_number': note.ky_songNumber,
-        'max_pitch': note.pitch,
         'IsMatched': (note.tj_songNumber == note.ky_songNumber),
         'Ismemo': note.memo
       });
@@ -289,7 +264,6 @@ class NoteData extends ChangeNotifier {
       '가수 이름': note.tj_singer,
       'TJ 번호': note.tj_songNumber,
       '금영 번호': note.ky_songNumber,
-      '최고음': note.pitch,
       '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
       '메모 여부': note.memo
     });
@@ -299,7 +273,6 @@ class NoteData extends ChangeNotifier {
       'singer': note.tj_singer,
       'TJ_number': note.tj_songNumber,
       'KY_number': note.ky_songNumber,
-      'max_pitch': note.pitch,
       'IsMatched': (note.tj_songNumber == note.ky_songNumber),
       'Ismemo': note.memo
     });
@@ -317,7 +290,6 @@ class NoteData extends ChangeNotifier {
             fitchMusic.ky_singer,
             fitchMusic.ky_songNumber,
             fitchMusic.gender,
-            fitchMusic.pitch,
             fitchMusic.pitchNum,
             "",
             0);
@@ -347,7 +319,6 @@ class NoteData extends ChangeNotifier {
             '가수 이름': note.tj_singer,
             'TJ 번호': note.tj_songNumber,
             '금영 번호': note.ky_songNumber,
-            '최고음': note.pitch,
             '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
             '메모 여부': note.memo
           });
@@ -358,7 +329,6 @@ class NoteData extends ChangeNotifier {
             'singer': note.tj_singer,
             'TJ_number': note.tj_songNumber,
             'KY_number': note.ky_songNumber,
-            'max_pitch': note.pitch,
             'IsMatched': (note.tj_songNumber == note.ky_songNumber),
             'Ismemo': note.memo
           });

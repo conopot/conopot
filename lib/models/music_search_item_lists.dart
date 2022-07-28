@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 import 'package:amplitude_flutter/identify.dart';
@@ -98,7 +99,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   Future<String> getHighMusics() async {
-    return await rootBundle.loadString('assets/musics/music_highest_key.txt');
+    return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
   }
 
   Future<String> getCombinedMusics() async {
@@ -183,19 +184,21 @@ class MusicSearchItemLists extends ChangeNotifier {
     //최고음 db 파싱
     contents = ls.convert(HighMusics);
 
-    late String tj_title, tj_singer, tj_songNumber;
-    late String ky_title, ky_singer, ky_songNumber;
-    late String gender, fitch;
-    late int fitchNum;
+    late String tj_songNumber, gender;
+    late int pitchNum;
 
     bool errFlag = false;
+
+    //최고음 정보가 있는 tj_songNumber map
+    HashMap<String, String> songNumberToGender = HashMap<String, String>();
+    HashMap<String, int> songNumberToPitchNum = HashMap<String, int>();
 
     //문자열 파싱 -> MusicSearchItem
     for (String str in contents) {
       int start = 0, end = 0;
       errFlag = false;
 
-      for (int i = 0; i < 9; i++) {
+      for (int i = 0; i < 3; i++) {
         end = str.indexOf('^', start);
         if (start == end) continue;
         if (end == -1) {
@@ -207,52 +210,31 @@ class MusicSearchItemLists extends ChangeNotifier {
         start = end + 1;
 
         if (i == 0)
-          tj_title = tmp;
-        else if (i == 1)
-          tj_singer = tmp;
-        else if (i == 2)
           tj_songNumber = tmp;
-        else if (i == 3)
-          ky_title = tmp;
-        else if (i == 4)
-          ky_singer = tmp;
-        else if (i == 5)
-          ky_songNumber = tmp;
-        else if (i == 6)
+        else if (i == 1)
           gender = tmp;
-        else if (i == 7)
-          fitch = tmp;
         else
-          fitchNum = int.parse(tmp);
+          pitchNum = int.parse(tmp);
       }
 
       if (errFlag) continue;
 
-      highestSongList.add(FitchMusic(
-          tj_title: tj_title,
-          tj_singer: tj_singer,
-          tj_songNumber: tj_songNumber,
-          ky_title: ky_title,
-          ky_singer: ky_singer,
-          ky_songNumber: ky_songNumber,
-          gender: gender,
-          pitch: fitch,
-          pitchNum: fitchNum));
-      highestFoundItems = List.from(highestSongList);
-
-      isChecked = List<bool>.filled(highestFoundItems.length, false);
-      notifyListeners();
+      songNumberToGender[tj_songNumber] = gender;
+      songNumberToPitchNum[tj_songNumber] = pitchNum;
     }
 
-    //최고음 db 파싱
+    //통합 db 파싱
     contents = ls.convert(CombinedMusics);
+
+    late String tj_title, tj_singer;
+    late String ky_title, ky_singer, ky_songNumber;
 
     //문자열 파싱 -> MusicSearchItem
     for (String str in contents) {
       int start = 0, end = 0;
       errFlag = false;
 
-      for (int i = 0; i < 9; i++) {
+      for (int i = 0; i < 6; i++) {
         end = str.indexOf('^', start);
         if (start == end) continue;
         if (end == -1) {
@@ -272,31 +254,51 @@ class MusicSearchItemLists extends ChangeNotifier {
           ky_title = tmp;
         else if (i == 4)
           ky_singer = tmp;
-        else if (i == 5)
-          ky_songNumber = tmp;
-        else if (i == 6)
-          gender = tmp;
-        else if (i == 7)
-          fitch = tmp;
-        else
-          fitchNum = (tmp != '?') ? int.parse(tmp) : 0;
+        else if (i == 5) ky_songNumber = tmp;
       }
 
       if (errFlag) continue;
 
-      combinedSongList.add(FitchMusic(
-          tj_title: tj_title,
-          tj_singer: tj_singer,
-          tj_songNumber: tj_songNumber,
-          ky_title: ky_title,
-          ky_singer: ky_singer,
-          ky_songNumber: ky_songNumber,
-          gender: gender,
-          pitch: fitch,
-          pitchNum: fitchNum));
+      if (songNumberToGender.containsKey(tj_songNumber)) {
+        String gender = songNumberToGender[tj_songNumber]!;
+        int pitchNum = songNumberToPitchNum[tj_songNumber]!;
+
+        highestSongList.add(FitchMusic(
+            tj_title: tj_title,
+            tj_singer: tj_singer,
+            tj_songNumber: tj_songNumber,
+            ky_title: ky_title,
+            ky_singer: ky_singer,
+            ky_songNumber: ky_songNumber,
+            gender: gender,
+            pitchNum: pitchNum));
+
+        combinedSongList.add(FitchMusic(
+            tj_title: tj_title,
+            tj_singer: tj_singer,
+            tj_songNumber: tj_songNumber,
+            ky_title: ky_title,
+            ky_singer: ky_singer,
+            ky_songNumber: ky_songNumber,
+            gender: gender,
+            pitchNum: pitchNum));
+      } else {
+        combinedSongList.add(FitchMusic(
+            tj_title: tj_title,
+            tj_singer: tj_singer,
+            tj_songNumber: tj_songNumber,
+            ky_title: ky_title,
+            ky_singer: ky_singer,
+            ky_songNumber: ky_songNumber,
+            gender: '?',
+            pitchNum: 0));
+      }
     }
 
     combinedFoundItems = combinedSongList;
+
+    highestFoundItems = List.from(highestSongList);
+    isChecked = List<bool>.filled(highestFoundItems.length, false);
 
     notifyListeners();
   }

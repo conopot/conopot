@@ -6,7 +6,6 @@ class Note {
   final String ky_singer;
   String ky_songNumber;
   final String gender;
-  final String pitch;
   final int pitchNum;
   String memo;
   int keyAdjustment;
@@ -19,7 +18,6 @@ class Note {
       this.ky_singer,
       this.ky_songNumber,
       this.gender,
-      this.pitch,
       this.pitchNum,
       this.memo,
       this.keyAdjustment);
@@ -33,7 +31,6 @@ class Note {
         'ky_singer': ky_singer,
         'ky_songNumber': ky_songNumber,
         'gender': gender,
-        'pitch': pitch,
         'pitchNum': pitchNum,
         'memo': memo,
         'keyAdjustment': keyAdjustment
@@ -49,7 +46,6 @@ class Note {
       json['ky_singer'] as String,
       json['ky_songNumber'] as String,
       json['gender'] as String,
-      json['pitch'] as String,
       json['pitchNum'] as int,
       json['memo'] as String,
       json['keyAdjustment'] as int,
@@ -58,6 +54,6 @@ class Note {
 
   @override
   String toString() {
-    return '{ ${this.tj_title}, ${this.tj_singer}, ${this.tj_songNumber}, ${this.ky_title}, ${this.ky_singer}, ${this.ky_songNumber}, ${this.gender}, ${this.pitch}, ${this.pitchNum}, ${this.memo}, ${this.keyAdjustment}}';
+    return '{ ${this.tj_title}, ${this.tj_singer}, ${this.tj_songNumber}, ${this.ky_title}, ${this.ky_singer}, ${this.ky_songNumber}, ${this.gender}, ${this.pitchNum}, ${this.memo}, ${this.keyAdjustment}}';
   }
 }
