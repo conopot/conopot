@@ -8,9 +8,11 @@ import 'package:conopot/screens/chart/pitch_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/musicBook/music_chart_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/screens/user/channel_talk.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class UserScreen extends StatefulWidget {
@@ -198,7 +200,7 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                       ),
                     ),
-                                        GestureDetector(
+                    GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         Provider.of<MusicSearchItemLists>(context,
@@ -318,6 +320,28 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              floatingActionButton: Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                width: 75,
+                height: 75,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    elevation: 5.0,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ChannelTalkScreen()),
+                      );
+                    },
+                    child: Image.asset(
+                      "assets/images/chat.png",
+                      width: SizeConfig.defaultSize * 30,
+                      height: SizeConfig.defaultSize * 30,
+                    ),
+                  ),
                 ),
               ),
             ));

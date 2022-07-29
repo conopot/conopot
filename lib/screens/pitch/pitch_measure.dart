@@ -250,8 +250,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       ret = "3옥타브 라";
     else if (931 <= frequency && frequency <= 933)
       ret = "3옥타브 라#";
-    else if (985 <= frequency && frequency <= 990) 
-      ret = "3옥타브 시";
+    else if (985 <= frequency && frequency <= 990) ret = "3옥타브 시";
 
     return ret;
   }
@@ -336,7 +335,9 @@ class _PitchMeasureState extends State<PitchMeasure> {
     int initialIndex = 0;
     if (maxFrequency >= 130 && initialSetting2 == false) {
       String highestPitch = frequencyToPitch(maxFrequency);
-      selected2 = highestPitch == "" ? selected2 : highestPitch.substring(5, highestPitch.length);
+      selected2 = highestPitch == ""
+          ? selected2
+          : highestPitch.substring(5, highestPitch.length);
       for (var i = 0; i < octave2.length; i++) {
         if (selected2 == octave2[i]) initialIndex = i;
       }

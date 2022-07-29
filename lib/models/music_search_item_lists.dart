@@ -203,7 +203,6 @@ class MusicSearchItemLists extends ChangeNotifier {
         if (start == end) continue;
         if (end == -1) {
           errFlag = true;
-          print(str);
           break;
         }
         String tmp = str.substring(start, end);
