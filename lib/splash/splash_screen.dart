@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     /// 노래방 곡 관련 초기화
     Future.delayed(Duration.zero, () {
       Provider.of<MusicSearchItemLists>(context, listen: false).init();

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:conopot/config/analytics_config.dart';
-import 'package:conopot/firebase/firebase_config.dart';
-import 'package:conopot/firebase/firebase_options.dart';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/splash/splash_screen.dart';
@@ -9,18 +8,20 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
 
   /// firebase crashlytics init
-  runZonedGuarded<Future<void>>(() async {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    runApp(const MyApp());
-  },
-      (error, stack) =>
-          FirebaseCrashlytics.instance.recordError(error, stack, fatal: true));
+  runZonedGuarded<Future<void>>(
+    () async {
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+      runApp(const MyApp());
+    },
+    (error, stack) =>
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -45,11 +46,11 @@ class MyApp extends StatelessWidget {
           title: 'conopot',
           theme: ThemeData(
             fontFamily: 'pretendard',
-            scaffoldBackgroundColor: Colors.white,
+            scaffoldBackgroundColor: kBackgroundColor,
             appBarTheme: const AppBarTheme(
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
+              centerTitle: false,
+              backgroundColor: kBackgroundColor,
+              foregroundColor: kPrimaryWhiteColor,
               elevation: 0,
             ),
             visualDensity: VisualDensity.adaptivePlatformDensity,

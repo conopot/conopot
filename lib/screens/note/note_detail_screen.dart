@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:http/http.dart' as http;
@@ -10,11 +9,8 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pitchupdart/pitch_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/music_search_item.dart';
