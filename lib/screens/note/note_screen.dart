@@ -47,10 +47,11 @@ class _NoteScreenState extends State<NoteScreen> {
         floatingActionButton: (!noteData.notes.isEmpty)
             ? Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
-                width: 75,
-                height: 75,
+                width: 72,
+                height: 72,
                 child: FittedBox(
                   child: FloatingActionButton(
+                    backgroundColor: Colors.transparent,
                     child: SvgPicture.asset('assets/icons/addButton.svg'),
                     onPressed: () {
                       Future.delayed(Duration.zero, () {

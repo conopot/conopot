@@ -7,11 +7,13 @@ import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
-
+  // 세로 화면 고정
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(
     () async {

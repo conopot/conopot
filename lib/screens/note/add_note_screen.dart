@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'components/note_search_bar.dart';
 
 class AddNoteScreen extends StatefulWidget {
-  
   const AddNoteScreen({Key? key}) : super(key: key);
 
   @override

@@ -26,7 +26,7 @@ class _NoteListState extends State<NoteList> {
         '${note.tj_songNumber}',
         style: TextStyle(
           color: kMainColor,
-          fontSize: defaultSize * 1.4,
+          fontSize: defaultSize * 1.2,
           fontWeight: FontWeight.w600,
         ),
       );
@@ -35,7 +35,8 @@ class _NoteListState extends State<NoteList> {
         return Text(
           pitchNumToString[note.pitchNum],
           style: TextStyle(
-            color: (note.pitchNum >= 29) ? kPrimaryColor : kPrimaryGreenColor,
+            color: kMainColor,
+            fontSize: defaultSize * 0.9,
             fontWeight: FontWeight.bold,
           ),
         );
@@ -95,7 +96,7 @@ class _NoteListState extends State<NoteList> {
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.all(defaultSize),
+                              padding: EdgeInsets.fromLTRB(defaultSize, defaultSize, 0, defaultSize),
                               height: defaultSize * 9,
                               key: Key(
                                 '${noteData.notes.indexOf(note)}',
@@ -132,12 +133,11 @@ class _NoteListState extends State<NoteList> {
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      SizedBox(height: defaultSize * 0.5),
+                                      SizedBox(height: defaultSize),
                                       Container(
                                         padding:
                                             EdgeInsets.all(defaultSize * 0.5),
                                         width: double.infinity,
-                                        height: defaultSize * 2.5,
                                         decoration: BoxDecoration(
                                           color: kPrimaryGreyColor,
                                           borderRadius: BorderRadius.all(
@@ -154,18 +154,23 @@ class _NoteListState extends State<NoteList> {
                                       )
                                     ],
                                   )),
-                                  SizedBox(width: defaultSize * 1.5),
-                                  SizedBox(
-                                      child: userSettingInfo(
-                                          Provider.of<MusicSearchItemLists>(
-                                                  context,
-                                                  listen: true)
-                                              .userNoteSetting,
-                                          note,
-                                          Provider.of<MusicSearchItemLists>(
-                                                  context,
-                                                  listen: true)
-                                              .userMaxPitch)),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                                    child: SizedBox(
+                                        width: defaultSize * 5,
+                                        child: Center(
+                                          child: userSettingInfo(
+                                              Provider.of<MusicSearchItemLists>(
+                                                      context,
+                                                      listen: true)
+                                                  .userNoteSetting,
+                                              note,
+                                              Provider.of<MusicSearchItemLists>(
+                                                      context,
+                                                      listen: true)
+                                                  .userMaxPitch),
+                                        )),
+                                  ),
                                 ],
                               ),
                             ),
