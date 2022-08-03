@@ -20,7 +20,7 @@ class NoteList extends StatefulWidget {
 class _NoteListState extends State<NoteList> {
   double defaultSize = SizeConfig.defaultSize;
   // 애창곡 노트 설정에 따라 달라지는 정보 (최고음 or TJ 노래번호)
-  Widget userSettingInfo(int setNum, Note note, int userPitch) {
+  Widget _userSettingInfo(int setNum, Note note, int userPitch) {
     if (setNum == 0) {
       return Text(
         '${note.tj_songNumber}',
@@ -97,7 +97,6 @@ class _NoteListState extends State<NoteList> {
                             },
                             child: Container(
                               padding: EdgeInsets.fromLTRB(defaultSize, defaultSize, 0, defaultSize),
-                              height: defaultSize * 9,
                               key: Key(
                                 '${noteData.notes.indexOf(note)}',
                               ),
@@ -159,7 +158,7 @@ class _NoteListState extends State<NoteList> {
                                     child: SizedBox(
                                         width: defaultSize * 5,
                                         child: Center(
-                                          child: userSettingInfo(
+                                          child: _userSettingInfo(
                                               Provider.of<MusicSearchItemLists>(
                                                       context,
                                                       listen: true)

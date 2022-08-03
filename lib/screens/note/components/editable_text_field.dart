@@ -1,11 +1,9 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../../../models/note.dart';
 
 class EditableTextField extends StatefulWidget {
   late Note note;
@@ -17,13 +15,17 @@ class EditableTextField extends StatefulWidget {
 
 class _EditableTextFieldState extends State<EditableTextField> {
   bool _isEditingText = false;
+  double defaultSize = SizeConfig.defaultSize;
+  int _maxLength = 25;
+  late int _textLength;
   late TextEditingController _editingController;
   late String initialText = widget.note.memo;
 
   @override
   void initState() {
     super.initState();
-    _editingController = TextEditingController(text: initialText);
+    this._editingController = TextEditingController(text: initialText);
+    this._textLength = initialText.length;
   }
 
   @override
@@ -38,70 +40,99 @@ class _EditableTextFieldState extends State<EditableTextField> {
   }
 
   Widget _editableTextField() {
-    if (_isEditingText) {
-      return Center(
-        child: TextField(
-          autofocus: true,
-          controller: _editingController,
-          maxLength: 25,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              suffixIcon: TextButton(
-                child: Text(
-                  "저장",
-                  style: TextStyle(color: kTitleColor),
-                ),
-                onPressed: () {
-                  //!event: 곡 상세정보 뷰 - 메모 수정
-                  Provider.of<NoteData>(context, listen: false)
-                      .songMemoEditEvent(widget.note.tj_title);
-                  setState(() {
-                    initialText = _editingController.text;
-                    _isEditingText = false;
-                    Provider.of<NoteData>(context, listen: false)
-                        .editNote(widget.note, initialText);
-                  });
-                },
-              )),
-        ),
-      );
-    }
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isEditingText = true;
-            });
-          },
-          child: SizedBox(
-            width: SizeConfig.screenWidth * 0.7,
-            child: Text(
-              initialText.length == 0 ? "메모를 입력해 주세요" : initialText,
-              overflow: TextOverflow.ellipsis,
-              style: initialText.length == 0 ? TextStyle(
-                color: Colors.grey[600],
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
-              ) :TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(
+        children: [
+          Text(
+            "한줄 메모",
+            style: TextStyle(
+                color: kPrimaryWhiteColor,
+                fontSize: defaultSize * 1.5,
+                fontWeight: FontWeight.w600),
           ),
-        ),
-        Expanded(
-          child: IconButton(
-            onPressed: () {
-              setState(() {
-                _isEditingText = true;
-              });
-            },
-            icon: Icon(Icons.edit),
-          ),
-        )
-      ],
-    );
+          Spacer(),
+          if (_isEditingText == true)
+            Text(
+              "${_textLength}/${_maxLength}",
+              style: TextStyle(color: kMainColor),
+            )
+        ],
+      ),
+      SizedBox(height: defaultSize * 2),
+      Container(
+          padding: EdgeInsets.only(left: defaultSize * 0.9),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              color: kPrimaryGreyColor),
+          child: _isEditingText == true
+              ? TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  autofocus: true,
+                  controller: _editingController,
+                  maxLength: _maxLength,
+                  cursorColor: kMainColor,
+                  style: TextStyle(
+                    color: kPrimaryWhiteColor,
+                    fontSize: defaultSize * 1.2,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _textLength = value.length;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      counterText: "",
+                      border: InputBorder.none,
+                      suffixIcon: TextButton(
+                        child: Text(
+                          "저장",
+                          style: TextStyle(color: kMainColor),
+                        ),
+                        onPressed: () {
+                          //!event: 곡 상세정보 뷰 - 메모 수정
+                          Provider.of<NoteData>(context, listen: false)
+                              .songMemoEditEvent(widget.note.tj_title);
+                          setState(() {
+                            initialText = _editingController.text;
+                            _isEditingText = false;
+                            Provider.of<NoteData>(context, listen: false)
+                                .editNote(widget.note, initialText);
+                          });
+                        },
+                      )),
+                )
+              : InkWell(
+                  onTap: () {
+                    setState(() {
+                      _isEditingText = true;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        child: Text(
+                            initialText.isEmpty ? "메모를 입력해 주세요" : initialText,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.2,
+                              fontWeight: FontWeight.w400,
+                            )),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isEditingText = true;
+                          });
+                        },
+                        color: kPrimaryWhiteColor,
+                        icon: Icon(Icons.edit),
+                      )
+                    ],
+                  ),
+                ))
+    ]);
   }
 }
