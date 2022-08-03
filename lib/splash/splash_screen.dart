@@ -37,12 +37,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image(
-            image: const AssetImage('assets/images/splash.png'),
-            height: SizeConfig.screenWidth * 0.3,
+      body: SafeArea(
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              image: const AssetImage('assets/images/splash.png'),
+              height: SizeConfig.screenWidth * 0.3,
+            ),
           ),
         ),
       ),

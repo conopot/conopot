@@ -1,56 +1,93 @@
+import 'dart:convert';
+import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
-class RequestPitchButton extends StatelessWidget {
+class RequestPitchInfoButton extends StatelessWidget {
   late Note note;
-  RequestPitchButton({Key? key, required Note note}) : super(key: key);
+  double defaultSize = SizeConfig.defaultSize;
+  RequestPitchInfoButton({Key? key, required this.note}) : super(key: key);
 
-  // 정보요청 다이어로그 창 팝업 함수
-  void showRequestDialog(BuildContext context) {
-    Widget requestButton = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            //!event
-            Provider.of<NoteData>(context, listen: false)
-                .pitchRequestEvent(note);
-            // 정보요청
-            noteInfoPostRequest(note);
-            // 정보요청
-            Navigator.of(context).pop();
+  // 최고음 요청 api
+  void _requestPitchInfo(Note note) async {
+    String url =
+        'https://zeq3b9zt96.execute-api.ap-northeast-2.amazonaws.com/conopot/Conopot_Mailing';
 
-            Fluttertoast.showToast(
-                msg: "최고음 정보를 요청하였습니다 :)",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
-          },
-          child: Text(
-            "정보 요청",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        "fields": {
+          "MusicName": "${note.tj_title}",
+          "MusicSinger": "${note.tj_singer}",
+          "MusicNumberTJ": "${note.tj_songNumber}",
+          "MusicNumberKY": "${note.ky_songNumber}",
+          "Calls": 1,
+          "Status": "To do"
+        }
+      }),
     );
+  }
+
+  // 최고음 정보요청 다이어로그 창 팝업 함수
+  void _showRequestInfoDialog(BuildContext context) {
+    Widget requestButton = ElevatedButton(
+      onPressed: () {
+        //!event
+        Provider.of<NoteData>(context, listen: false).pitchRequestEvent(note);
+        // 정보요청
+        _requestPitchInfo(note);
+        // 정보요청
+        Navigator.of(context).pop();
+
+        Fluttertoast.showToast(
+            msg: "최고음 정보가 요청되었습니다 :)",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: kMainColor,
+            textColor: kPrimaryWhiteColor,
+            fontSize: defaultSize * 1.6);
+      },
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)))),
+      child: const Text(
+        "요청",
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)))),
+        child: const Text("취소", style: TextStyle(fontWeight: FontWeight.w600)));
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        "최고음이 표시 되지 않을 경우 정보를 요청해주세요 ☺️",
+        "최고음이 표시 되지 않을 경우 최고음 정보를 요청해주세요 ☺️",
         style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+            fontSize: defaultSize * 1.6,
+            fontWeight: FontWeight.w500,
+            color: kPrimaryWhiteColor),
       ),
-      actions: [requestButton],
+      actions: [cancelButton, requestButton],
+      backgroundColor: kDialogColor,
     );
 
     showDialog(
@@ -62,42 +99,31 @@ class RequestPitchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var pitch = pitchNumToString[note.pitchNum];
+    String pitch = pitchNumToString[note.pitchNum];
+
     return pitch == '?'
         ? GestureDetector(
             onTap: () {
-              showRequestDialog(context);
+              _showRequestInfoDialog(context);
             },
             child: Container(
-              width: 80,
-              height: 25,
+              width: defaultSize * 6.2,
+              height: defaultSize * 2.6,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Color(0xFF7F8A8E),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: kMainColor,
               ),
               child: Center(
                 child: Text(
                   "정보요청",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: kPrimaryWhiteColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: defaultSize * 1.2),
                 ),
               ),
             ),
           )
-        : Container(
-            width: 95,
-            height: 28,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: Color(0xFFF54141),
-            ),
-            child: Center(
-              child: Text(
-                pitch,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          );
+        : Container();
   }
 }

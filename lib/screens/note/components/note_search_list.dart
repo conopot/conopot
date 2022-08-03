@@ -20,11 +20,6 @@ class NoteSearchList extends StatefulWidget {
 class _NoteSearchListState extends State<NoteSearchList> {
   double defaultSize = SizeConfig.defaultSize;
 
-  @override
-  Widget build(BuildContext context) {
-    return _ListView(context);
-  }
-
   // 노트 추가 다이어로그 팝업 함수
   void _showAddNoteDialog(BuildContext context, FitchMusic item) {
     // 확인 버튼
@@ -59,7 +54,6 @@ class _NoteSearchListState extends State<NoteSearchList> {
       child: Text("추가",
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            fontSize: defaultSize * 1.3,
           )),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(kMainColor),
@@ -84,7 +78,6 @@ class _NoteSearchListState extends State<NoteSearchList> {
         "취소",
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: defaultSize * 1.3,
         ),
       ),
     );
@@ -96,14 +89,12 @@ class _NoteSearchListState extends State<NoteSearchList> {
             text: "'${item.tj_title}' ",
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: defaultSize * 1.3,
             ),
           ),
           TextSpan(
               text: "노래를 애창곡 노트에 추가하시겠습니까?",
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: defaultSize * 1.3,
               ))
         ]),
       ),
@@ -111,7 +102,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
         cancelButton,
         okButton,
       ],
-      backgroundColor: Color(0xFF292929),
+      backgroundColor: kDialogColor,
     );
     showDialog(
         context: context,
@@ -267,5 +258,10 @@ class _NoteSearchListState extends State<NoteSearchList> {
               ),
           ),
         );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _ListView(context);
   }
 }

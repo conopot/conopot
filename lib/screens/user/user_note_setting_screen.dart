@@ -65,7 +65,6 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
                       defaultSize, defaultSize, 0, defaultSize),
-                  height: defaultSize * 9,
                   margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -166,7 +165,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
                       defaultSize, defaultSize, 0, defaultSize),
-                  height: defaultSize * 9,
+                  height: defaultSize * 9.5,
                   margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
