@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/models/lyric.dart';
 import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/size_config.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pitchupdart/pitch_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,8 +31,50 @@ class NoteDetailScreen extends StatefulWidget {
 }
 
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
+  String lyric = "";
+
+  getLyrics(String songNum) async {
+    //인터넷 연결 확인
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      String url =
+          'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
+
+      final response = await http.post(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          lyric =
+              Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
+          lyric = lyric.replaceAll('\n\n', '\n');
+          //크롤링한 가사가 비어있는 경우
+          if (lyric == "") {
+            lyric =
+                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+          }
+        });
+      } else {
+        setState(() {
+          lyric =
+              "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+        });
+      }
+    } else {
+      setState(() {
+        lyric = "인터넷 연결이 필요합니다 🤣\n인터넷이 연결되어있는지 확인해주세요!";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getLyrics(widget.note.tj_songNumber);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -53,7 +97,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           ),
         ],
       ),
-      body: Column(children: [
+      body: ListView(children: [
         SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -267,15 +311,28 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   ]),
                 ],
               ),
+              SizedBox(height: 15),
+              Text(
+                "가사",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 15),
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Text(
+                  lyric,
+                  style: TextStyle(
+                    height: 2,
+                    color: kPrimaryGreyColor,
+                    fontSize: defaultSize * 13,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        SizedBox(
-          height: 15,
-        ),
-        Expanded(
-          child: _recommendList(widget.note.pitchNum),
-        ),
+
+        //_recommendList(widget.note.pitchNum),
       ]),
     );
   }

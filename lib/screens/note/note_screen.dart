@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/lyric.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/musicBook/music_screen.dart';
+import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -18,6 +22,8 @@ import 'package:provider/provider.dart';
 
 import '../../models/note.dart';
 import 'add_note_screen.dart';
+
+import 'package:http/http.dart' as http;
 
 class NoteScreen extends StatefulWidget {
   const NoteScreen({Key? key}) : super(key: key);
@@ -91,7 +97,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 children: [
                   _CarouselSlider(context),
                   (noteData.notes.isEmpty)
-                      ? emptyNoteView()
+                      ? EmptyNoteList()
                       : _ReorderListView(),
                 ],
               ),
@@ -418,7 +424,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                       )),
                                 ],
                               )),
-                              onTap: () {
+                              onTap: () async {
                                 Provider.of<NoteData>(context, listen: false)
                                     .viewNoteEvent(note);
                                 Navigator.push(
