@@ -1,3 +1,5 @@
+import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:flutter/material.dart';
 
@@ -19,35 +21,42 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10),
+    double defaultSize = SizeConfig.defaultSize;
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(defaultSize, defaultSize * 1.5, defaultSize, defaultSize),
+      decoration: BoxDecoration(
+        color: kPrimaryLightBlackColor,
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
       child: TextField(
         controller: _controller,
+        style: TextStyle(color: kPrimaryWhiteColor),
         onChanged: (text) => {
           widget.musicList.runFilter(text, widget.musicList.tabIndex),
         },
         enableInteractiveSelection: false,
-        textAlign: TextAlign.left,
+        textAlignVertical: TextAlignVertical.center,
         keyboardType: TextInputType.name,
+        cursorColor: kMainColor,
         decoration: InputDecoration(
-          hintText: '노래 제목 또는 가수명을 입력해주세요',
-          contentPadding: EdgeInsets.all(15),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.1),
+          hintText: '노래, 가수 검색',
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: defaultSize * 1.5,
+            color: kPrimaryLightGreyColor,
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 0.1),
-          ),
+          border: InputBorder.none,
           prefixIcon: Icon(
             Icons.search,
-            color: Colors.grey,
+            color: kPrimaryWhiteColor,
           ),
           suffixIcon: _controller.text.isEmpty
               ? null
               : IconButton(
                   icon: const Icon(Icons.clear),
                   onPressed: _clearTextField,
-                  color: Colors.grey,
+                  color: kPrimaryWhiteColor,
                 ),
         ),
       ),

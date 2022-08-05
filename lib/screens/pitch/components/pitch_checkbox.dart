@@ -1,4 +1,5 @@
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class PitchCheckBox extends StatefulWidget {
 }
 
 class _PitchCheckBoxState extends State<PitchCheckBox> {
+  double defaultSize = SizeConfig.defaultSize;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<MusicSearchItemLists>(
@@ -19,51 +22,62 @@ class _PitchCheckBoxState extends State<PitchCheckBox> {
         child: musicList.highestFoundItems.isNotEmpty
             ? ListView.builder(
                 itemCount: musicList.highestFoundItems.length,
-                itemBuilder: (context, index) => Card(
-                  color: Colors.white,
-                  elevation: 1,
-                  child: CheckboxListTile(
-                    title: Text(
-                      musicList.highestFoundItems[index].tj_title,
-                      style: TextStyle(
-                        color: kTitleColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Text(
-                      musicList.highestFoundItems[index].tj_singer,
-                      style: TextStyle(
-                        color: kSubTitleColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    secondary: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          pitchNumToString[
-                              musicList.highestFoundItems[index].pitchNum],
+                itemBuilder: (context, index) => ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  child: Card(
+                    margin: EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, defaultSize * 0.5),
+                    color: kPrimaryLightBlackColor,
+                    elevation: 0,
+                    child: Theme(
+                      data: ThemeData(unselectedWidgetColor: kPrimaryWhiteColor, toggleableActiveColor: kMainColor),
+                      child: CheckboxListTile(
+                        title: Text(
+                          musicList.highestFoundItems[index].tj_title,
                           style: TextStyle(
-                            color: kTextColor,
-                            fontWeight: FontWeight.bold,
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 1.25,
+                            overflow: TextOverflow.ellipsis
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                      ],
+                        subtitle: Text(
+                          musicList.highestFoundItems[index].tj_singer,
+                          style: TextStyle(
+                            color: kPrimaryLightWhiteColor,
+                            fontSize: defaultSize * 1.1,
+                            fontWeight: FontWeight.w300,
+                            overflow: TextOverflow.ellipsis
+                          ),
+                        ),
+                        secondary: SizedBox(
+                          width: defaultSize * 6,
+                          child: Center(
+                            child: Text(
+                              pitchNumToString[
+                                  musicList.highestFoundItems[index].pitchNum],
+                              style: TextStyle(
+                                color: kMainColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize: defaultSize * 1.1
+                              ),
+                            ),
+                          ),
+                        ),
+                        value: musicList.isChecked[index],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            musicList.isChecked[index] = value!;
+                            if (value == true) {
+                              musicList.checkedMusics
+                                  .add(musicList.highestFoundItems[index]);
+                            } else {
+                              musicList.checkedMusics
+                                  .remove(musicList.highestFoundItems[index]);
+                            }
+                          });
+                        },
+                      ),
                     ),
-                    value: musicList.isChecked[index],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        musicList.isChecked[index] = value!;
-                        if (value == true) {
-                          musicList.checkedMusics
-                              .add(musicList.highestFoundItems[index]);
-                        } else {
-                          musicList.checkedMusics
-                              .remove(musicList.highestFoundItems[index]);
-                        }
-                      });
-                    },
                   ),
                 ),
               )

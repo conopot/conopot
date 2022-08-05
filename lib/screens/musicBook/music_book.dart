@@ -1,20 +1,38 @@
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:conopot/screens/musicBook/components/search_bar.dart';
-import 'package:conopot/screens/musicBook/components/search_list.dart';
-import 'package:conopot/config/size_config.dart';
+import 'package:conopot/screens/musicBook/components/musicbook_search_bar.dart';
+import 'package:conopot/screens/musicBook/components/musicbook_search_list.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 
-class MusicBookScreen extends StatelessWidget {
+class MusicBookScreen extends StatefulWidget {
+  @override
+  State<MusicBookScreen> createState() => _MusicBookScreenState();
+}
+
+class _MusicBookScreenState extends State<MusicBookScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    double widthSize = SizeConfig.screenWidth / 10;
-    Provider.of<NoteData>(context, listen: false)
-        .musicBookScreenPageViewEvent();
+    double defaultSize = SizeConfig.defaultSize;
+    Provider.of<NoteData>(context, listen: true).musicBookScreenPageViewEvent();
 
     return Consumer<MusicSearchItemLists>(
       builder: (
@@ -22,59 +40,52 @@ class MusicBookScreen extends StatelessWidget {
         musicList,
         child,
       ) =>
-          DefaultTabController(
-        initialIndex: 0,
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: BackButton(color: Colors.black),
-            automaticallyImplyLeading: false, // back button 숨기기 위함
-            centerTitle: true,
-
-            title: TabBar(
-              isScrollable: true,
-              onTap: (index) {
-                musicList.changeTabIndex(index: index + 1);
-              },
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorColor: Color(0xFF7B61FF),
-              tabs: [
-                Text(
-                  'TJ',
-                  style: TextStyle(
-                    color: (musicList.tabIndex == 1)
-                        ? kTextColor
-                        : kTextLightColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '금영',
-                  style: TextStyle(
-                    color: (musicList.tabIndex == 2)
-                        ? kTextColor
-                        : kTextLightColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          body: TabBarView(
+          Scaffold(
+        appBar: AppBar(
+            // automaticallyImplyLeading: false, // back button 숨기기 위함
+            centerTitle: false,
+            title: Text("노래방 책")),
+        body: SafeArea(
+          child: Column(
             children: [
-              Column(
-                children: [
-                  SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList, tabIdx: musicList.tabIndex),
+              TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                onTap: (index) {
+                  musicList.changeTabIndex(index: index + 1);
+                },
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorColor: kMainColor,
+                labelColor: kPrimaryWhiteColor,
+                unselectedLabelColor: kPrimaryLightGreyColor,
+                tabs: [
+                  Text(
+                    'TJ',
+                    style: TextStyle(
+                      fontSize: defaultSize * 1.6,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    '금영',
+                    style: TextStyle(
+                      fontSize: defaultSize * 1.6,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
-              Column(
-                children: [
-                  SearchBar(musicList: musicList),
-                  SearchList(musicList: musicList, tabIdx: musicList.tabIndex),
-                ],
+              SearchBar(musicList: musicList),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    SearchList(
+                        musicList: musicList),
+                    SearchList(
+                        musicList: musicList),
+                  ],
+                ),
               ),
             ],
           ),

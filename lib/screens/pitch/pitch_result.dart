@@ -4,7 +4,6 @@ import 'package:conopot/models/music_search_item_lists.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +45,8 @@ class _PitchResultState extends State<PitchResult> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    double defaultSize = SizeConfig.defaultSize;
+
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,
@@ -55,17 +55,16 @@ class _PitchResultState extends State<PitchResult> {
       ) =>
           Scaffold(
         appBar: AppBar(
-          leading: BackButton(color: Colors.black),
           title: Text(
             '측정 결과',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
+          centerTitle: true,
         ),
         body: Center(
           child: Column(
             children: [
               SizedBox(
-                height: SizeConfig.defaultSize * 30,
+                height: SizeConfig.defaultSize * 2.5,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -73,71 +72,78 @@ class _PitchResultState extends State<PitchResult> {
                   Text(
                     '내 최고음 :',
                     style: TextStyle(
-                      color: kTextColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 1.8,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(
-                    width: SizeConfig.defaultSize * 10,
+                    width: SizeConfig.defaultSize,
                   ),
                   Container(
-                    padding: EdgeInsets.all(6.0),
+                    padding: EdgeInsets.all(defaultSize),
                     decoration: BoxDecoration(
-                      color: kTitleColor,
-                      borderRadius: BorderRadius.circular(10.0),
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Text(
                       pitchNumToString[pitchLevel],
                       style: TextStyle(
-                        color: kPrimaryCreamColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.6,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 50,
+                height: SizeConfig.defaultSize * 2.5,
               ),
               //내 음역대의 인기곡들
               RichText(
                 text: TextSpan(
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 21,
+                    fontSize: defaultSize * 1.5,
                   ),
                   children: [
                     TextSpan(
                       text: '내 ',
                       style: TextStyle(
-                        color: kTextColor,
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     TextSpan(
-                      text: '최고음',
+                      text: '음역대',
                       style: TextStyle(
-                        color: kTextColor,
+                        color: kMainColor,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     TextSpan(
                       text: ' 근처의 인기곡',
                       style: TextStyle(
-                        color: kTextColor,
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 20,
+                height: SizeConfig.defaultSize,
               ),
-              Divider(
-                height: 1,
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                child: Divider(
+                  height: 1,
+                  color: kPrimaryLightWhiteColor,
+                ),
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 10,
+                height: SizeConfig.defaultSize,
               ),
               PitchSearchList(),
             ],
@@ -152,10 +158,10 @@ class _PitchResultState extends State<PitchResult> {
           label: Text(
             '홈 화면으로 이동',
             style: TextStyle(
-                fontWeight: FontWeight.bold, color: kPrimaryCreamColor),
+                fontWeight: FontWeight.w600, color: kPrimaryWhiteColor),
           ),
           icon: Icon(Icons.home),
-          backgroundColor: kPrimaryColor,
+          backgroundColor: kMainColor,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),

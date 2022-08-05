@@ -67,22 +67,22 @@ class EmptyNoteList extends StatelessWidget {
         SizedBox(
           height: defaultSize * 2.5,
         ),
-        Container(
-          width: defaultSize * 22.8,
-          height: defaultSize * 4,
-          decoration: BoxDecoration(
-              color: kMainColor,
-              borderRadius: BorderRadius.all(Radius.circular(18))),
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AddNoteScreen(),
                   ),
                 );
-              },
+          },
+          child: Container(
+            width: defaultSize * 22.8,
+            height: defaultSize * 4,
+            decoration: BoxDecoration(
+                color: kMainColor,
+                borderRadius: BorderRadius.all(Radius.circular(18))),
+            child: Center(
               child: Text(
                 "애창곡 추가하기",
                 style: TextStyle(

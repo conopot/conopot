@@ -16,7 +16,7 @@ class EditableTextField extends StatefulWidget {
 class _EditableTextFieldState extends State<EditableTextField> {
   bool _isEditingText = false;
   double defaultSize = SizeConfig.defaultSize;
-  int _maxLength = 25;
+  final int _maxLength = 25;
   late int _textLength;
   late TextEditingController _editingController;
   late String initialText = widget.note.memo;

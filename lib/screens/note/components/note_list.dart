@@ -22,22 +22,26 @@ class _NoteListState extends State<NoteList> {
   // 애창곡 노트 설정에 따라 달라지는 정보 (최고음 or TJ 노래번호)
   Widget _userSettingInfo(int setNum, Note note, int userPitch) {
     if (setNum == 0) {
-      return Text(
-        '${note.tj_songNumber}',
-        style: TextStyle(
-          color: kMainColor,
-          fontSize: defaultSize * 1.2,
-          fontWeight: FontWeight.w600,
+      return Center(
+        child: Text(
+          '${note.tj_songNumber}',
+          style: TextStyle(
+            color: kMainColor,
+            fontSize: defaultSize * 1.2,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       );
     } else if (setNum == 1) {
       if (note.pitchNum != 0) {
-        return Text(
-          pitchNumToString[note.pitchNum],
-          style: TextStyle(
-            color: kMainColor,
-            fontSize: defaultSize * 0.9,
-            fontWeight: FontWeight.bold,
+        return Center(
+          child: Text(
+            pitchNumToString[note.pitchNum],
+            style: TextStyle(
+              color: kMainColor,
+              fontSize: defaultSize * 0.9,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         );
       }
@@ -68,7 +72,7 @@ class _NoteListState extends State<NoteList> {
                       ),
                       child: Slidable(
                           endActionPane: ActionPane(
-                              extentRatio: .20,
+                              extentRatio: .25,
                               motion: ScrollMotion(),
                               children: [
                                 SlidableAction(
@@ -96,7 +100,8 @@ class _NoteListState extends State<NoteList> {
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(defaultSize, defaultSize, 0, defaultSize),
+                              padding: EdgeInsets.fromLTRB(defaultSize * 1.25, defaultSize * 1.25, 0, defaultSize * 1.25),
+                              // height: defaultSize * 9.5,
                               key: Key(
                                 '${noteData.notes.indexOf(note)}',
                               ),
