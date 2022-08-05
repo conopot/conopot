@@ -2,6 +2,7 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
+import 'package:conopot/screens/recommend/recommend_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOptions = <Widget>[NoteScreen(), MusicBookScreen()];
+  List<Widget> _widgetOptions = <Widget>[NoteScreen(), MusicBookScreen(), RecommendScreen()];
 
   @override
   Widget build(BuildContext context) {
