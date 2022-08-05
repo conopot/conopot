@@ -1,9 +1,7 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_lists.dart';
-import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class NoteSearchBar extends StatefulWidget {
   final MusicSearchItemLists musicList;
@@ -34,9 +32,6 @@ class _NoteSearchBarState extends State<NoteSearchBar> {
         style: TextStyle(color: kPrimaryWhiteColor),
         controller: _controller,
         onChanged: (text) => {widget.musicList.runCombinedFilter(text)},
-        onTap: () {
-          Provider.of<NoteData>(context, listen: false).setSelectedIndex(-1);
-        },
         enableInteractiveSelection: false,
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,

@@ -15,71 +15,83 @@ class PitchChoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
     // !event : 간접 음역대 측정뷰 - 페이지뷰
     Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 페이지뷰');
     SizeConfig().init(context);
+
     return Consumer<MusicSearchItemLists>(
         builder: (context, musicList, child) => Container(
               child: Scaffold(
-                appBar: AppBar(
-                  leading: BackButton(
-                    color: Colors.black,
-                    onPressed: () {
-                      // !event : 간접 음역대 측정뷰 - 백버튼
-                      Analytics_config.analytics.logEvent('간접 음역대 측정뷰 - 백버튼');
-                      Navigator.pop(context);
-                    },
+                appBar: PreferredSize(
+                  preferredSize: Size.fromHeight(defaultSize * 4),
+                  child: AppBar(
+                    automaticallyImplyLeading: false,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                      BackButton(
+                        color: kPrimaryWhiteColor,
+                        onPressed: () {
+                          // !event : 간접 음역대 측정뷰 - 백버튼
+                          Analytics_config.analytics
+                              .logEvent('간접 음역대 측정뷰 - 백버튼');
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Expanded(child: PitchSearchBar(musicList: musicList))
+                    ]),
+                    centerTitle: false,
                   ),
-                  title: Text(
-                    '음역대 측정',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  centerTitle: true,
                 ),
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: SizeConfig.defaultSize * 30,
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '이 노래, ',
-                            style: TextStyle(
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '가능하세요?',
-                            style: TextStyle(
-                              color: kTextColor,
-                            ),
-                          ),
-                        ],
+                body: SafeArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: defaultSize * 3,
                       ),
-                    ),
-                    SizedBox(
-                      height: SizeConfig.defaultSize * 20,
-                    ),
-                    Text(
-                      '전 구간 부를 수 있는 노래만 선택해주세요!',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Color(0xFF4F4F4F),
+                      Container(
+                        margin: EdgeInsets.only(left: defaultSize * 1.5),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "이 노래, 부를 수 있으세요?",
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: defaultSize * 2),
+                              ),
+                              SizedBox(height: defaultSize),
+                              Text("전 구간 끝까지 부를 수 있는 노래를 골라 주시면",
+                                  style: TextStyle(
+                                      color: kPrimaryLightWhiteColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: defaultSize * 1.5)),
+                              SizedBox(height: defaultSize * 0.5),
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    text: "음역대",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: defaultSize * 1.5)),
+                                TextSpan(
+                                    text: "를 측정해 드릴게요!",
+                                    style: TextStyle(
+                                        color: kPrimaryLightWhiteColor,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: defaultSize * 1.5))
+                              ]))
+                            ]),
                       ),
-                    ),
-                    PitchSearchBar(musicList: musicList),
-                    PitchDropdown(musicList: musicList),
-                    PitchCheckBox(),
-                  ],
+                      PitchDropdown(musicList: musicList),
+                      PitchCheckBox(),
+                    ],
+                  ),
                 ),
                 floatingActionButton: FloatingActionButton.extended(
                   onPressed: () => {
@@ -108,6 +120,7 @@ class PitchChoice extends StatelessWidget {
                         ),
                       }
                   },
+                  backgroundColor: kMainColor,
                   icon: Icon(Icons.check_sharp),
                   label: Text('선택 완료'),
                 ),

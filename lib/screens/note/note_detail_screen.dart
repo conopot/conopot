@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/models/lylic.dart';
 import 'package:conopot/models/music_search_item.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/note/components/editable_text_field.dart';
@@ -10,8 +13,11 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class NoteDetailScreen extends StatefulWidget {
   late Note note;
@@ -23,6 +29,45 @@ class NoteDetailScreen extends StatefulWidget {
 
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
   double defaultSize = SizeConfig.defaultSize;
+  String lyric = "";
+
+  void getLyrics(String songNum) async {
+    //인터넷 연결 확인
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      String url =
+          'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
+      final response = await http.post(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          lyric =
+              Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
+          lyric = lyric.replaceAll('\n\n', '\n');
+          //크롤링한 가사가 비어있는 경우
+          if (lyric == "") {
+            lyric =
+                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+          }
+        });
+      } else {
+        setState(() {
+          lyric =
+              "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+        });
+      }
+    } else {
+      setState(() {
+        lyric = "인터넷 연결이 필요합니다 🤣\n인터넷이 연결되어있는지 확인해주세요!";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getLyrics(widget.note.tj_songNumber);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,453 +95,278 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         ],
       ),
       body: SafeArea(
-        child: Column(children: [
-          Container(
-            padding: EdgeInsets.all(defaultSize * 1.5),
-            margin: EdgeInsets.symmetric(horizontal: defaultSize),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: kPrimaryLightBlackColor),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${widget.note.tj_title}',
-                      style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: defaultSize * 1.5),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: defaultSize * 0.5),
-                    Text(
-                      '${widget.note.tj_singer}',
-                      style: TextStyle(
-                          color: kPrimaryLightWhiteColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: defaultSize * 1.3),
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
-                ),
-                Spacer(),
-                Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        final url = Uri.parse(
-                            'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
-                        if (await canLaunchUrl(url)) {
-                          launchUrl(url, mode: LaunchMode.inAppWebView);
-                        }
-                      },
-                      child: SvgPicture.asset('assets/icons/youtube.svg'),
-                    ),
-                    Text(
-                      "노래 듣기",
-                      style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontSize: defaultSize,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: defaultSize),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: defaultSize),
-                  padding: EdgeInsets.all(defaultSize * 1.5),
-                  width: defaultSize * 12.2,
-                  decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Column(
+        child: SingleChildScrollView(
+          child: Column(children: [
+            Container(
+              padding: EdgeInsets.all(defaultSize * 1.5),
+              margin: EdgeInsets.symmetric(horizontal: defaultSize),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: kPrimaryLightBlackColor),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Expanded(
+                      //   child: Marquee(
+                      //     text: '${widget.note.tj_title}',
+                      //     style: TextStyle(
+                      //         color: kPrimaryWhiteColor,
+                      //         fontWeight: FontWeight.w500,
+                      //         fontSize: defaultSize * 1.7),
+                      //     scrollAxis: Axis.horizontal,
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     blankSpace: 20.0,
+                      //     velocity: 100.0,
+                      //     pauseAfterRound: Duration(seconds: 1),
+                      //     startPadding: 10.0,
+                      //     accelerationDuration: Duration(seconds: 1),
+                      //     accelerationCurve: Curves.linear,
+                      //     decelerationDuration: Duration(milliseconds: 500),
+                      //     decelerationCurve: Curves.easeOut,
+                      //   ),
+                      // ),
                       Text(
-                        "노래방 번호",
+                        '${widget.note.tj_title}',
                         style: TextStyle(
                             color: kPrimaryWhiteColor,
-                            fontSize: defaultSize * 1.5,
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 1.7),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: defaultSize),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: defaultSize * 3,
-                            child: Text(
-                              "TJ",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(width: defaultSize * 1.5),
-                          SizedBox(
-                            width: defaultSize * 4.7,
-                            child: Text(
-                              widget.note.tj_songNumber,
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: defaultSize),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: defaultSize * 3,
-                            child: Text(
-                              "금영",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(width: defaultSize * 1.5),
-                          widget.note.ky_songNumber == '?'
-                              ? GestureDetector(
-                                  onTap: () {
-                                    showKySearchDialog(context);
-                                  },
-                                  child: Container(
-                                      width: defaultSize * 4.7,
-                                      height: defaultSize * 2.3,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8)),
-                                        color: kMainColor,
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                        "검색",
-                                        style: TextStyle(
-                                            color: kPrimaryWhiteColor,
-                                            fontSize: defaultSize * 1.2,
-                                            fontWeight: FontWeight.w500),
-                                      ))),
-                                )
-                              : SizedBox(
-                                  width: defaultSize * 4.7,
-                                  child: Text(
-                                    widget.note.ky_songNumber,
-                                    style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                        ],
+                      SizedBox(height: defaultSize * 0.5),
+                      Text(
+                        '${widget.note.tj_singer}',
+                        style: TextStyle(
+                            color: kPrimaryLightWhiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 1.3),
+                        overflow: TextOverflow.ellipsis,
                       )
                     ],
                   ),
-                ),
-                SizedBox(width: defaultSize),
-                Expanded(
-                  child: Container(
-                      margin: EdgeInsets.only(right: defaultSize),
-                      padding: EdgeInsets.all(defaultSize * 1.5),
-                      decoration: BoxDecoration(
-                          color: kPrimaryLightBlackColor,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Spacer(),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          final url = Uri.parse(
+                              'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
+                          if (await canLaunchUrl(url)) {
+                            launchUrl(url, mode: LaunchMode.inAppWebView);
+                          }
+                        },
+                        child: SvgPicture.asset('assets/icons/youtube.svg'),
+                      ),
+                      Text(
+                        "노래 듣기",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: defaultSize),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: defaultSize),
+                    padding: EdgeInsets.all(defaultSize * 1.5),
+                    width: defaultSize * 12.2,
+                    decoration: BoxDecoration(
+                        color: kPrimaryLightBlackColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "노래방 번호",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.5,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: defaultSize),
+                        Row(
                           children: [
-                            Text(
-                              "최고음",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.2,
-                                  fontWeight: FontWeight.w200),
+                            SizedBox(
+                              width: defaultSize * 3,
+                              child: Text(
+                                "TJ",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            SizedBox(height: defaultSize * 0.2),
-                            Text(
-                              widget.note.pitchNum == 0
-                                  ? "-"
-                                  : "${pitchNumToString[widget.note.pitchNum]}",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: defaultSize),
-                            Text(
-                              "난이도",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.2,
-                                  fontWeight: FontWeight.w200),
-                            ),
-                            SizedBox(height: defaultSize * 0.2),
-                            Text(
-                              widget.note.pitchNum == 0
-                                  ? "-"
-                                  : "${pitchNumToString[widget.note.pitchNum]}",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                            SizedBox(width: defaultSize * 1.5),
+                            SizedBox(
+                              width: defaultSize * 4.7,
+                              child: Text(
+                                widget.note.tj_songNumber,
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )
                           ],
                         ),
-                        Spacer(),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: RequestPitchInfoButton(note: widget.note)),
-                      ])),
-                )
-              ],
+                        SizedBox(height: defaultSize),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: defaultSize * 3,
+                              child: Text(
+                                "금영",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            SizedBox(width: defaultSize * 1.5),
+                            widget.note.ky_songNumber == '?'
+                                ? GestureDetector(
+                                    onTap: () {
+                                      showKySearchDialog(context);
+                                    },
+                                    child: Container(
+                                        width: defaultSize * 4.7,
+                                        height: defaultSize * 2.3,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          color: kMainColor,
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          "검색",
+                                          style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              fontSize: defaultSize * 1.2,
+                                              fontWeight: FontWeight.w500),
+                                        ))),
+                                  )
+                                : SizedBox(
+                                    width: defaultSize * 4.7,
+                                    child: Text(
+                                      widget.note.ky_songNumber,
+                                      style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.5,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: defaultSize),
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(right: defaultSize),
+                        padding: EdgeInsets.all(defaultSize * 1.5),
+                        decoration: BoxDecoration(
+                            color: kPrimaryLightBlackColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: Row(children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "최고음",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.2,
+                                    fontWeight: FontWeight.w200),
+                              ),
+                              SizedBox(height: defaultSize * 0.2),
+                              Text(
+                                widget.note.pitchNum == 0
+                                    ? "-"
+                                    : "${pitchNumToString[widget.note.pitchNum]}",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: defaultSize),
+                              Text(
+                                "난이도",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.2,
+                                    fontWeight: FontWeight.w200),
+                              ),
+                              SizedBox(height: defaultSize * 0.2),
+                              Text(
+                                widget.note.pitchNum == 0 ? "-" : "상",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          Align(
+                              alignment: Alignment.bottomRight,
+                              child: RequestPitchInfoButton(note: widget.note)),
+                        ])),
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: defaultSize),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: defaultSize),
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: kPrimaryLightBlackColor,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            padding: EdgeInsets.all(defaultSize * 1.5),
-            child: EditableTextField(note: widget.note),
-          )
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Expanded(
-          //       child: Padding(
-          //         padding: const EdgeInsets.only(left: 20),
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           children: [
-          //             Text(
-          //               widget.note.tj_title,
-          //               overflow: TextOverflow.ellipsis,
-          //               maxLines: 1,
-          //               style: TextStyle(
-          //                 color: kTitleColor,
-          //                 fontWeight: FontWeight.bold,
-          //                 fontSize: 23,
-          //               ),
-          //             ),
-          //             SizedBox(
-          //               height: 5,
-          //             ),
-          //             Text(
-          //               widget.note.tj_singer,
-          //               overflow: TextOverflow.ellipsis,
-          //               maxLines: 1,
-          //               style: TextStyle(
-          //                   color: kSubTitleColor,
-          //                   fontSize: 15,
-          //                   fontWeight: FontWeight.bold),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //     Container(
-          //       width: 80,
-          //       alignment: Alignment.center,
-          //       child: Column(
-          //         children: [
-          //           IconButton(
-          //               padding: EdgeInsets.only(right: 10),
-          //               icon: SvgPicture.asset('assets/icons/youtube.svg'),
-          //               onPressed: () async {
-          //                 final url = Uri.parse(
-          //                     'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
-          //                 if (await canLaunchUrl(url)) {
-          //                   launchUrl(url, mode: LaunchMode.inAppWebView);
-          //                 }
-          //               }),
-          //           Align(
-          //               alignment: Alignment(-0.3, 0),
-          //               child: Text(
-          //                 "노래 듣기",
-          //                 style: TextStyle(
-          //                     fontSize: 13, fontWeight: FontWeight.bold),
-          //               )),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Container(
-          //   padding: EdgeInsets.only(top: 10),
-          //   height: 1,
-          //   child: Divider(
-          //     color: Color(0xFFD2CDCD),
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 20,
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 20, right: 20),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       SizedBox(
-          //         height: 10,
-          //       ),
-          //       Row(
-          //         children: [
-          //           Container(
-          //               width: 50,
-          //               child: Text("TJ",
-          //                   style: TextStyle(
-          //                       fontSize: 18, fontWeight: FontWeight.bold))),
-          //           SizedBox(width: 10),
-          //           Container(
-          //             width: 70,
-          //             height: 28,
-          //             decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.all(Radius.circular(5)),
-          //               color: Color(0x30826A6A),
-          //             ),
-          //             child: Center(
-          //                 child: Text(
-          //               widget.note.tj_songNumber,
-          //               style:
-          //                   TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-          //             )),
-          //           ),
-          //           SizedBox(width: 30),
-          //           Container(
-          //             child: Text("최고음",
-          //                 style: TextStyle(
-          //                   fontSize: 16,
-          //                   fontWeight: FontWeight.bold,
-          //                 )),
-          //             width: 60,
-          //           ),
-          //           SizedBox(width: 10),
-          //           _pitchInfo(pitchNumToString[widget.note.pitchNum]),
-          //         ],
-          //       ),
-          //       SizedBox(height: 10),
-          //       Row(
-          //         children: [
-          //           Container(
-          //             width: 50,
-          //             child: Text(
-          //               "금영",
-          //               style:
-          //                   TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          //             ),
-          //           ),
-          //           SizedBox(width: 10),
-          //           widget.note.ky_songNumber == '?'
-          //               ? GestureDetector(
-          //                   onTap: () {
-          //                     _showKySearchDialog(context);
-          //                   },
-          //                   child: Container(
-          //                     width: 70,
-          //                     height: 28,
-          //                     decoration: BoxDecoration(
-          //                       borderRadius:
-          //                           BorderRadius.all(Radius.circular(5)),
-          //                       color: Color(0x30826A6A),
-          //                     ),
-          //                     child: Align(
-          //                       alignment: Alignment.centerLeft,
-          //                       child: Icon(Icons.search),
-          //                     ),
-          //                   ),
-          //                 )
-          //               : Container(
-          //                   width: 70,
-          //                   height: 28,
-          //                   decoration: BoxDecoration(
-          //                     borderRadius: BorderRadius.all(Radius.circular(5)),
-          //                     color: Color(0x30826A6A),
-          //                   ),
-          //                   child: Center(
-          //                     child: Text(
-          //                       widget.note.ky_songNumber,
-          //                       style: TextStyle(
-          //                           fontWeight: FontWeight.bold, fontSize: 17),
-          //                     ),
-          //                   ),
-          //                 ),
-          //           SizedBox(width: 30),
-          //           if (pitchNumToString[widget.note.pitchNum] != '?')
-          //             Row(
-          //               children: [
-          //                 Container(
-          //                   child: Text("최고음\n들어보기",
-          //                       style: TextStyle(
-          //                           fontSize: 13, fontWeight: FontWeight.bold)),
-          //                   width: 55,
-          //                 ),
-          //                 TextButton(
-          //                   onPressed: () {
-          //                     Provider.of<NoteData>(context, listen: false)
-          //                         .pitchListenEvent();
-          //                     play(pitchNumToCode[widget.note.pitchNum]);
-          //                   },
-          //                   child: Icon(
-          //                     Icons.play_circle_outline_outlined,
-          //                     color: Colors.black,
-          //                     size: 40.0,
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //         ],
-          //       ),
-          //       SizedBox(height: 15),
-          //       Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Text(
-          //             "메모",
-          //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          //           ),
-          //           SizedBox(height: 10),
-          //           Stack(children: [
-          //             Container(
-          //               width: MediaQuery.of(context).size.width,
-          //               height: 50,
-          //               decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.all(Radius.circular(5)),
-          //                   color: Color(0xFFF5F5FA)),
-          //             ),
-          //             Container(
-          //               child: EditableTextField(note: widget.note),
-          //               padding: EdgeInsets.only(left: 15),
-          //             )
-          //           ]),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 15,
-          // ),
-          // Expanded(
-          //   child: _recommendList(widget.note.pitchNum),
-          // ),
-        ]),
+            SizedBox(height: defaultSize),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: defaultSize),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              padding: EdgeInsets.all(defaultSize * 1.5),
+              child: EditableTextField(note: widget.note),
+            ),
+            SizedBox(height: defaultSize),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: defaultSize),
+              padding: EdgeInsets.all(defaultSize * 1.5),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("가사",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize * 1.5,
+                            fontWeight: FontWeight.w600)),
+                    SizedBox(height: defaultSize * 2),
+                    Center(
+                      child: Text(lyric.isEmpty ? "로딩중 입니다": lyric.trim(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: kPrimaryLightWhiteColor,
+                              fontSize: defaultSize * 1.4,
+                              fontWeight: FontWeight.w300)),
+                    ),
+                  ]),
+            )
+          ]),
+        ),
       ),
     );
   }
@@ -600,11 +470,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
     Widget cancelButton = ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ))),
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ))),
         onPressed: () {
           Navigator.of(context).pop();
         },

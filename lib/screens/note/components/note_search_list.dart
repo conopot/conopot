@@ -88,7 +88,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
           TextSpan(
             text: "'${item.tj_title}' ",
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w400,
             ),
           ),
           TextSpan(
@@ -121,7 +121,6 @@ class _NoteSearchListState extends State<NoteSearchList> {
                   margin: EdgeInsets.fromLTRB(
                       defaultSize, 0, defaultSize, defaultSize * 0.5),
                   child: Container(
-                    height: defaultSize * 9,
                     width: defaultSize * 35.5,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -144,6 +143,9 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                   fontWeight: FontWeight.w600,
                                   color: kPrimaryWhiteColor,
                                 ),
+                              ),
+                              SizedBox(
+                                height: defaultSize * 0.2,
                               ),
                               Text(
                                 widget.musicList.combinedFoundItems[index]

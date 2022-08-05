@@ -46,7 +46,7 @@ class _NoteScreenState extends State<NoteScreen> {
         ),
         floatingActionButton: (!noteData.notes.isEmpty)
             ? Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
+                margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, defaultSize * 0.5),
                 width: 72,
                 height: 72,
                 child: FittedBox(

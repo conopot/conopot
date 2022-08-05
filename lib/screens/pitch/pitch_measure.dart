@@ -41,8 +41,13 @@ class _PitchMeasureState extends State<PitchMeasure> {
   bool initialSetting1 = false;
   bool initialSetting2 = false;
   bool playFlag = false;
+  double defaultSize = SizeConfig.defaultSize;
+  double screenHeight = SizeConfig.screenHeight;
+  double screenWidth = SizeConfig.screenWidth;
 
+  @override
   void initState() {
+    super.initState();
     frequency = 0;
     maxFrequency = 0;
     flag = 0;
@@ -81,7 +86,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
     }
   }
 
-  _showPermissionDialog() {
+  void _showPermissionDialog() {
     Widget okButton = TextButton(
       child: Text("설정으로 이동",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
@@ -285,22 +290,21 @@ class _PitchMeasureState extends State<PitchMeasure> {
     SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () {
-              //!event : 직접 음역대 측정 뷰  - 백 버튼
-              Analytics_config.analytics.logEvent('직접 음역대 측정 뷰 - 백 버튼',
-                  eventProperties: {'flag': flag});
-              Navigator.pop(context);
-            },
-          ),
           title: Text(
             '음역대 측정',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
+          leading: BackButton(
+              color: kPrimaryWhiteColor,
+              onPressed: () {
+                _stopCapture();
+                Navigator.pop(context); //뒤로가기
+              },
+            ),
         ),
-        body: (flag == 0 || flag == 1) ? _firstScreen() : _secondScreen());
+        
+        body: SafeArea(
+            child: flag == 0 || flag == 1 ? _firstScreen() : _secondScreen()));
   }
 
   Widget _picker1() {
@@ -362,117 +366,62 @@ class _PitchMeasureState extends State<PitchMeasure> {
         ]);
   }
 
-  // 측정 시작, 측정 중지
+  // 측정 시작, 측정 중지 화면
   Widget _firstScreen() {
     return Container(
-      width: SizeConfig.screenWidth,
+      width: screenWidth,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          flag == 0
-              ? Column(children: [
-                  Text(
-                    '노래를 부르면 최고음 측정을 해드릴게요! 🤗',
-                    style: TextStyle(
-                      color: kPrimaryBlackColor,
-                      fontSize: SizeConfig.defaultSize * 17,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.screenHeight * 0.04),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '주의 사항',
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: SizeConfig.defaultSize * 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Icon(Icons.warning, color: Colors.yellow[800]),
-                    ],
-                  ),
-                  SizedBox(
-                    height: SizeConfig.defaultSize * 20,
-                  ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.9,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '1.  조용하고 크게 소리를 낼 수 있는 곳에서 테스트하세요.',
-                            style: TextStyle(
-                              color: kTextColor,
-                              fontSize: SizeConfig.defaultSize * 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize),
-                          Text(
-                            '2.  가성이 아닌 진성으로 부르세요.',
-                            style: TextStyle(
-                              color: kTextColor,
-                              fontSize: SizeConfig.defaultSize * 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ]),
-                  ),
-                ])
-              : SizedBox(
-                  width: SizeConfig.screenWidth * 0.9,
+              Container(
+                  margin: EdgeInsets.only(left: defaultSize * 3),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '노래를 불러 보세요 🎤',
                           style: TextStyle(
-                            color: kTextColor,
-                            fontSize: SizeConfig.defaultSize * 20,
-                            fontWeight: FontWeight.bold,
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize * 2,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(
-                          height: SizeConfig.defaultSize * 10,
+                          height: SizeConfig.defaultSize * 1.5,
                         ),
                         Row(
                           children: [
                             Text(
                               '최고',
                               style: TextStyle(
-                                color: kTextColor,
-                                fontSize: SizeConfig.defaultSize * 20,
-                                fontWeight: FontWeight.bold,
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 2,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.symmetric(horizontal: 10),
-                              padding: EdgeInsets.all(8.0),
+                              margin:
+                                  EdgeInsets.symmetric(horizontal: defaultSize),
+                              padding: EdgeInsets.all(defaultSize),
                               decoration: BoxDecoration(
+                                color: kPrimaryLightBlackColor,
                                 borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 0.5,
-                                ),
                               ),
                               child: Text(
                                 "${frequencyToPitch(maxFrequency)}",
                                 style: TextStyle(
-                                  color: kTextColor,
-                                  fontSize: SizeConfig.defaultSize * 20,
-                                  fontWeight: FontWeight.bold,
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 2,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
                             Text(
                               '까지 올라갔어요!',
                               style: TextStyle(
-                                color: kTextColor,
-                                fontSize: SizeConfig.defaultSize * 20,
-                                fontWeight: FontWeight.bold,
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 2,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
@@ -480,111 +429,105 @@ class _PitchMeasureState extends State<PitchMeasure> {
                       ]),
                 ),
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 30.0),
-            height: SizeConfig.screenHeight * 0.35,
-            width: SizeConfig.screenWidth * 0.9,
+            width: double.infinity,
+            margin: EdgeInsets.all(defaultSize * 3),
+            padding: EdgeInsets.all(defaultSize * 3),
             decoration: BoxDecoration(
+              color: kPrimaryLightBlackColor,
               borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(
-                color: Colors.grey,
-                width: 0.5,
-              ),
             ),
-            child: Center(
+            child: IntrinsicHeight(
               child: Column(
                 children: [
-                  SizedBox(height: SizeConfig.defaultSize * 10),
                   Text(
                     "현재 측정 음",
                     style: TextStyle(
-                      fontSize: 21.0,
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryBlackColor,
+                      fontSize: defaultSize * 1.8,
+                      fontWeight: FontWeight.w500,
+                      color: kPrimaryWhiteColor,
                     ),
                   ),
                   flag == 0
                       ? Expanded(
-                          child: Stack(
+                          child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment(0, -0.4),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: defaultSize * 5),
                                 child: Icon(
                                   Icons.remove,
+                                  color: kPrimaryWhiteColor,
                                 ),
                               ),
-                              SizedBox(height: SizeConfig.screenHeight * 0.08),
-                              Align(
-                                alignment: Alignment(0, 0.8),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    //!event : 직접 음역대 측정 뷰  - 측정 시작
-                                    Analytics_config.analytics
-                                        .logEvent('직접 음역대 측정 뷰 - 측정 시작');
-                                    _startCapture();
-                                    setState(() {
-                                      flag = 1;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    child: Center(
-                                        child: Text(
-                                      "측정 시작",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        color: Colors.blue),
-                                  ),
+                              GestureDetector(
+                                onTap: () {
+                                  //!event : 직접 음역대 측정 뷰  - 측정 시작
+                                  Analytics_config.analytics
+                                      .logEvent('직접 음역대 측정 뷰 - 측정 시작');
+                                  _startCapture();
+                                  setState(() {
+                                    flag = 1;
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 3.5),
+                                  padding: EdgeInsets.all(defaultSize),
+                                  child: Center(
+                                      child: Text(
+                                    "측정 시작",
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.6,
+                                        fontWeight: FontWeight.w600),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      color: kMainColor),
                                 ),
                               ),
                             ],
                           ),
                         )
                       : Expanded(
-                          child: Stack(
+                          child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment(0, -0.4),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: defaultSize * 5),
                                 child: Text(
                                   frequencyToPitch(frequency),
                                   style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold),
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 3,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
-                              SizedBox(height: SizeConfig.screenHeight * 0.08),
-                              Align(
-                                alignment: Alignment(0, 0.8),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    //!event : 직접 음역대 측정 뷰  - 측정 중지
-                                    Analytics_config.analytics
-                                        .logEvent('직접 음역대 측정 뷰 - 측정 중지');
-                                    _stopCapture();
-                                    setState(() {
-                                      flag = 2;
-                                    });
-                                  },
-                                  child: Container(
-                                    width: 100,
-                                    height: 30,
-                                    child: Center(
-                                        child: Text(
-                                      "측정 중지",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        color: Colors.red),
-                                  ),
+                              GestureDetector(
+                                onTap: () {
+                                  // !event : 직접 음역대 측정 뷰  - 측정 중지
+                                  Analytics_config.analytics
+                                      .logEvent('직접 음역대 측정 뷰 - 측정 중지');
+                                  _stopCapture();
+                                  setState(() {
+                                    flag = 2;
+                                  });
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 3.5),
+                                  padding: EdgeInsets.all(defaultSize),
+                                  child: Center(
+                                      child: Text(
+                                    "측정 중지",
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.6,
+                                        fontWeight: FontWeight.w600),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      color: kPrimaryGreyColor),
                                 ),
                               ),
                             ],
@@ -599,7 +542,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
     );
   }
 
-  //
+  // 최고음 선택 화면
   Widget _secondScreen() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -610,118 +553,108 @@ class _PitchMeasureState extends State<PitchMeasure> {
             Text(
               '내 최고음 선택하기',
               style: TextStyle(
-                color: kPrimaryBlackColor,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+                color: kPrimaryWhiteColor,
+                fontSize: defaultSize * 2.5,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
         SizedBox(
-          height: SizeConfig.defaultSize * 20,
+          height: defaultSize * 5,
         ),
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 16.0),
-          height: SizeConfig.screenHeight * 0.3,
-          width: SizeConfig.screenWidth * 0.9,
+          margin: EdgeInsets.symmetric(horizontal: defaultSize * 3),
+          padding: EdgeInsets.all(defaultSize),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(
-              color: Colors.grey,
-              width: 0.5,
-            ),
-          ),
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        height: SizeConfig.screenHeight * 0.2,
-                        width: SizeConfig.screenWidth * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: _picker1()),
-                    Container(
-                        height: SizeConfig.screenHeight * 0.2,
-                        width: SizeConfig.screenWidth * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: _picker2()),
-                  ],
-                ),
-                SizedBox(height: SizeConfig.defaultSize * 10),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                          Analytics_config.analytics
-                              .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
-                          setState(() {
-                            flag = 0;
-                            frequency = 0;
-                            maxFrequency = 0;
-                            nowPitchName = "";
-                            selected1 = "1옥타브";
-                            selected2 = "도";
-                            initialSetting1 = false;
-                            initialSetting2 = false;
-                          });
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          child: Center(
-                              child: Text(
-                            "다시 측정하기",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.red),
-                        ),
+              borderRadius: BorderRadius.circular(8.0),
+              color: kPrimaryLightBlackColor),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      width: defaultSize * 10,
+                      height: defaultSize * 15,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                          Analytics_config.analytics
-                              .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
-                          Navigator.push(
-                              context,
-                              CustomPageRoute(
-                                child: PitchResult(
-                                    fitchLevel: StringToPitchNum[
-                                        selected1 + ' ' + selected2]),
-                              ));
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 30,
-                          child: Center(
-                              child: Text(
-                            "선택 완료",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.blue),
-                        ),
+                      child: _picker1()),
+                  Container(
+                      width: defaultSize * 10,
+                      height: defaultSize * 15,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ],
+                      child: _picker2()),
+                ],
+              ),
+              SizedBox(height: defaultSize),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      //!event : 직접 음역대 측정 뷰  - 다시 측정하기
+                      Analytics_config.analytics
+                          .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
+                      setState(() {
+                        flag = 0;
+                        frequency = 0;
+                        maxFrequency = 0;
+                        nowPitchName = "";
+                        selected1 = "1옥타브";
+                        selected2 = "도";
+                        initialSetting1 = false;
+                        initialSetting2 = false;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(defaultSize),
+                      child: Center(
+                          child: Text(
+                        "다시 측정",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w600),
+                      )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: kPrimaryGreyColor),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                  GestureDetector(
+                    onTap: () {
+                      //!event : 직접 음역대 측정 뷰  - 다시 측정하기
+                      Analytics_config.analytics
+                          .logEvent('직접 음역대 측정 뷰 - 다시 측정하기');
+                      Navigator.push(
+                          context,
+                          CustomPageRoute(
+                            child: PitchResult(
+                                fitchLevel: StringToPitchNum[
+                                    selected1 + ' ' + selected2]),
+                          ));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(defaultSize),
+                      child: Center(
+                          child: Text(
+                        "선택 완료",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w600),
+                      )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: kMainColor),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: defaultSize * 2)
+            ],
           ),
         ),
       ],
