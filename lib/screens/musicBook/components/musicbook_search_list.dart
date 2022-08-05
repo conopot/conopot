@@ -31,6 +31,7 @@ class _SearchListState extends State<SearchList> {
             item.songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
+        Navigator.of(context).pop();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           Fluttertoast.showToast(
               msg: "이미 등록된 곡입니다 😢",

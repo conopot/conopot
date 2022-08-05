@@ -18,7 +18,7 @@ const kPrimaryGreenColor = Colors.green;
 // ver1.1.0
 const kBackgroundColor = Color(0xFF111111);
 const kMainColor = Color(0xFFFF8A3D);
-const kDialogColor = Color(0xFF292929);
+const kDialogColor = Color(0xFF212121);
 const kPrimaryBlackColor = Color(0xFF000000);
 const kPrimaryLightBlackColor = Color(0xFF222222);
 const kPrimaryGreyColor = Color(0xFF333333);

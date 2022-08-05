@@ -59,6 +59,13 @@ class _PitchResultState extends State<PitchResult> {
             '측정 결과',
           ),
           centerTitle: true,
+          leading: BackButton(
+            color: kPrimaryWhiteColor,
+            onPressed: () {
+              int count = 0;
+              Navigator.of(context).popUntil((_) => count++ >= 2); //뒤로가기
+            },
+          ),
         ),
         body: Center(
           child: Column(
