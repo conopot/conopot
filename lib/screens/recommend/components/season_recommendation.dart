@@ -1,10 +1,19 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SeasonRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  List<String> _list = ['봄', '여름', '가을', '겨울'];
+  List<String> titleList = ['봄', '여름', '가을', '겨울'];
+  List<List<MusicSearchItem>> songList = [
+    RecommendationItemList.springList,
+    RecommendationItemList.summerList,
+    RecommendationItemList.fallList,
+    RecommendationItemList.winterList,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +32,16 @@ class SeasonRecommendation extends StatelessWidget {
             height: defaultSize * 11,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _list.length,
+              itemCount: titleList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: (){
-
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecommendationDetailScreen(
+                                title: titleList[index],
+                                songList: songList[index])));
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: defaultSize * 2),
@@ -48,8 +62,11 @@ class SeasonRecommendation extends StatelessWidget {
                         Align(
                             alignment: Alignment.center,
                             child: Text(
-                              _list[index],
-                              style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.5),
+                              titleList[index],
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: defaultSize * 1.5),
                             )),
                       ],
                     ),

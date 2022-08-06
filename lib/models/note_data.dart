@@ -1,29 +1,28 @@
 import 'dart:convert';
 
-import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
-  bool visibleOfTextField = false;
-  late FitchMusic clickedItem;
-  int selectedIndex = -1;
   bool emptyCheck = false;
 
   final storage = new FlutterSecureStorage();
 
-  void initNotes(List<FitchMusic> combinedSongList) async {
+  void initNotes() async {
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
@@ -197,65 +196,6 @@ class NoteData extends ChangeNotifier {
         .logEvent(name: 'pitch_chart_search_view__pageView');
   }
 
-  //local storage 저장 (key : songNum, value : memo)
-  //예외 : 이미 있는 노래를 추가할 경우
-  Future<void> addNote(String memo) async {
-    Note note = Note(
-        clickedItem.tj_title,
-        clickedItem.tj_singer,
-        clickedItem.tj_songNumber,
-        clickedItem.ky_title,
-        clickedItem.ky_singer,
-        clickedItem.ky_songNumber,
-        clickedItem.gender,
-        clickedItem.pitchNum,
-        memo,
-        0);
-
-    bool flag = false;
-    for (Note iter_note in notes) {
-      if (iter_note.tj_songNumber == clickedItem.tj_songNumber) {
-        flag = true;
-        break;
-      }
-    }
-    if (!flag) {
-      notes.add(note);
-      await storage.write(key: 'notes', value: jsonEncode(notes));
-
-      final Identify identify = Identify()..set('노트 개수', notes.length);
-
-      await FirebaseAnalytics.instance
-          .setUserProperty(name: 'noteCnt', value: notes.length.toString());
-
-      Analytics_config.analytics.identify(identify);
-
-      //!event: 곡 추가 뷰 - 노트 추가 이벤트
-      Analytics_config.analytics
-          .logEvent('곡 추가 뷰 - 노트 추가 이벤트', eventProperties: {
-        '곡 이름': note.tj_title,
-        '가수 이름': note.tj_singer,
-        'TJ 번호': note.tj_songNumber,
-        '금영 번호': note.ky_songNumber,
-        '매칭 여부': (note.tj_songNumber == note.ky_songNumber),
-        '메모 여부': note.memo
-      });
-      FirebaseAnalytics.instance
-          .logEvent(name: 'song_add__note_add', parameters: {
-        'title': note.tj_title,
-        'singer': note.tj_singer,
-        'TJ_number': note.tj_songNumber,
-        'KY_number': note.ky_songNumber,
-        'IsMatched': (note.tj_songNumber == note.ky_songNumber),
-        'Ismemo': note.memo
-      });
-    } else {
-      emptyCheck = true;
-    }
-
-    notifyListeners();
-  }
-
   //!event: 곡 상세정보 - 최고음 요청
   void pitchRequestEvent(Note note) {
     Analytics_config.analytics
@@ -363,41 +303,12 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void hideTextFiled() {
-    this.visibleOfTextField = false;
-    notifyListeners();
-  }
-
-  void showTextFiled() {
-    this.visibleOfTextField = true;
-    notifyListeners();
-  }
-
   void initEmptyCheck() {
     emptyCheck = false;
     notifyListeners();
   }
 
-  void setSelectedIndex(int idx) {
-    if (this.selectedIndex == idx) {
-      this.selectedIndex = -1;
-    } else {
-      this.selectedIndex = idx;
-    }
-    notifyListeners();
-  }
-
-  void pluskeyAdjustment(int idx) {
-    notes[idx].keyAdjustment++;
-    notifyListeners();
-  }
-
-  void minuskeyAdjustment(int idx) {
-    notes[idx].keyAdjustment--;
-    notifyListeners();
-  }
-
-  void changeKySongNumber(Note note, String kySongNumber) {
+  void editKySongNumber(Note note, String kySongNumber) {
     int idx = notes.indexOf(note);
     notes[idx].ky_songNumber = kySongNumber;
     notifyListeners();
@@ -405,5 +316,177 @@ class NoteData extends ChangeNotifier {
 
   Future<void> reorderEvent() async {
     await storage.write(key: 'notes', value: jsonEncode(notes));
+  }
+
+  // 노트추가 다이어로그 팝업 함수
+  void showAddNoteDialog(BuildContext context, String songNumber, String title) {
+    double defaultSize = SizeConfig.defaultSize;
+
+    Widget okButton = ElevatedButton(
+      onPressed: () {
+        Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
+            songNumber,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .combinedSongList);
+        Navigator.of(context).pop();
+        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
+          Fluttertoast.showToast(
+              msg: "이미 등록된 곡입니다 😢",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xFFFF7878),
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+        } else {
+          Fluttertoast.showToast(
+              msg: "노래가 추가 되었습니다 🎉",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kMainColor,
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+        }
+      },
+      child: Text("추가",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ))),
+    );
+
+    Widget cancelButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: Text(
+        "취소",
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "'${title}' 노래를 애창곡 노트에 추가하시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
+
+  // 간단한 정보를 보여주고 애창곡노트 추가버튼이 있는 다이어로그 팝업 함수
+  void showAddNoteDialogWithInfo(BuildContext context, {required String songNumber, required String title, required String singer}) {
+    double defaultSize = SizeConfig.defaultSize;
+
+    Widget okButton = ElevatedButton(
+      onPressed: () {
+        addNoteBySongNumber(
+            songNumber,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .combinedSongList);
+        Navigator.of(context).pop();
+        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
+          Fluttertoast.showToast(
+              msg: "이미 등록된 곡입니다 😢",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xFFFF7878),
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
+        } else {
+          Fluttertoast.showToast(
+              msg: "노래가 추가 되었습니다 🎉",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: kMainColor,
+              textColor: kPrimaryWhiteColor,
+              fontSize: defaultSize * 1.6);
+        }
+      },
+      child: Text("애창곡 노트에 추가",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ))),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: IntrinsicHeight(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(
+            children: [
+              Text("${songNumber}",
+                  style: TextStyle(color: kMainColor)),
+              Spacer(),
+              IconButton(
+                onPressed: () async {
+                  final url = Uri.parse(
+                      'https://www.youtube.com/results?search_query= ${title} ${singer}');
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(url, mode: LaunchMode.inAppWebView);
+                  }
+                },
+                icon: SvgPicture.asset("assets/icons/youtube.svg"),
+              )
+            ],
+          ),
+          SizedBox(height: defaultSize * 2),
+          Text("${title}",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: defaultSize * 1.4)),
+          SizedBox(height: defaultSize),
+          Text("${singer}",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: defaultSize * 1.2)),
+        ]),
+      ),
+      actions: [
+        Center(child: okButton),
+      ],
+      backgroundColor: kDialogColor,
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
   }
 }

@@ -1,10 +1,20 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class ContextualRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  List<String> _list = ['여심저격', '커플 끼리', '분위기 UP', '지치고 힘들 때', '비올때'];
+  List<String> titleList = ['여심저격', '커플 끼리', '분위기 UP', '지치고 힘들 때', '비올때'];
+  List<List<MusicSearchItem>> songList = [
+    RecommendationItemList.loveList,
+    RecommendationItemList.duetList,
+    RecommendationItemList.excitedList,
+    RecommendationItemList.tiredList,
+    RecommendationItemList.rainList
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +33,16 @@ class ContextualRecommendation extends StatelessWidget {
             height: defaultSize * 11,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _list.length,
+              itemCount: titleList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: (){
-
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecommendationDetailScreen(
+                                title: titleList[index],
+                                songList: songList[index])));
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: defaultSize * 2),
@@ -48,8 +63,11 @@ class ContextualRecommendation extends StatelessWidget {
                         Align(
                             alignment: Alignment.center,
                             child: Text(
-                              _list[index],
-                              style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.5),
+                              titleList[index],
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: defaultSize * 1.5),
                             )),
                       ],
                     ),

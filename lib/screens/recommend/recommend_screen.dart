@@ -1,5 +1,5 @@
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/recommend/components/contextual_recommendation.dart';
 import 'package:conopot/screens/recommend/components/customize_recommendation.dart';
 import 'package:conopot/screens/recommend/components/gender_recommendation.dart';
@@ -42,15 +42,15 @@ class _RecommendScreenState extends State<RecommendScreen> {
                 SizedBox(height: defaultSize * 2),
                 CustomizeRecommendation(musicList: musicList), // 맞춤 추천
                 SizedBox(height: defaultSize * 2),
-                PopularSongRecommendation(),
+                PopularSongRecommendation(), // 인기 추천
                 SizedBox(height: defaultSize * 2),
-                ContextualRecommendation(),
+                ContextualRecommendation(), // 상황별 추천
                 SizedBox(height: defaultSize * 2),
-                GenreRecommendation(),
+                GenreRecommendation(), // 장르 추천
                 SizedBox(height: defaultSize * 2),
-                GenderRecommendation(),
+                GenderRecommendation(), // 성별 추천
                 SizedBox(height: defaultSize * 2),
-                SeasonRecommendation(),
+                SeasonRecommendation(), // 계절별 추천
               ],
             ),
           ),

@@ -1,13 +1,10 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/recommend/customize_recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CustomizeRecommendation extends StatefulWidget {
   late MusicSearchItemLists musicList;
@@ -22,94 +19,6 @@ class CustomizeRecommendation extends StatefulWidget {
 // 맞춤 추천
 class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
   double defaultSize = SizeConfig.defaultSize;
-
-  // 노래 간단한 정보 + 유튜브 + 애창곡노트에 추가버튼 다이어로그 팝업 함수
-  void showAddDialog(BuildContext context, FitchMusic item) {
-    Widget okButton = ElevatedButton(
-      onPressed: () {
-        Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
-            item.tj_songNumber,
-            Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList);
-        Navigator.of(context).pop();
-        if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          Fluttertoast.showToast(
-              msg: "이미 등록된 곡입니다 😢",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color(0xFFFF7878),
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
-          Provider.of<NoteData>(context, listen: false).initEmptyCheck();
-        } else {
-          Fluttertoast.showToast(
-              msg: "노래가 추가 되었습니다 🎉",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: kMainColor,
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
-        }
-      },
-      child: Text("애창곡 노트에 추가",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          )),
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kMainColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ))),
-    );
-
-    AlertDialog alert = AlertDialog(
-      content: IntrinsicHeight(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            children: [
-              Text("${item.tj_songNumber}",
-                  style: TextStyle(color: kMainColor)),
-              Spacer(),
-              IconButton(
-                onPressed: () async {
-                  final url = Uri.parse(
-                      'https://www.youtube.com/results?search_query= ${item.tj_title} ${item.tj_singer}');
-                  if (await canLaunchUrl(url)) {
-                    launchUrl(url, mode: LaunchMode.inAppWebView);
-                  }
-                },
-                icon: SvgPicture.asset("assets/icons/youtube.svg"),
-              )
-            ],
-          ),
-          SizedBox(height: defaultSize * 2),
-          Text("${item.tj_title}",
-              style: TextStyle(
-                  color: kPrimaryWhiteColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: defaultSize * 1.4)),
-          SizedBox(height: defaultSize),
-          Text("${item.tj_singer}",
-              style: TextStyle(
-                  color: kPrimaryWhiteColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: defaultSize * 1.2)),
-        ]),
-      ),
-      actions: [
-        Center(child: okButton),
-      ],
-      backgroundColor: kDialogColor,
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,14 +37,11 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
               if (widget.musicList.userMaxPitch != -1)
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      widget.musicList.userMaxPitch = -1;
-                    });
-                    // Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //                 builder: (context) =>
-                    //                     PitchMainScreen()));
+                    Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CustomizeRecommendationDetailScreen(title: "맞춤 추천", songList: widget.musicList.highestFoundItems)));
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(
@@ -202,10 +108,13 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 15),
                       itemBuilder: (context, index) {
+                        String songNumber = widget.musicList.highestFoundItems[index].tj_songNumber;
+                        String title = widget.musicList.highestFoundItems[index].tj_title;
+                        String singer = widget.musicList.highestFoundItems[index].tj_singer;
+
                         return GestureDetector(
                           onTap: () {
-                            showAddDialog(context,
-                                widget.musicList.highestFoundItems[index]);
+                            Provider.of<NoteData>(context, listen: false).showAddNoteDialogWithInfo(context, songNumber: songNumber, title : title, singer : singer);
                           },
                           child: GridTile(
                             child: Container(
@@ -220,7 +129,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                                     width: 40,
                                     child: Center(
                                       child: Text(
-                                        "${widget.musicList.highestFoundItems[index].tj_songNumber}",
+                                        "${songNumber}",
                                         style: TextStyle(
                                             color: kMainColor,
                                             fontWeight: FontWeight.w400,
@@ -236,7 +145,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "${widget.musicList.highestFoundItems[index].tj_title}",
+                                            "${title}",
                                             style: TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 color: kPrimaryWhiteColor,
@@ -244,7 +153,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                                                 fontSize: 11),
                                           ),
                                           Text(
-                                            "${widget.musicList.highestFoundItems[index].tj_singer}",
+                                            "${singer}",
                                             style: TextStyle(
                                                 overflow: TextOverflow.ellipsis,
                                                 color: kPrimaryLightWhiteColor,

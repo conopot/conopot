@@ -1,5 +1,8 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class GenreRecommendation extends StatelessWidget {
@@ -8,7 +11,15 @@ class GenreRecommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    List<String> _list = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', 'J-POP'];
+    List<String> titleList = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', 'J-POP'];
+    List<List<MusicSearchItem>> songList = [
+    RecommendationItemList.balladeList,
+    RecommendationItemList.hiphopList,
+    RecommendationItemList.rnbList,
+    RecommendationItemList.popList,
+    RecommendationItemList.cartoonList,
+    RecommendationItemList.jpopList,
+  ];
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
@@ -25,11 +36,16 @@ class GenreRecommendation extends StatelessWidget {
             height: defaultSize * 11,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _list.length,
+              itemCount: titleList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: (){
-
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RecommendationDetailScreen(
+                                title: titleList[index],
+                                songList: songList[index])));
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: defaultSize * 2),
@@ -50,7 +66,7 @@ class GenreRecommendation extends StatelessWidget {
                         Align(
                             alignment: Alignment.center,
                             child: Text(
-                              _list[index],
+                              titleList[index],
                               style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.5),
                             )),
                       ],

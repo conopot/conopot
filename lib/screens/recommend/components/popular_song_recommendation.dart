@@ -1,6 +1,10 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:conopot/screens/recommend/popular_recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PopularSongRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
@@ -26,8 +30,41 @@ class PopularSongRecommendation extends StatelessWidget {
               itemCount: _list.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: (){
-
+                  onTap: () {
+                    if (index == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PopularRecommendationDetailScreen(
+                                      title: _list[index],
+                                      songList:
+                                          Provider.of<MusicSearchItemLists>(
+                                                  context,
+                                                  listen: false)
+                                              .tjChartSongList)));
+                    } else if (index == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PopularRecommendationDetailScreen(
+                                      title: _list[index],
+                                      songList:
+                                          Provider.of<MusicSearchItemLists>(
+                                                  context,
+                                                  listen: false)
+                                              .kyChartSongList)));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PopularRecommendationDetailScreen(
+                                      title: _list[index],
+                                      songList: RecommendationItemList
+                                          .allTimeLegendList)));
+                    }
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: defaultSize * 2),
@@ -49,7 +86,10 @@ class PopularSongRecommendation extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               _list[index],
-                              style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.5),
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: defaultSize * 1.5),
                             )),
                       ],
                     ),
