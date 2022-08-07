@@ -24,16 +24,12 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> highestResults = [];
   List<FitchMusic> combinedSongList = [];
   List<FitchMusic> combinedFoundItems = [];
-
   List<bool> isChecked = [];
   List<FitchMusic> checkedMusics = [];
 
   int tabIndex = 1; // TJ or 금영
-
   int userPitch = 23;
-
   int userMaxPitch = -1;
-
   int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
 
   final storage = new FlutterSecureStorage();

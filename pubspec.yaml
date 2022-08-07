@@ -64,6 +64,7 @@ dependencies:
   webview_flutter: ^3.0.4
   internet_connection_checker: ^0.0.1+4
   marquee: ^2.2.3
+  intl: ^0.17.0
 
 
 
@@ -96,6 +97,11 @@ flutter:
     - assets/images/
     - assets/musics/
     - assets/fitches/
+    - assets/musics/recommendation/gender/
+    - assets/musics/recommendation/genre/
+    - assets/musics/recommendation/popular/
+    - assets/musics/recommendation/season/
+    - assets/musics/recommendation/tema/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -8,7 +8,7 @@ import 'package:conopot/screens/note/components/editable_text_field.dart';
 import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
@@ -426,7 +426,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Provider.of<NoteData>(context, listen: false)
-                                      .changeKySongNumber(widget.note,
+                                      .editKySongNumber(widget.note,
                                           kySearchSongList[index].songNumber);
                                   setState(() {});
                                   Navigator.of(context).pop();

@@ -1,7 +1,7 @@
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/chart/components/pitch_search_bar.dart';
 import 'package:conopot/screens/pitch/components/pitch_checkbox.dart';
 import 'package:conopot/screens/pitch/components/pitch_dropdown.dart';

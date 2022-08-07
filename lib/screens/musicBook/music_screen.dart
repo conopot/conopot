@@ -1,5 +1,5 @@
 import 'package:conopot/components/custom_page_route.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/musicBook/music_chart_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/config/size_config.dart';

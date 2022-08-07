@@ -1,6 +1,6 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
@@ -59,7 +59,6 @@ class _NoteScreenState extends State<NoteScreen> {
                                 listen: false)
                             .initCombinedBook();
                       });
-                      noteData.setSelectedIndex(-1);
                       Navigator.push(
                         context,
                         MaterialPageRoute(

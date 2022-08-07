@@ -1,6 +1,6 @@
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/chart/components/pitch_search_list.dart';
 import 'package:conopot/config/size_config.dart';
@@ -59,6 +59,13 @@ class _PitchResultState extends State<PitchResult> {
             '측정 결과',
           ),
           centerTitle: true,
+          leading: BackButton(
+            color: kPrimaryWhiteColor,
+            onPressed: () {
+              int count = 0;
+              Navigator.of(context).popUntil((_) => count++ >= 2); //뒤로가기
+            },
+          ),
         ),
         body: Center(
           child: Column(

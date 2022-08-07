@@ -1,10 +1,13 @@
-import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_lists.dart';
-import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/screens/recommend/components/contextual_recommendation.dart';
+import 'package:conopot/screens/recommend/components/customize_recommendation.dart';
+import 'package:conopot/screens/recommend/components/gender_recommendation.dart';
+import 'package:conopot/screens/recommend/components/genre_recommendation.dart';
+import 'package:conopot/screens/recommend/components/pitch_detection_banner.dart';
+import 'package:conopot/screens/recommend/components/popular_song_recommendation.dart';
+import 'package:conopot/screens/recommend/components/season_recommendation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class RecommendScreen extends StatefulWidget {
@@ -33,108 +36,21 @@ class _RecommendScreenState extends State<RecommendScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                  padding: EdgeInsets.all(defaultSize * 1.5),
-                  decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "내 음역대 측정하고",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.7,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: defaultSize),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: "삑사리 ",
-                                      style: TextStyle(
-                                          color: kMainColor,
-                                          fontSize: defaultSize * 2.5,
-                                          fontWeight: FontWeight.w600)),
-                                  TextSpan(
-                                      text: "걱정 없는",
-                                      style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                          fontSize: defaultSize * 2.5,
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                            ),
-                            Text("노래 추천 받아보세요!",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 2.5,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: defaultSize * 2),
-                            Text(
-                                "내 음역대 : ${musicList.userMaxPitch == -1 ? "" : pitchNumToString[musicList.userPitch].toString()}",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.5,
-                                    fontWeight: FontWeight.w400)),
-                            SizedBox(height: defaultSize * 2),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PitchMainScreen()));
-                              },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(defaultSize * 1.5,
-                                    defaultSize, defaultSize * 1.5, defaultSize),
-                                decoration: BoxDecoration(
-                                    color: kMainColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                child: Text(
-                                  "음역대 측정하기",
-                                  style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: SvgPicture.asset(
-                              "assets/icons/chart.svg",
-                              height: defaultSize * 10,
-                              width: defaultSize * 10,
-                            ))
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: defaultSize),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                  child: Row(
-                    children: [
-                      Text("맞춤 추천", style: TextStyle(fontSize: defaultSize)),
-                      Spacer(),
-                      Container(padding: EdgeInsets.all(defaultSize * 0.8),decoration: BoxDecoration(color: kMainColor, borderRadius: BorderRadius.all(Radius.circular(8))),)
-                    ],
-                  ),
-                )
+                PitchDetectionBanner(musicList: musicList), // 음역대 측정하기 버튼 배너
+                SizedBox(height: defaultSize * 2),
+                CustomizeRecommendation(musicList: musicList), // 맞춤 추천
+                SizedBox(height: defaultSize * 2),
+                PopularSongRecommendation(), // 인기 추천
+                SizedBox(height: defaultSize * 2),
+                ContextualRecommendation(), // 상황별 추천
+                SizedBox(height: defaultSize * 2),
+                GenreRecommendation(), // 장르 추천
+                SizedBox(height: defaultSize * 2),
+                GenderRecommendation(), // 성별 추천
+                SizedBox(height: defaultSize * 2),
+                SeasonRecommendation(), // 계절별 추천
               ],
             ),
           ),
