@@ -71,6 +71,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
         title: Text(
