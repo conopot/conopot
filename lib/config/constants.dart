@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFFF60A20); /// 테마 글씨
+const kPrimaryColor = Color(0xFFF60A20);
+
+/// 테마 글씨
 const kTitleColor = Color(0xFF4b5F7E);
 const kSubTitleColor = Color(0xFF4f4f4f);
 
