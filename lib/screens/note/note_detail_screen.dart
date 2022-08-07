@@ -12,6 +12,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:marquee/marquee.dart';
@@ -65,13 +66,28 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   @override
   void initState() {
-    getLyrics(widget.note.tj_songNumber);
     super.initState();
+    getLyrics(widget.note.tj_songNumber);
+  }
+
+  bool _willTextOverflow(
+      {required String text,
+      required double maxWidth,
+      required TextStyle style}) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: maxWidth);
+
+    return textPainter.didExceedMaxLines;
   }
 
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    double screenWidth = SizeConfig.screenWidth;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -105,70 +121,110 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                   color: kPrimaryLightBlackColor),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Expanded(
-                      //   child: Marquee(
-                      //     text: '${widget.note.tj_title}',
-                      //     style: TextStyle(
-                      //         color: kPrimaryWhiteColor,
-                      //         fontWeight: FontWeight.w500,
-                      //         fontSize: defaultSize * 1.7),
-                      //     scrollAxis: Axis.horizontal,
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     blankSpace: 20.0,
-                      //     velocity: 100.0,
-                      //     pauseAfterRound: Duration(seconds: 1),
-                      //     startPadding: 10.0,
-                      //     accelerationDuration: Duration(seconds: 1),
-                      //     accelerationCurve: Curves.linear,
-                      //     decelerationDuration: Duration(milliseconds: 500),
-                      //     decelerationCurve: Curves.easeOut,
-                      //   ),
-                      // ),
-                      Text(
-                        '${widget.note.tj_title}',
-                        style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 1.7),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: defaultSize * 0.5),
-                      Text(
-                        '${widget.note.tj_singer}',
-                        style: TextStyle(
-                            color: kPrimaryLightWhiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 1.3),
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    ],
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _willTextOverflow(
+                                text: '${widget.note.tj_title}',
+                                maxWidth: screenWidth * 0.7,
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: defaultSize * 1.7))
+                            ? Container(
+                              width: double.maxFinite,
+                              height: defaultSize * 2.5,
+                              child: Marquee(
+                                  text: '${widget.note.tj_title}',
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: defaultSize * 1.7),
+                                  scrollAxis: Axis.horizontal,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  blankSpace: 20.0,
+                                  velocity: 20.0,
+                                  pauseAfterRound: Duration(seconds: 10),
+                                  startPadding: 0,
+                                  accelerationDuration: Duration(seconds: 1),
+                                  accelerationCurve: Curves.linear,
+                                  decelerationDuration:
+                                      Duration(milliseconds: 1000),
+                                  decelerationCurve: Curves.easeOut,
+                                ),
+                            )
+                            : Text('${widget.note.tj_title}',
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: defaultSize * 1.7)),
+                        SizedBox(height: defaultSize * 0.5),
+                        _willTextOverflow(
+                                text: '${widget.note.tj_singer}',
+                                maxWidth: screenWidth * 0.7,
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: defaultSize * 1.3))
+                            ? Container(
+                              width: double.maxFinite,
+                              height: defaultSize * 2.5,
+                              child: Marquee(
+                                  text: '${widget.note.tj_singer}',
+                                  style: TextStyle(
+                                      color: kPrimaryLightWhiteColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: defaultSize * 1.3),
+                                  scrollAxis: Axis.horizontal,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  blankSpace: 20.0,
+                                  velocity: 20.0,
+                                  pauseAfterRound: Duration(seconds: 10),
+                                  startPadding: 0,
+                                  accelerationDuration: Duration(seconds: 1),
+                                  accelerationCurve: Curves.linear,
+                                  decelerationDuration:
+                                      Duration(milliseconds: 1000),
+                                  decelerationCurve: Curves.easeOut,
+                                ),
+                            )
+                            : Text('${widget.note.tj_singer}',
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: defaultSize * 1.3)),
+                      ],
+                    ),
                   ),
-                  Spacer(),
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          final url = Uri.parse(
-                              'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
-                          if (await canLaunchUrl(url)) {
-                            launchUrl(url, mode: LaunchMode.inAppWebView);
-                          }
-                        },
-                        child: SvgPicture.asset('assets/icons/youtube.svg'),
-                      ),
-                      Text(
-                        "노래 듣기",
-                        style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontSize: defaultSize,
-                            fontWeight: FontWeight.w400),
-                      )
-                    ],
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            final url = Uri.parse(
+                                'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
+                            if (await canLaunchUrl(url)) {
+                              launchUrl(url, mode: LaunchMode.inAppWebView);
+                            }
+                          },
+                          child: SvgPicture.asset('assets/icons/youtube.svg'),
+                        ),
+                        Text(
+                          "노래 듣기",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize,
+                              fontWeight: FontWeight.w400),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -357,7 +413,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             fontWeight: FontWeight.w600)),
                     SizedBox(height: defaultSize * 2),
                     Center(
-                      child: Text(lyric.isEmpty ? "로딩중 입니다": lyric.trim(),
+                      child: Text(lyric.isEmpty ? "로딩중 입니다" : lyric.trim(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: kPrimaryLightWhiteColor,
