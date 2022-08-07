@@ -60,7 +60,7 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                             height: SizeConfig.screenHeight * 0.15,
                             child: FittedBox(
                               child: SvgPicture.asset(
-                                'assets/icons/detect1.svg',
+                                'assets/icons/mike.svg',
                               ),
                             ),
                           ),
@@ -120,7 +120,7 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                             height: SizeConfig.screenHeight * 0.15,
                             child: FittedBox(
                               child: SvgPicture.asset(
-                                'assets/icons/detect2.svg',
+                                'assets/icons/search.svg',
                               ),
                             ),
                           ),

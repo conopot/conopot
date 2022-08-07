@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class PitchSearchList extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
+  double screenHeight = SizeConfig.screenHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -78,48 +79,44 @@ class PitchSearchList extends StatelessWidget {
                         );
                       })
                   : SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            "텅",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 18),
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize),
-                          Text(
-                            "내 최고음 근처 인기곡들이 없어요",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: kPrimaryLightWhiteColor,
-                                fontSize: defaultSize * 1.5),
-                          ),
-                          SizedBox(height: SizeConfig.defaultSize),
-                          ElevatedButton(
-                            onPressed: () {
-                              int count = 0;
-                              Navigator.of(context)
-                                  .popUntil((_) => count++ >= 2);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PitchMeasure()));
-                            },
-                            child: Text(
-                              "다시 측정하기",
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: screenHeight * 0.25),
+                            Text(
+                              "내 최고음 근처의 인기곡들이 없어요",
                               style: TextStyle(
-                                  color: kPrimaryBlackColor,
-                                  fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w500,
+                                  color: kPrimaryLightWhiteColor,
+                                  fontSize: defaultSize * 1.5),
                             ),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                side: BorderSide(color: kPrimaryBlackColor),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(20.0))),
-                          ),
-                        ],
+                            SizedBox(height: SizeConfig.defaultSize),
+                            ElevatedButton(
+                              onPressed: () {
+                                int count = 0;
+                                Navigator.of(context)
+                                    .popUntil((_) => count++ >= 2);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PitchMeasure()));
+                              },
+                              child: Text(
+                                "다시 측정하기",
+                                style: TextStyle(
+                                    color: kPrimaryBlackColor,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  side: BorderSide(color: kPrimaryBlackColor),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(20.0))),
+                            ),
+                          ],
+                        ),
                       ),
                     )),
     );

@@ -96,7 +96,7 @@ class _PitchResultState extends State<PitchResult> {
                     child: Text(
                       pitchNumToString[pitchLevel],
                       style: TextStyle(
-                        color: kPrimaryWhiteColor,
+                        color: kMainColor,
                         fontSize: defaultSize * 1.6,
                         fontWeight: FontWeight.w500,
                       ),
@@ -105,7 +105,7 @@ class _PitchResultState extends State<PitchResult> {
                 ],
               ),
               SizedBox(
-                height: SizeConfig.defaultSize * 2.5,
+                height: SizeConfig.defaultSize * 3,
               ),
               //내 음역대의 인기곡들
               RichText(
@@ -123,9 +123,9 @@ class _PitchResultState extends State<PitchResult> {
                       ),
                     ),
                     TextSpan(
-                      text: '음역대',
+                      text: '최고음',
                       style: TextStyle(
-                        color: kMainColor,
+                        color: kPrimaryWhiteColor,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

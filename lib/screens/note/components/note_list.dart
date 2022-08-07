@@ -59,6 +59,7 @@ class _NoteListState extends State<NoteList> {
               canvasColor: Colors.transparent,
             ),
             child: ReorderableListView(
+              padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48),
               children: noteData.notes
                   .map(
                     (note) => Container(
@@ -101,7 +102,6 @@ class _NoteListState extends State<NoteList> {
                             },
                             child: Container(
                               padding: EdgeInsets.fromLTRB(defaultSize * 1.25, defaultSize * 1.25, 0, defaultSize * 1.25),
-                              // height: defaultSize * 9.5,
                               key: Key(
                                 '${noteData.notes.indexOf(note)}',
                               ),

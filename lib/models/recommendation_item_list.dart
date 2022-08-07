@@ -31,7 +31,7 @@ class RecommendationItemList {
   static List<MusicSearchItem> tiredList = [];
 
   // 추천곡 리스트 초기화
-  void initRecommendationList() async {
+  initRecommendationList() async {
     LineSplitter ls = new LineSplitter();
     List<String> textTitle = [
       'gender/female_high',

@@ -1,9 +1,12 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -12,14 +15,14 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-
   List<Widget> _widgetOptions = <Widget>[NoteScreen(), MusicBookScreen(), RecommendScreen()];
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    double defaultSize = SizeConfig.defaultSize;
     return WillPopScope(
       onWillPop: () async {
         return true;
@@ -31,17 +34,20 @@ class _MainScreenState extends State<MainScreen> {
               border: Border(
                   top: BorderSide(color: kPrimaryWhiteColor, width: 0.1))),
           child: BottomNavigationBar(
+            key: Provider.of<NoteData>(context, listen: false).globalKey,
+            selectedFontSize: defaultSize * 1.2,
+            unselectedFontSize: defaultSize * 1.2,
             backgroundColor: kBackgroundColor,
             currentIndex: _selectedIndex,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
+            selectedItemColor: kMainColor,
+            unselectedItemColor: kPrimaryWhiteColor,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
                   color: kPrimaryWhiteColor,
                 ),
-                label: "home",
+                label: "홈",
                 activeIcon: Icon(
                   Icons.home,
                   color: kMainColor,
@@ -52,22 +58,16 @@ class _MainScreenState extends State<MainScreen> {
                   Icons.search,
                   color: kPrimaryWhiteColor,
                 ),
-                label: "music_book",
+                label: "검색",
                 activeIcon: Icon(
                   Icons.search,
                   color: kMainColor,
                 ),
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.recommend,
-                  color: kPrimaryWhiteColor,
-                ),
-                label: "recommend",
-                activeIcon: Icon(
-                  Icons.recommend,
-                  color: kMainColor,
-                ),
+                icon: Padding(padding: EdgeInsets.only(bottom: defaultSize * 0.2),child: SvgPicture.asset("assets/icons/recommend.svg", height: defaultSize * 1.7, width: defaultSize * 1.7)),
+                label: "추천",
+                activeIcon: Padding(padding: EdgeInsets.only(bottom: defaultSize * 0.2),child: SvgPicture.asset("assets/icons/recommend_click.svg",height: defaultSize * 1.7, width: defaultSize * 1.7)),
               ),
             ],
             onTap: (index) {

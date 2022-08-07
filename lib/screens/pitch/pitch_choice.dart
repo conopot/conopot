@@ -61,30 +61,24 @@ class PitchChoice extends StatelessWidget {
                                 "이 노래, 부를 수 있으세요?",
                                 style: TextStyle(
                                     color: kPrimaryLightWhiteColor,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w700,
                                     fontSize: defaultSize * 2),
                               ),
                               SizedBox(height: defaultSize),
                               Text("전 구간 끝까지 부를 수 있는 노래를 골라 주시면",
                                   style: TextStyle(
                                       color: kPrimaryLightWhiteColor,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w200,
                                       fontSize: defaultSize * 1.5)),
                               SizedBox(height: defaultSize * 0.5),
                               RichText(
                                   text: TextSpan(children: [
                                 TextSpan(
-                                    text: "음역대",
-                                    style: TextStyle(
-                                        color: kMainColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: defaultSize * 1.5)),
-                                TextSpan(
-                                    text: "를 측정해 드릴게요!",
+                                    text: "음역대를 측정해 드릴게요!",
                                     style: TextStyle(
                                         color: kPrimaryLightWhiteColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: defaultSize * 1.5))
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: defaultSize * 1.5)),
                               ]))
                             ]),
                       ),

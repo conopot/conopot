@@ -28,11 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
     /// 사용자 노트 초기화 (local storage)
     await Provider.of<NoteData>(context, listen: false).initNotes();
 
+    await RecommendationItemList().initRecommendationList();
+
     /// 2초 후 MainScreen 전환 (replace)
-    Timer(const Duration(milliseconds: 2000), () {
-      Navigator.pushReplacement(
+    Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
-    });
   }
 
   @override

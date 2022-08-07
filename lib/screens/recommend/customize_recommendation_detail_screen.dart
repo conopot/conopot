@@ -29,7 +29,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             String songNumber = songList[index].tj_songNumber;
             String title = songList[index].tj_title;
-            String singer = songList[index].ky_singer;
+            String singer = songList[index].tj_singer;
             int pitchNum = songList[index].pitchNum;
 
             return ClipRRect(

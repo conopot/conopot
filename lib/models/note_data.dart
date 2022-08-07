@@ -19,6 +19,7 @@ import 'note.dart';
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
   bool emptyCheck = false;
+  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
 
   final storage = new FlutterSecureStorage();
 

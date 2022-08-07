@@ -233,103 +233,100 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(left: defaultSize),
-                    padding: EdgeInsets.all(defaultSize * 1.5),
-                    width: defaultSize * 12.2,
-                    decoration: BoxDecoration(
-                        color: kPrimaryLightBlackColor,
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "노래방 번호",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 1.5,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(height: defaultSize),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: defaultSize * 3,
-                              child: Text(
-                                "TJ",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.5,
-                                    fontWeight: FontWeight.w500),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(left: defaultSize),
+                      padding: EdgeInsets.all(defaultSize * 1.5),
+                      decoration: BoxDecoration(
+                          color: kPrimaryLightBlackColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "노래방 번호",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.5,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: defaultSize),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: defaultSize * 3,
+                                child: Text(
+                                  "TJ",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 1.5,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: defaultSize * 1.5),
-                            SizedBox(
-                              width: defaultSize * 4.7,
-                              child: Text(
+                              SizedBox(width: defaultSize * 1.5),
+                              Text(
                                 widget.note.tj_songNumber,
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 1.5,
                                     fontWeight: FontWeight.w500),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: defaultSize),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: defaultSize * 3,
+                                child: Text(
+                                  "금영",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 1.5,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: defaultSize),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: defaultSize * 3,
-                              child: Text(
-                                "금영",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.5,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            SizedBox(width: defaultSize * 1.5),
-                            widget.note.ky_songNumber == '?'
-                                ? GestureDetector(
-                                    onTap: () {
-                                      showKySearchDialog(context);
-                                    },
-                                    child: Container(
-                                        width: defaultSize * 4.7,
-                                        height: defaultSize * 2.3,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8)),
-                                          color: kMainColor,
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          "검색",
-                                          style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              fontSize: defaultSize * 1.2,
-                                              fontWeight: FontWeight.w500),
-                                        ))),
-                                  )
-                                : SizedBox(
-                                    width: defaultSize * 4.7,
-                                    child: Text(
-                                      widget.note.ky_songNumber,
-                                      style: TextStyle(
-                                        color: kPrimaryWhiteColor,
-                                        fontSize: defaultSize * 1.5,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              SizedBox(width: defaultSize * 1.5),
+                              widget.note.ky_songNumber == '?'
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        showKySearchDialog(context);
+                                      },
+                                      child: Container(
+                                          width: defaultSize * 4.7,
+                                          height: defaultSize * 2.3,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8)),
+                                            color: kMainColor,
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            "검색",
+                                            style: TextStyle(
+                                                color: kPrimaryWhiteColor,
+                                                fontSize: defaultSize * 1.2,
+                                                fontWeight: FontWeight.w500),
+                                          ))),
+                                    )
+                                  : Text(
+                                    widget.note.ky_songNumber,
+                                    style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 1.5,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                          ],
-                        )
-                      ],
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(width: defaultSize),
                   Expanded(
+                    flex: 1,
                     child: Container(
                         margin: EdgeInsets.only(right: defaultSize),
                         padding: EdgeInsets.all(defaultSize * 1.5),
@@ -429,6 +426,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   // 금영 노래방 번호 검색 팝업 함수
   void showKySearchDialog(BuildContext context) async {
+    double defaultSize = SizeConfig.defaultSize;
     //!event: 곡 상세정보 뷰 - 금영 검색
     Provider.of<NoteData>(context, listen: false)
         .kySearchEvent(widget.note.tj_songNumber);
@@ -442,32 +440,35 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       builder: (BuildContext context) {
         return Center(
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
             child: Container(
               width: SizeConfig.screenWidth * 0.8,
               height: SizeConfig.screenHeight * 0.6,
-              color: Colors.white,
-              child: Column(children: [
+              color: kDialogColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.symmetric(vertical: defaultSize * 1),
                   child: DefaultTextStyle(
-                    style: TextStyle(color: Colors.black, fontSize: 30),
+                    style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 2),
                     child: Text(
                       "금영 번호 추가",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
+                Container(margin: EdgeInsets.symmetric(horizontal: defaultSize) ,child: Divider(height: 0.1, color: kPrimaryLightWhiteColor)),
                 kySearchSongList.length == 0
                     ? Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: DefaultTextStyle(
-                          style: TextStyle(fontSize: 15, color: Colors.black),
+                          style: TextStyle(fontSize: defaultSize * 1.4),
                           child: Text(
                             "검색 결과가 없습니다 😪",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryLightGreenColor),
+                                fontWeight: FontWeight.w400,
+                                color: kPrimaryLightWhiteColor),
                           ),
                         ),
                       )
@@ -475,9 +476,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         child: ListView.builder(
                           itemCount: kySearchSongList.length,
                           itemBuilder: (context, index) => Container(
-                            margin: EdgeInsets.symmetric(horizontal: 5),
-                            height: 100,
+                            margin: EdgeInsets.symmetric(horizontal: defaultSize * 0.5),
                             child: Card(
+                              color: kPrimaryGreyColor,
                               elevation: 0,
                               child: GestureDetector(
                                 onTap: () {
@@ -488,11 +489,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                   Navigator.of(context).pop();
                                 },
                                 child: ListTile(
-                                  title: Text(kySearchSongList[index].title),
+                                  title: Text(kySearchSongList[index].title, style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),),
                                   subtitle:
-                                      Text(kySearchSongList[index].singer),
-                                  trailing:
-                                      Text(kySearchSongList[index].songNumber),
+                                      Text(kySearchSongList[index].singer, style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.2)),
+                                  leading:
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(kySearchSongList[index].songNumber, style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.2)),
+                                        ],
+                                      ),
                                 ),
                               ),
                             ),

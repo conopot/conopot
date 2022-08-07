@@ -11,8 +11,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'add_note_screen.dart';
 
-import 'package:http/http.dart' as http;
-
 class NoteScreen extends StatefulWidget {
   const NoteScreen({Key? key}) : super(key: key);
 
