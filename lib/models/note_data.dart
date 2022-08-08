@@ -318,6 +318,7 @@ class NoteData extends ChangeNotifier {
         Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
     );
     showDialog(
         context: context,

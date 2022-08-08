@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class PopularSongRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  List<String> _list = ['tj 인기차트', '금영 인기차트', '올타임 레전드'];
+  List<String> _list = ['TJ 인기차트', '금영 인기차트', '올타임 레전드'];
 
   @override
   Widget build(BuildContext context) {

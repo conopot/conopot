@@ -25,6 +25,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<MusicSearchItem> kyChartSongList = [];
   List<FitchMusic> highestSongList = [];
   List<FitchMusic> highestFoundItems = [];
+  List<FitchMusic> customizeRecommendationList = [];
   List<FitchMusic> highestResults = [];
   List<FitchMusic> combinedSongList = [];
   List<FitchMusic> combinedFoundItems = [];
@@ -247,6 +248,7 @@ class MusicSearchItemLists extends ChangeNotifier {
             string.pitchNum <= pitchNum + 1))
         .toList();
     highestFoundItems = highestResults;
+    customizeRecommendationList = highestResults;
   }
 
   initVersion() async {
@@ -428,6 +430,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     combinedFoundItems = combinedSongList;
 
     highestFoundItems = List.from(highestSongList);
+    customizeRecommendationList = highestFoundItems
+        .where((string) => (userMaxPitch - 1 <= string.pitchNum &&
+            string.pitchNum <= userMaxPitch + 1))
+        .toList();
     isChecked = List<bool>.filled(highestFoundItems.length, false);
 
     notifyListeners();

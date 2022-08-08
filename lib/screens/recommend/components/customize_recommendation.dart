@@ -45,7 +45,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        CustomizeRecommendationDetailScreen(title: "맞춤 추천", songList: widget.musicList.highestFoundItems)));
+                                        CustomizeRecommendationDetailScreen(title: "맞춤 추천", songList: widget.musicList.customizeRecommendationList)));
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(
@@ -82,7 +82,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                             fontWeight: FontWeight.w400,
                             fontSize: defaultSize * 1.5))),
               )
-            : widget.musicList.highestFoundItems.isEmpty
+            : widget.musicList.customizeRecommendationList.isEmpty
                 ? Container(
                     width: double.infinity,
                     margin:
@@ -104,7 +104,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     height: 180,
                     child: GridView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.musicList.highestFoundItems.length,
+                      itemCount: widget.musicList.customizeRecommendationList.length,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 60,
@@ -112,9 +112,9 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 15),
                       itemBuilder: (context, index) {
-                        String songNumber = widget.musicList.highestFoundItems[index].tj_songNumber;
-                        String title = widget.musicList.highestFoundItems[index].tj_title;
-                        String singer = widget.musicList.highestFoundItems[index].tj_singer;
+                        String songNumber = widget.musicList.customizeRecommendationList[index].tj_songNumber;
+                        String title = widget.musicList.customizeRecommendationList[index].tj_title;
+                        String singer = widget.musicList.customizeRecommendationList[index].tj_singer;
 
                         return GestureDetector(
                           onTap: () {

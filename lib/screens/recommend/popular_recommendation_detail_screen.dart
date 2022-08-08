@@ -23,7 +23,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: (title == 'tj 인기차트' || title == '금영 인기차트')
+        title: (title == 'TJ 인기차트' || title == '금영 인기차트')
             ? RichText(text: TextSpan(children: [TextSpan(text: '${title} ', style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: defaultSize * 1.8)), TextSpan(text: '${today} 기준', style: TextStyle(
