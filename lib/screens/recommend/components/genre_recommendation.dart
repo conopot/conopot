@@ -12,14 +12,14 @@ class GenreRecommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    List<String> titleList = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', 'J-POP'];
+    List<String> titleList = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', '트로트'];
     List<List<MusicSearchItem>> songList = [
     RecommendationItemList.balladeList,
     RecommendationItemList.hiphopList,
     RecommendationItemList.rnbList,
     RecommendationItemList.popList,
     RecommendationItemList.cartoonList,
-    RecommendationItemList.jpopList,
+    RecommendationItemList.oldList,
   ];
 
     return Container(
@@ -63,8 +63,8 @@ class GenreRecommendation extends StatelessWidget {
                         Analytics_config().clickCarttonRecommendationEvent();
                         break;
                       case 5:
-                        //event!: 추천_뷰__JPOP
-                        Analytics_config().clickJPOPRecommendationEvent();
+                        //event!: 추천_뷰__트로트
+                        Analytics_config().clickOldrecommendationEvent();
                         break;
                     }
                     Navigator.push(

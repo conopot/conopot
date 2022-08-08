@@ -1,7 +1,9 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final MusicSearchItemLists musicList;
@@ -12,25 +14,31 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  final TextEditingController _controller = TextEditingController();
-
-  void _clearTextField() {
-    _controller.text = "";
-    widget.musicList.runFilter(_controller.text, widget.musicList.tabIndex);
+  @override
+  void initState() {
+    Provider.of<NoteData>(context, listen: false).controller = TextEditingController();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    double defaultSize = SizeConfig.defaultSize;
+    void _clearTextField() {
+      Provider.of<NoteData>(context, listen: false).controller.text = "";
+      widget.musicList.runFilter(
+          Provider.of<NoteData>(context, listen: false).controller.text,
+          widget.musicList.tabIndex);
+    }
 
+    double defaultSize = SizeConfig.defaultSize;
     return Container(
-      margin: EdgeInsets.fromLTRB(defaultSize, defaultSize * 1.5, defaultSize, defaultSize),
+      margin: EdgeInsets.fromLTRB(
+          defaultSize, defaultSize * 1.5, defaultSize, defaultSize),
       decoration: BoxDecoration(
         color: kPrimaryLightBlackColor,
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
       child: TextField(
-        controller: _controller,
+        controller: Provider.of<NoteData>(context, listen: false).controller,
         style: TextStyle(color: kPrimaryWhiteColor),
         onChanged: (text) => {
           widget.musicList.runFilter(text, widget.musicList.tabIndex),
@@ -51,7 +59,10 @@ class _SearchBarState extends State<SearchBar> {
             Icons.search,
             color: kPrimaryWhiteColor,
           ),
-          suffixIcon: _controller.text.isEmpty
+          suffixIcon: Provider.of<NoteData>(context, listen: false)
+                  .controller
+                  .text
+                  .isEmpty
               ? null
               : IconButton(
                   icon: const Icon(Icons.clear),

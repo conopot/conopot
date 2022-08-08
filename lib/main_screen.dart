@@ -1,6 +1,7 @@
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
@@ -72,6 +73,9 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
               ),
             ],
             onTap: (index) {
+              if (index == 1) {
+                Provider.of<MusicSearchItemLists>(context, listen: false).changeTabIndex(index: 1);
+              }
               setState(() {
                 _selectedIndex = index;
                 if (index == 1) {

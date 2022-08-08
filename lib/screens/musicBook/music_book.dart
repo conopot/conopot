@@ -1,4 +1,3 @@
-import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -20,8 +19,8 @@ class _MusicBookScreenState extends State<MusicBookScreen>
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    super.initState();
   }
 
   @override
@@ -33,7 +32,6 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,
@@ -42,7 +40,6 @@ class _MusicBookScreenState extends State<MusicBookScreen>
       ) =>
           Scaffold(
         appBar: AppBar(
-            // automaticallyImplyLeading: false, // back button 숨기기 위함
             centerTitle: false,
             title: Text("노래방 책")),
         body: SafeArea(
@@ -53,6 +50,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                 isScrollable: true,
                 onTap: (index) {
                   musicList.changeTabIndex(index: index + 1);
+                  Provider.of<NoteData>(context, listen: false).controller.text = "";
                 },
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorColor: kMainColor,

@@ -13,7 +13,7 @@ class RecommendationItemList {
   static List<MusicSearchItem> balladeList = [];
   static List<MusicSearchItem> cartoonList = [];
   static List<MusicSearchItem> hiphopList = [];
-  static List<MusicSearchItem> jpopList = [];
+  static List<MusicSearchItem> oldList = [];
   static List<MusicSearchItem> popList = [];
   static List<MusicSearchItem> rnbList = [];
   //popular
@@ -41,7 +41,7 @@ class RecommendationItemList {
       'genre/ballade',
       'genre/cartoon',
       'genre/hiphop',
-      'genre/jpop',
+      'genre/old',
       'genre/pop',
       'genre/rnb',
       'popular/all_time_legend',
@@ -68,7 +68,7 @@ class RecommendationItemList {
     parseMusics(contextList[4], balladeList);
     parseMusics(contextList[5], cartoonList);
     parseMusics(contextList[6], hiphopList);
-    parseMusics(contextList[7], jpopList);
+    parseMusics(contextList[7], oldList);
     parseMusics(contextList[8], popList);
     parseMusics(contextList[9], rnbList);
     parseMusics(contextList[10], allTimeLegendList);

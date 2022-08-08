@@ -5,7 +5,6 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,8 @@ import 'note.dart';
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
   bool emptyCheck = false;
-  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
+  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKe
+  TextEditingController controller = TextEditingController();
 
   final storage = new FlutterSecureStorage();
 
