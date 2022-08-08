@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -17,6 +18,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Analytics_config().settingNotePageView();
     int choice = Provider.of<MusicSearchItemLists>(context, listen: true)
         .userNoteSetting;
     return Scaffold(
@@ -41,6 +43,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                       groupValue: choice,
                       onChanged: (int? value) {
                         setState(() {
+                          Analytics_config().settingNoteSettingItem("반주기번호");
                           choice = 0;
                           Provider.of<MusicSearchItemLists>(context,
                                   listen: false)
@@ -141,6 +144,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                       groupValue: choice,
                       onChanged: (int? value) {
                         setState(() {
+                          Analytics_config().settingNoteSettingItem("최고음");
                           choice = 1;
                           Provider.of<MusicSearchItemLists>(context,
                                   listen: false)

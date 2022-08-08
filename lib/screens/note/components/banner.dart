@@ -44,13 +44,17 @@ class CarouselSliderBanner extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // !event 배너 클릭 이벤트
-        Analytics_config().pitchBannerClickEvent(
-            Provider.of<NoteData>(context, listen: false).notes.length);
         if (itemIndex == 0) {
+          Analytics_config().noteViewBannerRecommandEvent();
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(2);
         } else {
+          if (itemIndex == 1) {
+            Analytics_config().noteViewBannerMeasureEvent();
+          } else {
+            Analytics_config().noteViewBannerNoteSettingEvent();
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => screen),

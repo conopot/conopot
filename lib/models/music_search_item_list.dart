@@ -472,6 +472,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
       //!event : 일반_검색_뷰__검색_키워드
       Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+      Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
     });
@@ -534,7 +535,8 @@ class MusicSearchItemLists extends ChangeNotifier {
       combinedFoundItems = highestResults;
 
       //!event : 곡 추가 뷰 - 검색 키워드
-      Analytics_config().event('곡_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+      Analytics_config().event('노트_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+      Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
     });
@@ -568,6 +570,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
       //!event : 최고음 검색 뷰 - 검색 키워드
       Analytics_config().event('최고음_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+      Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
     });

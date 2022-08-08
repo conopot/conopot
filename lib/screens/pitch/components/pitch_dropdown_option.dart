@@ -29,7 +29,6 @@ class _PitchDropdownOptionState extends State<PitchDropdownOption> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold),
             onChanged: (String? newValue) {
-              Analytics_config().pitchSortEvent(newValue!);
               musicList.changeSortOption(option: newValue);
               setState(() {
                 if (newValue != null) {

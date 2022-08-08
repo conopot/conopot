@@ -58,8 +58,8 @@ class RequestPitchInfoButton extends StatelessWidget {
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
         } else {
-          //!event
-          Analytics_config().pitchRequestEvent(note);
+          //!event : 최고음 요청
+          Analytics_config().pitchRequestEvent(note.tj_title);
           // 정보요청
           _requestPitchInfo(note);
           storage.write(

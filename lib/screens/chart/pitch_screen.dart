@@ -21,7 +21,7 @@ class _PitchScreenState extends State<PitchScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double widthSize = SizeConfig.screenWidth / 10;
-    Analytics_config().pitchChartScreenPageViewEvent();
+    Analytics_config().pitchMeasurePageView();
 
     return Consumer<MusicSearchItemLists>(
       builder: (

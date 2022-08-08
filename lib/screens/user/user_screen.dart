@@ -25,6 +25,7 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Analytics_config().settingPageView();
     return Consumer<MusicSearchItemLists>(
         builder: (
       context,
@@ -44,12 +45,16 @@ class _UserScreenState extends State<UserScreen> {
                   SizedBox(height: defaultSize),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => NoteSettingScreen()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NoteSettingScreen()));
                     },
                     splashColor: Colors.transparent,
                     child: Container(
                       height: defaultSize * 4,
-                      padding: EdgeInsets.symmetric(horizontal: defaultSize * 2),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 2),
                       child: Row(children: [
                         Text("애창곡 노트 설정",
                             style: TextStyle(
@@ -75,6 +80,7 @@ class _UserScreenState extends State<UserScreen> {
                   child: FloatingActionButton(
                     elevation: 5.0,
                     onPressed: () {
+                      Analytics_config().settingChannelTalk();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) => ChannelTalkScreen()),

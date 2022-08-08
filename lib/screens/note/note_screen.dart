@@ -25,6 +25,8 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Analytics_config().noteViewPageViewEvent();
+
     return Consumer<NoteData>(
       builder: (context, noteData, child) => Scaffold(
         appBar: AppBar(
@@ -61,7 +63,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                 listen: false)
                             .initCombinedBook();
                       });
-                      Analytics_config().addNoteEvent(noteData.notes.length);
+                      Analytics_config().addNoteEvent();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

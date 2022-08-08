@@ -16,8 +16,6 @@ class ChartScreen extends StatelessWidget {
     SizeConfig().init(context);
     double widthSize = SizeConfig.screenWidth / 10;
 
-    Analytics_config().popChartScreenPageViewEvent();
-
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,
