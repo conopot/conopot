@@ -57,6 +57,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
                     title: Text(
                       title,
                       style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
                         color: kPrimaryWhiteColor,
                         fontSize: defaultSize * 1.4,
                         fontWeight: FontWeight.w500,
@@ -65,16 +66,21 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
                     subtitle: Text(
                       singer,
                       style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
                           color: kPrimaryLightWhiteColor,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w300,
                           fontSize: defaultSize * 1.2),
                     ),
                     onTap: () {
                       //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
-                      Analytics_config().clickCustomizeRecommendationListItemEvent();
+                      Analytics_config()
+                          .clickCustomizeRecommendationListItemEvent();
 
                       Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialogWithInfo(context, songNumber: songNumber, title: title, singer: singer);
+                          .showAddNoteDialogWithInfo(context,
+                              songNumber: songNumber,
+                              title: title,
+                              singer: singer);
                     }),
               ),
             );

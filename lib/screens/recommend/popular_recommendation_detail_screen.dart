@@ -83,7 +83,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             color: kPrimaryWhiteColor,
-                            fontSize: defaultSize * 1.4,
+                            fontSize: defaultSize * 1.3,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -92,20 +92,19 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: kPrimaryLightWhiteColor,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w300,
                               fontSize: defaultSize * 1.2),
                         ),
                         trailing: SizedBox(
                           width: defaultSize * 5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [Text(
+                          child: Center(
+                            child: Text(
                               songNumber,
                               style: TextStyle(
                                   color: kMainColor,
                                   fontWeight: FontWeight.w500,
                                   fontSize: defaultSize * 1.3),
-                            )],
+                            ),
                           ),
                         ),
                         onTap: () {

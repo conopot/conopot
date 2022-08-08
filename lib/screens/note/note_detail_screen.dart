@@ -206,28 +206,30 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            Analytics_config()
-                                .noteDetailViewYoutube(widget.note.tj_title);
-                            final url = Uri.parse(
-                                'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
-                            if (await canLaunchUrl(url)) {
-                              launchUrl(url, mode: LaunchMode.inAppWebView);
-                            }
-                          },
-                          child: SvgPicture.asset('assets/icons/youtube.svg'),
+                    child: Container(
+                      child: GestureDetector(
+                        onTap: () async {
+                          Analytics_config()
+                              .noteDetailViewYoutube(widget.note.tj_title);
+                          final url = Uri.parse(
+                              'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
+                          if (await canLaunchUrl(url)) {
+                            launchUrl(url, mode: LaunchMode.inAppWebView);
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset('assets/icons/youtube.svg'),
+                            Text(
+                              "노래 듣기",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize,
+                                  fontWeight: FontWeight.w400),
+                            )
+                          ],
                         ),
-                        Text(
-                          "노래 듣기",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize,
-                              fontWeight: FontWeight.w400),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 ],
