@@ -11,6 +11,7 @@ import 'package:conopot/models/music_search_item.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -168,34 +169,59 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   Future<String> getTJMusics() async {
-    final file = File('$dir/musicbook_TJ.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
   }
 
   Future<String> getTJMusicChart() async {
-    final file = File('$dir/chart_TJ.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/chart_TJ.txt');
   }
 
   Future<String> getKYMusics() async {
-    final file = File('$dir/musicbook_KY.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
   }
 
   Future<String> getKYMusicChart() async {
-    final file = File('$dir/chart_KY.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/chart_KY.txt');
   }
 
   Future<String> getHighMusics() async {
-    final file = File('$dir/highest_Pitch.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
   }
 
   Future<String> getCombinedMusics() async {
-    final file = File('$dir/matching_Musics.txt');
-    return file.readAsString();
+    return await rootBundle.loadString('assets/musics/matching_Musics.txt');
   }
+
+  //리소스 업데이트 코드 (개발 완료되면 풀 것)
+  // Future<String> getTJMusics() async {
+  //   final file = File('$dir/musicbook_TJ.txt');
+  //   return file.readAsString();
+  // }
+
+  // Future<String> getTJMusicChart() async {
+  //   final file = File('$dir/chart_TJ.txt');
+  //   return file.readAsString();
+  // }
+
+  // Future<String> getKYMusics() async {
+  //   final file = File('$dir/musicbook_KY.txt');
+  //   return file.readAsString();
+  // }
+
+  // Future<String> getKYMusicChart() async {
+  //   final file = File('$dir/chart_KY.txt');
+  //   return file.readAsString();
+  // }
+
+  // Future<String> getHighMusics() async {
+  //   final file = File('$dir/highest_Pitch.txt');
+  //   return file.readAsString();
+  // }
+
+  // Future<String> getCombinedMusics() async {
+  //   final file = File('$dir/matching_Musics.txt');
+  //   return file.readAsString();
+  // }
 
   void initFitch() {
     highestFoundItems = List.from(highestSongList);
@@ -224,9 +250,9 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   initVersion() async {
-    dir = (await getApplicationDocumentsDirectory()).path;
-
-    await checkVersionUpdate();
+    //리소스 업데이트 코드 (개발 완료되면 주석 풀 것)
+    //dir = (await getApplicationDocumentsDirectory()).path;
+    //await checkVersionUpdate();
 
     init();
   }
