@@ -33,7 +33,6 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    Analytics_config().musicBookScreenPageViewEvent();
 
     return Consumer<MusicSearchItemLists>(
       builder: (

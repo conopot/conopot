@@ -623,7 +623,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   GestureDetector(
                     onTap: () {
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
-                      Analytics_config().event('직접_음역대_측정_뷰__다시_측정하기', {});
+                      Analytics_config().event('직접_음역대_측정_뷰__선택_완료', {});
                       Navigator.push(
                           context,
                           CustomPageRoute(

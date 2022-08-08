@@ -47,6 +47,8 @@ class _PitchResultState extends State<PitchResult> {
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
 
+    Analytics_config().event('음역대_측정_결과_뷰__페이지뷰', {});
+
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,

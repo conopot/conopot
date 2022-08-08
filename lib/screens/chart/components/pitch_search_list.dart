@@ -69,8 +69,8 @@ class PitchSearchList extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   // !event : 음역대 측정 결과 뷰 - 내 최고음 주변의 인기곡들
-                                  Analytics_config().event(
-                                      '음역대_측정_결과_뷰__내_최고음_주변의_인기곡_리스트_클릭', {});
+                                  Analytics_config()
+                                      .event('음역대_측정_결과_뷰__노트_추가', {});
                                   Provider.of<NoteData>(context, listen: false)
                                       .showAddNoteDialog(
                                           context, songNumber, title);

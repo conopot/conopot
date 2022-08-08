@@ -93,7 +93,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
                         onPressed: () {
                           //!event: 곡 상세정보 뷰 - 메모 수정
                           Analytics_config()
-                              .songMemoEditEvent(widget.note.tj_title);
+                              .noteDetailViewMemo(widget.note.tj_title);
                           setState(() {
                             initialText = _editingController.text;
                             _isEditingText = false;

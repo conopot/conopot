@@ -90,6 +90,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
+    Analytics_config().noteDetailPageView();
 
     return Scaffold(
       appBar: AppBar(
@@ -209,6 +210,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       children: [
                         GestureDetector(
                           onTap: () async {
+                            Analytics_config()
+                                .noteDetailViewYoutube(widget.note.tj_title);
                             final url = Uri.parse(
                                 'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
                             if (await canLaunchUrl(url)) {
@@ -430,7 +433,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   void showKySearchDialog(BuildContext context) async {
     double defaultSize = SizeConfig.defaultSize;
     //!event: 곡 상세정보 뷰 - 금영 검색
-    Analytics_config().kySearchEvent(widget.note.tj_songNumber);
+    Analytics_config().noteDetailViewFindKY(widget.note.tj_songNumber);
     Provider.of<MusicSearchItemLists>(context, listen: false)
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
@@ -545,7 +548,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
-        Analytics_config().noteDeleteEvent(widget.note);
+        Analytics_config().noteDeleteEvent(widget.note.tj_title);
         Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },

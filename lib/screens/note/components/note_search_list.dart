@@ -146,8 +146,11 @@ class _NoteSearchListState extends State<NoteSearchList> {
                                         .showAddNoteDialog(
                                             context, songNumber, title);
                                     //!event: 곡 추가 뷰 - 리스트 클릭 시
-                                    Analytics_config().addSongClickEvent(widget
-                                        .musicList.combinedFoundItems[index]);
+                                    Analytics_config().addViewSongClickEvent(
+                                        widget
+                                            .musicList
+                                            .combinedFoundItems[index]
+                                            .tj_title);
                                   },
                                   child: SvgPicture.asset(
                                       "assets/icons/listButton.svg"),

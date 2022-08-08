@@ -171,6 +171,7 @@ class NoteData extends ChangeNotifier {
               fontSize: defaultSize * 1.6);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
+          Analytics_config().addViewSongAddEvent(title);
           Fluttertoast.showToast(
               msg: "노래가 추가 되었습니다 🎉",
               toastLength: Toast.LENGTH_SHORT,
