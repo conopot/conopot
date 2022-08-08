@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -73,6 +74,13 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
             onTap: (index) {
               setState(() {
                 _selectedIndex = index;
+                if (index == 1) {
+                  //!event: 네비게이션__검색탭
+                  Analytics_config().clicksearchTapEvent();
+                } else if (index == 2) {
+                  //!event: 네비게이션__추천탭
+                  Analytics_config().clickRecommendationTapEvent();
+                }
               });
             },
           ),

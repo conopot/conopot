@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -32,6 +33,9 @@ class PopularSongRecommendation extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     if (index == 0) {
+                      //!event: 추천_뷰___TJ_인기차트
+                      Analytics_config().clickTJChartEvent();
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -44,6 +48,9 @@ class PopularSongRecommendation extends StatelessWidget {
                                                   listen: false)
                                               .tjChartSongList)));
                     } else if (index == 1) {
+                      //!event: 추천_뷰__금영_인기차트
+                      Analytics_config().clickKYChartEvent();
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -56,6 +63,9 @@ class PopularSongRecommendation extends StatelessWidget {
                                                   listen: false)
                                               .kyChartSongList)));
                     } else {
+                      //!event: 추천_뷰__올타임_레전드
+                      Analytics_config().clickAllTimeLegendRecommendationEvent();
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -36,6 +37,25 @@ class GenderRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    switch(index) {
+                      case 0:
+                        //event!: 추천_뷰__남성고음
+                        Analytics_config().clickManHighRecommendationEvent();
+                        break;
+                      case 1:
+                        //event!: 추천_뷰__여성고음
+                        Analytics_config().clickFemaleHighRecommendationEvent();
+                        break;
+                      case 2:
+                        //event!: 추천_뷰__남성저음
+                        Analytics_config().clickManHighRecommendationEvent();
+                        break;
+                      case 3:
+                        //event!: 추천_뷰__여성저음
+                        Analytics_config().clickFemaleLowRecommendationEvent();
+                        break;
+                    }
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -69,6 +70,9 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
                           fontSize: defaultSize * 1.2),
                     ),
                     onTap: () {
+                      //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
+                      Analytics_config().clickCustomizeRecommendationListItemEvent();
+
                       Provider.of<NoteData>(context, listen: false)
                           .showAddNoteDialogWithInfo(context, songNumber: songNumber, title: title, singer: singer);
                     }),

@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/recommend/components/contextual_recommendation.dart';
@@ -22,6 +23,9 @@ class _RecommendScreenState extends State<RecommendScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //!evnet:  추천_뷰__페이지뷰
+    Analytics_config().recommendationPageVeiwEvent;
+
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,

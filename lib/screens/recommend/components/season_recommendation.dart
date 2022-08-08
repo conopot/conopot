@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -36,6 +37,25 @@ class SeasonRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    switch(index) {
+                      case 0:
+                        //event!: 추천_뷰__봄
+                        Analytics_config().clickSpringRecommendationEvent();
+                        break;
+                      case 1:
+                        //event!: 추천_뷰__여름
+                        Analytics_config().clickSummerRecommendationdEvent();
+                        break;
+                      case 2:
+                        //event!: 추천_뷰__가을
+                        Analytics_config().clickFallRecommendationEvent();
+                        break;
+                      case 3:
+                        //event!: 추천_뷰__겨울
+                        Analytics_config().clickWinterRecommendationEvent();
+                        break;
+                    }
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

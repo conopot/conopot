@@ -236,6 +236,8 @@ class NoteData extends ChangeNotifier {
       {required String songNumber,
       required String title,
       required String singer}) {
+    //!event: 일반_검색_뷰__노래_유튜브
+    Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
 
     Widget okButton = ElevatedButton(

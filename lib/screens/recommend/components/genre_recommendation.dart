@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -40,6 +41,32 @@ class GenreRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: (){
+                    switch(index) {
+                      case 0:
+                        //event!: 추천_뷰__발라드
+                        Analytics_config().clickBalladRecommendationEvent();
+                        break;
+                      case 1:
+                        //event!: 추천_뷰__힙합
+                        Analytics_config().clickHipHopRecommendationEvent();
+                        break;
+                      case 2:
+                        //event!: 추천_뷰__알앤비
+                        Analytics_config().clickRnbRecommendationEvent();
+                        break;
+                      case 3:
+                        //event!: 추천_뷰_팝
+                        Analytics_config().clickPopRecommendationEvent();
+                        break;
+                      case 4:
+                        //event!: 추천_뷰__만화주제가
+                        Analytics_config().clickCarttonRecommendationEvent();
+                        break;
+                      case 5:
+                        //event!: 추천_뷰__JPOP
+                        Analytics_config().clickJPOPRecommendationEvent();
+                        break;
+                    }
                     Navigator.push(
                         context,
                         MaterialPageRoute(

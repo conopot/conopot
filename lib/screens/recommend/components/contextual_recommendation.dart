@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -37,6 +38,28 @@ class ContextualRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    switch(index) {
+                      case 0:
+                        //!event: 추천_뷰__여심저격
+                        Analytics_config().clickLoveRecommendationEvent();
+                        break;
+                      case 1:
+                        //!event: 추천_뷰__커플끼리
+                        Analytics_config().clickCoupleRecommendationEvent();
+                        break;
+                      case 2:
+                        //!event: 추천_뷰__분위기UP
+                        Analytics_config().clickTensionUpRecommendationEvent();
+                        break;
+                      case 3:
+                        //!event: 추천_뷰__지치고힘들때
+                        Analytics_config().clickTiredRecommendationEvent();
+                        break;
+                      case 4:
+                        //!evnet: 추천_뷰__비올 때
+                        Analytics_config().clickRainRecommendationEvent();
+                        break;
+                    }
                     Navigator.push(
                         context,
                         MaterialPageRoute(

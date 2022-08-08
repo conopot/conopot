@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -37,6 +38,9 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
               if (widget.musicList.userMaxPitch != -1)
                 GestureDetector(
                   onTap: () {
+                    //!event: 추천_뷰__맞춤_추천_더보기
+                    Analytics_config().clickCustomizeRecommendationButtonEvent();
+
                     Navigator.push(
                                 context,
                                 MaterialPageRoute(

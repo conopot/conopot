@@ -1,10 +1,10 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class PitchDetectionBanner extends StatefulWidget {
   late MusicSearchItemLists musicList;
@@ -74,6 +74,9 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                 SizedBox(height: defaultSize * 2),
                 GestureDetector(
                   onTap: () {
+                    //!evnet: 추천_뷰__음역대 측정
+                    Analytics_config().clickRecommendationPitchDetectionButtonEvent();
+                    
                     Navigator.push(
                         context,
                         MaterialPageRoute(
