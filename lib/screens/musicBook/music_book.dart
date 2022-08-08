@@ -51,6 +51,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                 onTap: (index) {
                   musicList.changeTabIndex(index: index + 1);
                   Provider.of<NoteData>(context, listen: false).controller.text = "";
+                  FocusScope.of(context).requestFocus(FocusNode());
                 },
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorColor: kMainColor,

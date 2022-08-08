@@ -16,6 +16,7 @@ class PitchChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
     // !event : 간접 음역대 측정뷰 - 페이지뷰
     Analytics_config().event('간접_음역대_측정뷰__페이지뷰', {});
     SizeConfig().init(context);
@@ -87,7 +88,7 @@ class PitchChoice extends StatelessWidget {
                     ],
                   ),
                 ),
-                floatingActionButton: FloatingActionButton.extended(
+                floatingActionButton: keyboardIsOpened ? null :FloatingActionButton.extended(
                   onPressed: () => {
                     // !event : 간접 음역대 측정뷰 - 선택완료
                     Analytics_config().event('간접_음역대_측정뷰__선택완료', {

@@ -89,7 +89,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
   void _showPermissionDialog() {
     Widget okButton = TextButton(
       child: Text("설정으로 이동",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+          style: TextStyle(fontWeight: FontWeight.w500, color: kMainColor)),
       onPressed: () {
         openAppSettings();
       },
@@ -102,19 +102,22 @@ class _PitchMeasureState extends State<PitchMeasure> {
       child: Text(
         "취소",
         style:
-            TextStyle(fontWeight: FontWeight.bold, color: kPrimaryBlackColor),
+            TextStyle(fontWeight: FontWeight.w500, color: kPrimaryWhiteColor),
       ),
     );
 
     AlertDialog alert = AlertDialog(
       content: Text(
         "마이크 서비스를 사용할 수 없습니다. 기기의 '설정> 개인정보 보호'에서 마이크 서비스를 켜주세요.(필수권한)",
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(fontWeight: FontWeight.w500, color: kPrimaryLightWhiteColor),
       ),
       actions: [
         cancelButton,
         okButton,
       ],
+      backgroundColor: kPrimaryLightBlackColor,
+      shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
     showDialog(

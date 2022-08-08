@@ -96,6 +96,14 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
                 onTap: () {
                   Provider.of<MusicSearchItemLists>(context, listen: false)
                       .initFitch();
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                          .isChecked =
+                      List<bool>.filled(
+                          Provider.of<MusicSearchItemLists>(context,
+                                  listen: false)
+                              .highestFoundItems
+                              .length,
+                          false);
                   Navigator.push(
                     context,
                     CustomPageRoute(

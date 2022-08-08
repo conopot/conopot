@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class ContextualRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  List<String> titleList = ['여심저격', '커플 끼리', '분위기 UP', '지치고 힘들 때', '비올때'];
+  List<String> titleList = ['여심저격', '커플 끼리', '분위기 UP', '지치고 힘들 때', '비올 때'];
   List<List<MusicSearchItem>> songList = [
     RecommendationItemList.loveList,
     RecommendationItemList.duetList,

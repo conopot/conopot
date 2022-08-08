@@ -223,6 +223,8 @@ class NoteData extends ChangeNotifier {
         okButton,
       ],
       backgroundColor: kDialogColor,
+      shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
     showDialog(
@@ -318,7 +320,7 @@ class NoteData extends ChangeNotifier {
         Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
     );
     showDialog(
         context: context,
