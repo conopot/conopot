@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -46,7 +47,8 @@ class _NoteScreenState extends State<NoteScreen> {
         ),
         floatingActionButton: (!noteData.notes.isEmpty)
             ? Container(
-                margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, defaultSize * 0.5),
+                margin: EdgeInsets.fromLTRB(
+                    0, 0, defaultSize * 0.5, defaultSize * 0.5),
                 width: 72,
                 height: 72,
                 child: FittedBox(
@@ -59,6 +61,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                 listen: false)
                             .initCombinedBook();
                       });
+                      Analytics_config().addNoteEvent(noteData.notes.length);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -73,8 +76,12 @@ class _NoteScreenState extends State<NoteScreen> {
         body: Column(
           children: [
             CarouselSliderBanner(),
-            if (noteData.notes.isEmpty)...[ EmptyNoteList()]
-            else...[SizedBox(height: defaultSize),NoteList()],
+            if (noteData.notes.isEmpty) ...[
+              EmptyNoteList()
+            ] else ...[
+              SizedBox(height: defaultSize),
+              NoteList()
+            ],
           ],
         ),
       ),

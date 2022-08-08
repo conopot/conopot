@@ -607,24 +607,4 @@ class MusicSearchItemLists extends ChangeNotifier {
           search_keyword_singer_title: singer + title));
     }
   }
-
-  //!event: 애창곡 노트 뷰 - 최고음 배너 클릭 시
-  void pitchBannerClickEvent(int noteCnt) {
-    Analytics_config().event('애창곡_노트_뷰__최고음_배너_클릭', {});
-  }
-
-  //!event: 애창곡 노트 뷰 - 노트 설정 배너 클릭 시
-  void noteSettingBannerClickEvent(int noteCnt) {
-    Analytics_config().event('애창곡_노트_뷰__노트설정_배너_클릭', {});
-  }
-
-  //!event: 내 정보 - 최고음 측정 여부
-  void checkPitchMeasureEvent(int noteCnt) {
-    Analytics_config().event('내_정보__최고음_측정_여부', {});
-  }
-
-  //!event: 최고음 검색 뷰 - 정렬
-  void pitchSortEvent(String sortOptionStr) {
-    Analytics_config().event('최고음_검색_뷰__정렬', {'정렬_기준': sortOptionStr});
-  }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/lyric.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -312,13 +313,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                           ))),
                                     )
                                   : Text(
-                                    widget.note.ky_songNumber,
-                                    style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w500,
+                                      widget.note.ky_songNumber,
+                                      style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.5,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
                             ],
                           )
                         ],
@@ -429,8 +430,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   void showKySearchDialog(BuildContext context) async {
     double defaultSize = SizeConfig.defaultSize;
     //!event: 곡 상세정보 뷰 - 금영 검색
-    Provider.of<NoteData>(context, listen: false)
-        .kySearchEvent(widget.note.tj_songNumber);
+    Analytics_config().kySearchEvent(widget.note.tj_songNumber);
     Provider.of<MusicSearchItemLists>(context, listen: false)
         .runKYFilter(widget.note.tj_title);
     List<MusicSearchItem> kySearchSongList =
@@ -447,66 +447,88 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               height: SizeConfig.screenHeight * 0.6,
               color: kDialogColor,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: defaultSize * 1),
-                  child: DefaultTextStyle(
-                    style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 2),
-                    child: Text(
-                      "금영 번호 추가",
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                Container(margin: EdgeInsets.symmetric(horizontal: defaultSize) ,child: Divider(height: 0.1, color: kPrimaryLightWhiteColor)),
-                kySearchSongList.length == 0
-                    ? Padding(
-                        padding: EdgeInsets.only(top: 20),
-                        child: DefaultTextStyle(
-                          style: TextStyle(fontSize: defaultSize * 1.4),
-                          child: Text(
-                            "검색 결과가 없습니다 😪",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: kPrimaryLightWhiteColor),
-                          ),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: defaultSize * 1),
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                            color: kPrimaryLightWhiteColor,
+                            fontSize: defaultSize * 2),
+                        child: Text(
+                          "금영 번호 추가",
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: kySearchSongList.length,
-                          itemBuilder: (context, index) => Container(
-                            margin: EdgeInsets.symmetric(horizontal: defaultSize * 0.5),
-                            child: Card(
-                              color: kPrimaryGreyColor,
-                              elevation: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .editKySongNumber(widget.note,
-                                          kySearchSongList[index].songNumber);
-                                  setState(() {});
-                                  Navigator.of(context).pop();
-                                },
-                                child: ListTile(
-                                  title: Text(kySearchSongList[index].title, style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),),
-                                  subtitle:
-                                      Text(kySearchSongList[index].singer, style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.2)),
-                                  leading:
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ),
+                    Container(
+                        margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                        child: Divider(
+                            height: 0.1, color: kPrimaryLightWhiteColor)),
+                    kySearchSongList.length == 0
+                        ? Padding(
+                            padding: EdgeInsets.only(top: 20),
+                            child: DefaultTextStyle(
+                              style: TextStyle(fontSize: defaultSize * 1.4),
+                              child: Text(
+                                "검색 결과가 없습니다 😪",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    color: kPrimaryLightWhiteColor),
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              itemCount: kySearchSongList.length,
+                              itemBuilder: (context, index) => Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 0.5),
+                                child: Card(
+                                  color: kPrimaryGreyColor,
+                                  elevation: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Provider.of<NoteData>(context,
+                                              listen: false)
+                                          .editKySongNumber(
+                                              widget.note,
+                                              kySearchSongList[index]
+                                                  .songNumber);
+                                      setState(() {});
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                        kySearchSongList[index].title,
+                                        style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.4),
+                                      ),
+                                      subtitle: Text(
+                                          kySearchSongList[index].singer,
+                                          style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              fontSize: defaultSize * 1.2)),
+                                      leading: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text(kySearchSongList[index].songNumber, style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.2)),
+                                          Text(
+                                              kySearchSongList[index]
+                                                  .songNumber,
+                                              style: TextStyle(
+                                                  color: kMainColor,
+                                                  fontSize: defaultSize * 1.2)),
                                         ],
                                       ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      )
-              ]),
+                          )
+                  ]),
             ),
           ),
         );
@@ -523,8 +545,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
-        Provider.of<NoteData>(context, listen: false)
-            .noteDeleteEvent(widget.note);
+        Analytics_config().noteDeleteEvent(widget.note);
         Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },

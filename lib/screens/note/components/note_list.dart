@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -59,15 +60,13 @@ class _NoteListState extends State<NoteList> {
               canvasColor: Colors.transparent,
             ),
             child: ReorderableListView(
-              padding: const EdgeInsets.only(bottom: kFloatingActionButtonMargin + 48),
+              padding: const EdgeInsets.only(
+                  bottom: kFloatingActionButtonMargin + 48),
               children: noteData.notes
                   .map(
                     (note) => Container(
                       margin: EdgeInsets.fromLTRB(
-                          defaultSize,
-                          0,
-                          defaultSize * 0.5,
-                          defaultSize * 0.5),
+                          defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                       key: Key(
                         '${noteData.notes.indexOf(note)}',
                       ),
@@ -89,8 +88,7 @@ class _NoteListState extends State<NoteList> {
                               ]),
                           child: GestureDetector(
                             onTap: () {
-                              Provider.of<NoteData>(context, listen: false)
-                                  .viewNoteEvent(note);
+                              Analytics_config().viewNoteEvent(note);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -101,7 +99,8 @@ class _NoteListState extends State<NoteList> {
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(defaultSize * 1.25, defaultSize * 1.25, 0, defaultSize * 1.25),
+                              padding: EdgeInsets.fromLTRB(defaultSize * 1.25,
+                                  defaultSize * 1.25, 0, defaultSize * 1.25),
                               key: Key(
                                 '${noteData.notes.indexOf(note)}',
                               ),
@@ -159,7 +158,8 @@ class _NoteListState extends State<NoteList> {
                                     ],
                                   )),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize),
                                     child: SizedBox(
                                         width: defaultSize * 5,
                                         child: Center(

@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note.dart';
@@ -91,7 +92,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
                         ),
                         onPressed: () {
                           //!event: 곡 상세정보 뷰 - 메모 수정
-                          Provider.of<NoteData>(context, listen: false)
+                          Analytics_config()
                               .songMemoEditEvent(widget.note.tj_title);
                           setState(() {
                             initialText = _editingController.text;

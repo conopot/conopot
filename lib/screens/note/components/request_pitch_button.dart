@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note.dart';
@@ -58,7 +59,7 @@ class RequestPitchInfoButton extends StatelessWidget {
               fontSize: defaultSize * 1.6);
         } else {
           //!event
-          Provider.of<NoteData>(context, listen: false).pitchRequestEvent(note);
+          Analytics_config().pitchRequestEvent(note);
           // 정보요청
           _requestPitchInfo(note);
           storage.write(

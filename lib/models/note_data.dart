@@ -41,115 +41,21 @@ class NoteData extends ChangeNotifier {
       }
     }
 
-    final Identify identify = Identify()..set('노트 개수', notes.length);
+    Identify identify = Identify()..set('노트 개수', notes.length);
+    identify = Identify()..set('메모 노트 개수', memoCnt);
 
     await FirebaseAnalytics.instance
         .setUserProperty(name: 'noteCnt', value: notes.length.toString());
 
+    await FirebaseAnalytics.instance
+        .setUserProperty(name: 'memoCnt', value: memoCnt.toString());
+
     Analytics_config.analytics.identify(identify);
 
-    //!event : 노트 뷰 조회
-    Analytics_config()
-        .event('애창곡_노트_뷰__페이지뷰', {'노트_개수': notes.length, '메모_노트_개수': memoCnt});
+    //!event : 애창곡_노트_뷰__페이지뷰
+    Analytics_config().event('애창곡_노트_뷰__페이지뷰', {});
 
     notifyListeners();
-  }
-
-  //!event : 애창곡 노트 뷰 - 곡 추가
-  Future<void> addNoteEvent() async {
-    Analytics_config().event('애창곡_노트_뷰__곡_추가_버튼클릭', {});
-
-    final Identify identify = Identify()..set('노트 개수', notes.length);
-
-    await FirebaseAnalytics.instance
-        .setUserProperty(name: 'noteCnt', value: notes.length.toString());
-
-    Analytics_config.analytics.identify(identify);
-  }
-
-  //!event : 애창곡 노트 뷰 - 곡 상세 정보 조회
-  void viewNoteEvent(Note note) {
-    Analytics_config().event('애창곡_노트_뷰__노트_상세_정보_조회', {
-      '곡_이름': note.tj_title,
-      '가수_이름': note.tj_singer,
-      'TJ_번호': note.tj_songNumber,
-      '금영_번호': note.ky_songNumber,
-      '최고음': pitchNumToString[note.pitchNum],
-      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-      '메모_여부': note.memo
-    });
-  }
-
-  //!event: 곡 추가 뷰 - 리스트 클릭 시
-  void addSongClickEvent(FitchMusic fitchMusic) {
-    Analytics_config().event('노트_추가_뷰__노래선택', {
-      '곡_이름': fitchMusic.tj_title,
-      '가수_이름': fitchMusic.tj_singer,
-      'TJ_번호': fitchMusic.tj_songNumber,
-      '금영_번호': fitchMusic.ky_songNumber,
-      '최고음': fitchMusic.pitchNum,
-      '매칭_여부': (fitchMusic.tj_songNumber == fitchMusic.ky_songNumber),
-    });
-  }
-
-  //!event: 곡 상세정보 뷰 - 노트 삭제
-  void noteDeleteEvent(Note note) {
-    Analytics_config().event('노트_상세정보_뷰__노트_삭제', {
-      '곡_이름': note.tj_title,
-      '가수_이름': note.tj_singer,
-      'TJ_번호': note.tj_songNumber,
-      '금영_번호': note.ky_songNumber,
-      '최고음': pitchNumToString[note.pitchNum],
-      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-    });
-  }
-
-  //!event: 곡 상세정보 뷰 - 최고음 들어보기
-  void pitchListenEvent() {
-    Analytics_config().event('노트_상세정보_뷰__최고음_들어보기', {});
-  }
-
-  //!event: 곡 상세정보 뷰 - 유튜브 클릭
-  void youtubeClickEvent(Note note) {
-    Analytics_config()
-        .event('노트_상세정보_뷰__유튜브_클릭', {'곡_이름': note.tj_title, '메모': note.memo});
-  }
-
-  //!event: 곡 상세정보 뷰 - 금영 검색
-  void kySearchEvent(String tjNumber) {
-    Analytics_config().event('노트_상세정보_뷰__금영_검색', {'TJ_번호': tjNumber});
-  }
-
-  //!event: 곡 상세정보 뷰 - 메모 수정
-  void songMemoEditEvent(String title) {
-    Analytics_config().event('노트_상세정보_뷰__메모_수정', {'곡_이름': title});
-  }
-
-  //!event: 일반 노래 검색 뷰 - 페이지뷰
-  void musicBookScreenPageViewEvent() {
-    Analytics_config().event('일반_노래_검색_뷰__페이지뷰', {});
-  }
-
-  //!event: 인기 차트 검색 뷰 - 페이지뷰
-  void popChartScreenPageViewEvent() {
-    Analytics_config().event('인기_차트_검색_뷰__페이지뷰', {});
-  }
-
-  //!event: 최고음 차트 검색 뷰 - 페이지뷰
-  void pitchChartScreenPageViewEvent() {
-    Analytics_config().event('최고음_차트_검색_뷰__페이지뷰', {});
-  }
-
-  //!event: 곡 상세정보 - 최고음 요청
-  void pitchRequestEvent(Note note) {
-    Analytics_config().event('노트_상세_정보__최고음_요청_이벤트', {
-      '곡_이름': note.tj_title,
-      '가수_이름': note.tj_singer,
-      'TJ_번호': note.tj_songNumber,
-      '금영_번호': note.ky_songNumber,
-      '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-      '메모_여부': note.memo
-    });
   }
 
   Future<void> addNoteBySongNumber(

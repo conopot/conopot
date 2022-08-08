@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +29,7 @@ class _PitchDropdownOptionState extends State<PitchDropdownOption> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold),
             onChanged: (String? newValue) {
-              Provider.of<MusicSearchItemLists>(context, listen: false)
-                  .pitchSortEvent(newValue!);
+              Analytics_config().pitchSortEvent(newValue!);
               musicList.changeSortOption(option: newValue);
               setState(() {
                 if (newValue != null) {

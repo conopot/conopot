@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -32,7 +33,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    Provider.of<NoteData>(context, listen: true).musicBookScreenPageViewEvent();
+    Analytics_config().musicBookScreenPageViewEvent();
 
     return Consumer<MusicSearchItemLists>(
       builder: (
@@ -80,10 +81,8 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    SearchList(
-                        musicList: musicList),
-                    SearchList(
-                        musicList: musicList),
+                    SearchList(musicList: musicList),
+                    SearchList(musicList: musicList),
                   ],
                 ),
               ),

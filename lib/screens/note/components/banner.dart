@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/main_screen.dart';
@@ -43,9 +44,8 @@ class CarouselSliderBanner extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // !event 배너 클릭 이벤트
-        Provider.of<MusicSearchItemLists>(context, listen: false)
-            .pitchBannerClickEvent(
-                Provider.of<NoteData>(context, listen: false).notes.length);
+        Analytics_config().pitchBannerClickEvent(
+            Provider.of<NoteData>(context, listen: false).notes.length);
         if (itemIndex == 0) {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
