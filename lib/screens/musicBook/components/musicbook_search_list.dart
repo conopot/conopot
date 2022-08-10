@@ -28,55 +28,60 @@ class _SearchListState extends State<SearchList> {
               String singer = widget.musicList.foundItems[index].singer;
 
               return GestureDetector(
-                  onTap: () {
-                    Provider.of<NoteData>(context, listen: false).showAddNoteDialogWithInfo(context, songNumber: songNumber, title: title, singer: singer);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(
-                        defaultSize, 0, defaultSize, defaultSize),
-                    padding: EdgeInsets.all(defaultSize * 1.5),
-                    decoration: BoxDecoration(
-                        color: kPrimaryLightBlackColor,
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Row(children: [
-                      SizedBox(
-                        width: defaultSize * 6,
-                        child: Center(
-                            child: Text(
-                                "${songNumber}",
-                                style: TextStyle(
-                                    color: kMainColor,
-                                    fontSize: defaultSize * 1.4,
-                                    fontWeight: FontWeight.w500))),
-                      ),
-                      SizedBox(width: defaultSize),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${title}",
-                              overflow: TextOverflow.ellipsis,
+                onTap: () {
+                  if (widget.musicList.tabIndex == 1) {
+                    Provider.of<NoteData>(context, listen: false)
+                        .showAddNoteDialogWithInfo(context,
+                            songNumber: songNumber,
+                            title: title,
+                            singer: singer);
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(
+                      defaultSize, 0, defaultSize, defaultSize),
+                  padding: EdgeInsets.all(defaultSize * 1.5),
+                  decoration: BoxDecoration(
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: Row(children: [
+                    SizedBox(
+                      width: defaultSize * 6,
+                      child: Center(
+                          child: Text("${songNumber}",
                               style: TextStyle(
-                                  color: kPrimaryWhiteColor,
+                                  color: kMainColor,
                                   fontSize: defaultSize * 1.4,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(height: defaultSize * 0.5),
-                            Text(
-                              "${singer}",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: kPrimaryLightWhiteColor,
-                                  fontSize: defaultSize * 1.2,
-                                  fontWeight: FontWeight.w300),
-                            )
-                          ],
-                        ),
-                      )
-                    ]),
-                  ),
-                );
+                                  fontWeight: FontWeight.w500))),
+                    ),
+                    SizedBox(width: defaultSize),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${title}",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.4,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(height: defaultSize * 0.5),
+                          Text(
+                            "${singer}",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.2,
+                                fontWeight: FontWeight.w300),
+                          )
+                        ],
+                      ),
+                    )
+                  ]),
+                ),
+              );
             })
         : Center(
             child: Text(

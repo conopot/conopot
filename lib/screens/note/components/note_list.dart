@@ -69,7 +69,7 @@ class _NoteListState extends State<NoteList> {
               children: noteData.notes
                   .map(
                     (note) => Container(
-                      height: Platform.isIOS ? defaultSize * 10 : null,
+                      height: Platform.isIOS ? defaultSize * 9.7 : null,
                       margin: EdgeInsets.fromLTRB(
                           defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                       key: Key(

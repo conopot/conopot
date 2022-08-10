@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/config/size_config.dart';
@@ -28,11 +29,14 @@ class _SplashScreenState extends State<SplashScreen> {
     /// 사용자 노트 초기화 (local storage)
     await Provider.of<NoteData>(context, listen: false).initNotes();
 
-    await RecommendationItemList().initRecommendationList();
+    await SizeConfig().init(context);
 
+    await RecommendationItemList().initRecommendationList();
     /// 2초 후 MainScreen 전환 (replace)
-    Navigator.pushReplacement(
+    Timer(const Duration(milliseconds: 1000), () {
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
+    });
   }
 
   @override
@@ -60,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: SizeConfig.defaultSize * 5,
             ),
             const CircularProgressIndicator(
-              color: Color(0xFFFF9A62),
+              color: kMainColor,
               backgroundColor: Color(0x4DFF9A62),
             ),
           ],

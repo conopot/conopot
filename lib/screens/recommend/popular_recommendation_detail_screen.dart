@@ -49,7 +49,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
               itemCount: songList.length,
               itemBuilder: (context, index) {
                 String songNumber = songList[index].songNumber;
-                String title = songList[index].title;
+                String songTitle = songList[index].title;
                 String singer = songList[index].singer;
 
                 return ClipRRect(
@@ -89,7 +89,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          title,
+                          songTitle,
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
                             color: kPrimaryWhiteColor,
@@ -118,11 +118,13 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          Provider.of<NoteData>(context, listen: false)
-                              .showAddNoteDialogWithInfo(context,
-                                  songNumber: songNumber,
-                                  title: title,
-                                  singer: singer);
+                          if (title != '금영 인기차트') {
+                            Provider.of<NoteData>(context, listen: false)
+                                .showAddNoteDialogWithInfo(context,
+                                    songNumber: songNumber,
+                                    title: songTitle,
+                                    singer: singer);
+                          }
                         }),
                   ),
                 );

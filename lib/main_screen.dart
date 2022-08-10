@@ -23,7 +23,6 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     double defaultSize = SizeConfig.defaultSize;
     return WillPopScope(
       onWillPop: () async {
