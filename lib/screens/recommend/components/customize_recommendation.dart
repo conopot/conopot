@@ -101,7 +101,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                 : Container(
                     margin: EdgeInsets.symmetric(horizontal: defaultSize),
                     width: double.infinity,
-                    height: 180,
+                    height: 185,
                     child: GridView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.musicList.customizeRecommendationList.length,

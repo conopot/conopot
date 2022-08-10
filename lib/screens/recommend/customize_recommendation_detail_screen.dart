@@ -18,6 +18,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    double screenHeight = SizeConfig.screenHeight;
 
     return Scaffold(
       appBar: AppBar(
@@ -26,6 +27,8 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView.builder(
+            padding: EdgeInsets.only(
+                  bottom: screenHeight * 0.5),
           itemCount: songList.length,
           itemBuilder: (context, index) {
             String songNumber = songList[index].tj_songNumber;

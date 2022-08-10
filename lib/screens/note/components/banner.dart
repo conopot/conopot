@@ -2,8 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/main_screen.dart';
-import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -62,7 +60,6 @@ class CarouselSliderBanner extends StatelessWidget {
         }
       },
       child: Container(
-        width: defaultSize * 35.5,
         margin: EdgeInsets.symmetric(horizontal: defaultSize * 0.3),
         padding: EdgeInsets.all(defaultSize * 1.5),
         decoration: BoxDecoration(
@@ -80,6 +77,7 @@ class CarouselSliderBanner extends StatelessWidget {
           ),
           SizedBox(width: defaultSize * 1.5),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
@@ -115,7 +113,7 @@ class CarouselSliderBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
       options: CarouselOptions(
-        height: defaultSize * 7.8,
+        height: defaultSize * 9,
         enableInfiniteScroll: false,
         viewportFraction: 0.95,
         autoPlay: true,

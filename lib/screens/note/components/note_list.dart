@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -20,6 +22,7 @@ class NoteList extends StatefulWidget {
 // 애창곡 노트뷰 노트 리스트
 class _NoteListState extends State<NoteList> {
   double defaultSize = SizeConfig.defaultSize;
+
   // 애창곡 노트 설정에 따라 달라지는 정보 (최고음 or TJ 노래번호)
   Widget _userSettingInfo(int setNum, Note note, int userPitch) {
     if (setNum == 0) {
@@ -52,6 +55,8 @@ class _NoteListState extends State<NoteList> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHieght = SizeConfig.screenHeight;
+
     return Expanded(
       child: Consumer<NoteData>(
         builder: (context, noteData, child) {
@@ -60,11 +65,11 @@ class _NoteListState extends State<NoteList> {
               canvasColor: Colors.transparent,
             ),
             child: ReorderableListView(
-              padding: const EdgeInsets.only(
-                  bottom: kFloatingActionButtonMargin + 48),
+              padding: EdgeInsets.only(bottom: screenHieght * 0.5),
               children: noteData.notes
                   .map(
                     (note) => Container(
+                      height: Platform.isIOS ? defaultSize * 100 : null,
                       margin: EdgeInsets.fromLTRB(
                           defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                       key: Key(
@@ -76,7 +81,7 @@ class _NoteListState extends State<NoteList> {
                               motion: ScrollMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (BuildContext context) {
+                                  onPressed: (context) {
                                     noteData.deleteNote(note);
                                   },
                                   backgroundColor: kPrimaryLightBlackColor,

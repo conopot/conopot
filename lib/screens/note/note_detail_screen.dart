@@ -260,7 +260,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         Row(
                           children: [
                             SizedBox(
-                              width: defaultSize * 3,
+                              width: defaultSize * 4,
                               child: Text(
                                 "TJ",
                                 style: TextStyle(
@@ -283,7 +283,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         Row(
                           children: [
                             SizedBox(
-                              width: defaultSize * 3,
+                              width: defaultSize * 4,
                               child: Text(
                                 "금영",
                                 style: TextStyle(

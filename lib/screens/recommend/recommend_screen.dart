@@ -23,6 +23,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = SizeConfig.screenHeight;
     //!evnet:  추천_뷰__페이지뷰
     Analytics_config().recommendationPageVeiwEvent;
 
@@ -39,6 +40,8 @@ class _RecommendScreenState extends State<RecommendScreen> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+                  bottom: screenHeight * 0.5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

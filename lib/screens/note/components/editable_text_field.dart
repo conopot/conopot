@@ -74,7 +74,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
                   cursorColor: kMainColor,
                   style: TextStyle(
                     color: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.2,
+                    fontSize: defaultSize * 1.4,
                     fontWeight: FontWeight.w400,
                   ),
                   onChanged: (value) {
@@ -111,16 +111,14 @@ class _EditableTextFieldState extends State<EditableTextField> {
                   },
                   child: Row(
                     children: [
-                      Container(
-                        child: Text(
-                            initialText.isEmpty ? "메모를 입력해 주세요" : initialText,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 1.2,
-                              fontWeight: FontWeight.w400,
-                            )),
-                      ),
+                      Text(
+                          initialText.isEmpty ? "메모를 입력해 주세요" : initialText,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize * 1.4,
+                            fontWeight: FontWeight.w400,
+                          )),
                       Spacer(),
                       IconButton(
                         onPressed: () {

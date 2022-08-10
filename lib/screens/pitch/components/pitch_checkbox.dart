@@ -81,10 +81,12 @@ class _PitchCheckBoxState extends State<PitchCheckBox> {
                   ),
                 ),
               )
-            : Text(
-                '검색 결과가 없습니다',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+            : Center(
+              child: Text(
+                  '검색 결과가 없습니다',
+                  style: TextStyle(color: kPrimaryWhiteColor ,fontSize: defaultSize * 1.8, fontWeight: FontWeight.w500),
+                ),
+            ),
       ),
     );
   }

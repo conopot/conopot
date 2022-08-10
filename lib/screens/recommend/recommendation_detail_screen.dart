@@ -16,6 +16,7 @@ class RecommendationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    double screenHeight = SizeConfig.screenHeight;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,15 +25,18 @@ class RecommendationDetailScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView.builder(
-          itemCount: songList.length,
-          itemBuilder: (context, index) {
-            String songNumber = songList[index].songNumber;
-            String title = songList[index].title;
-            String singer = songList[index].singer;
+            padding: EdgeInsets.only(bottom: screenHeight * 0.5),
+            itemCount: songList.length,
+            itemBuilder: (context, index) {
+              String songNumber = songList[index].songNumber;
+              String title = songList[index].title;
+              String singer = songList[index].singer;
 
-            return GestureDetector(
+              return GestureDetector(
                 onTap: () {
-                  Provider.of<NoteData>(context, listen: false).showAddNoteDialogWithInfo(context, songNumber: songNumber, title: title, singer: singer);
+                  Provider.of<NoteData>(context, listen: false)
+                      .showAddNoteDialogWithInfo(context,
+                          songNumber: songNumber, title: title, singer: singer);
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(
@@ -45,8 +49,7 @@ class RecommendationDetailScreen extends StatelessWidget {
                     SizedBox(
                       width: defaultSize * 6,
                       child: Center(
-                          child: Text(
-                              "${songNumber}",
+                          child: Text("${songNumber}",
                               style: TextStyle(
                                   color: kMainColor,
                                   fontSize: defaultSize * 1.4,
@@ -80,7 +83,7 @@ class RecommendationDetailScreen extends StatelessWidget {
                   ]),
                 ),
               );
-          }),
+            }),
       ),
     );
   }

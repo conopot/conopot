@@ -17,6 +17,7 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    double screenHeight = SizeConfig.screenHeight;
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('M월 d일');
     String today = formatter.format(now);
@@ -24,18 +25,27 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: (title == 'TJ 인기차트' || title == '금영 인기차트')
-            ? RichText(text: TextSpan(children: [TextSpan(text: '${title} ', style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: defaultSize * 1.8)), TextSpan(text: '${today} 기준', style: TextStyle(
-                              color: kMainColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: defaultSize * 1.2,
-                              ))]))
+            ? RichText(
+                text: TextSpan(children: [
+                TextSpan(
+                    text: '${title} ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: defaultSize * 1.8)),
+                TextSpan(
+                    text: '${today} 기준',
+                    style: TextStyle(
+                      color: kMainColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: defaultSize * 1.2,
+                    ))
+              ]))
             : Text('${title}'),
         centerTitle: true,
       ),
       body: SafeArea(
           child: ListView.builder(
+              padding: EdgeInsets.only(bottom: screenHeight * 0.5),
               itemCount: songList.length,
               itemBuilder: (context, index) {
                 String songNumber = songList[index].songNumber;
