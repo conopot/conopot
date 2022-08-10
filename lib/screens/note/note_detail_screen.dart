@@ -41,20 +41,29 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     if (result == true) {
       String url =
           'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
-      final response = await http.post(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        setState(() {
-          lyric =
-              Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
-          lyric = lyric.replaceAll('\n\n', '\n');
-          //크롤링한 가사가 비어있는 경우
-          if (lyric == "") {
+      try {
+        final response = await http.post(Uri.parse(url));
+
+        if (response.statusCode == 200) {
+          setState(() {
+            lyric = Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
+                .lyric;
+            lyric = lyric.replaceAll('\n\n', '\n');
+            //크롤링한 가사가 비어있는 경우
+            if (lyric == "") {
+              lyric =
+                  "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+            }
+          });
+        } else {
+          setState(() {
             lyric =
                 "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
-          }
-        });
-      } else {
+          });
+        }
+      } catch (e) {
+        print(e);
         setState(() {
           lyric =
               "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
