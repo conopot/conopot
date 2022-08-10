@@ -63,7 +63,7 @@ class _NoteScreenState extends State<NoteScreen> {
                                 listen: false)
                             .initCombinedBook();
                       });
-                      Analytics_config().addNoteEvent();
+                      Analytics_config().noteViewEnterEvent();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
