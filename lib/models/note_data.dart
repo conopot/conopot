@@ -102,6 +102,7 @@ class NoteData extends ChangeNotifier {
             '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
             '메모_여부': note.memo
           });
+          Analytics_config().musicAddEvent(note.tj_title);
         } else {
           emptyCheck = true;
         }
@@ -172,6 +173,7 @@ class NoteData extends ChangeNotifier {
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
+          Analytics_config().musicAddEvent(title);
           Fluttertoast.showToast(
               msg: "노래가 추가 되었습니다 🎉",
               toastLength: Toast.LENGTH_SHORT,
@@ -224,7 +226,7 @@ class NoteData extends ChangeNotifier {
       ],
       backgroundColor: kDialogColor,
       shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8))),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
     showDialog(
@@ -261,6 +263,9 @@ class NoteData extends ChangeNotifier {
               fontSize: defaultSize * 1.6);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
+          //!event: 일반_검색_뷰__노트추가
+          Analytics_config().searchViewNoteAddEvent(title);
+          Analytics_config().musicAddEvent(title);
           Fluttertoast.showToast(
               msg: "노래가 추가 되었습니다 🎉",
               toastLength: Toast.LENGTH_SHORT,
@@ -320,7 +325,8 @@ class NoteData extends ChangeNotifier {
         Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
     );
     showDialog(
         context: context,

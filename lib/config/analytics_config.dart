@@ -46,9 +46,9 @@ class Analytics_config {
     Analytics_config().event('애창곡_노트_뷰__페이지뷰', {});
   }
 
-  //!event : 애창곡_노트_뷰__곡_추가_버튼클릭
-  addNoteEvent() {
-    Analytics_config().event('애창곡_노트_뷰__곡_추가_버튼클릭', {});
+  //!event : 애창곡_노트_뷰__노트_추가_뷰_진입
+  noteViewEnterEvent() {
+    Analytics_config().event('애창곡_노트_뷰__노트_추가_뷰_진입', {});
   }
 
   //!event : 애창곡_노트_뷰__노트_상세_정보_조회
@@ -79,14 +79,22 @@ class Analytics_config {
     Analytics_config().event('애창곡_노트_뷰__배너_노트설정', {});
   }
 
+  //!event : 노래검색__검색키워드
   musicSearchKeywordEvent(String keyword) {
     Analytics_config().event('노래검색__검색키워드', {'검색_키워드': keyword});
   }
 
+  //!event : 노래리스트__노트추가
   musicAddEvent(String songTitle) {
-    Analytics_config().event('노래리스트__곡추가', {'곡명': songTitle});
+    Analytics_config().event('노래리스트__노트추가', {'곡명': songTitle});
   }
 
+  //!event : 일반_검색_뷰__노트추가
+  searchViewNoteAddEvent(String title) {
+    Analytics_config().event('일반_검색_뷰__노트추가', {'곡명': title});
+  }
+
+  //!event : 노트_추가_뷰__페이지뷰
   addNotePageView() {
     Analytics_config().event('노트_추가_뷰__페이지뷰', {});
   }
@@ -96,9 +104,9 @@ class Analytics_config {
     Analytics_config().event('노트_추가_뷰__노래선택', {'곡명': title});
   }
 
-  //!event: 노트_추가_뷰__노래추가
+  //!event: 노트_추가_뷰__노트추가
   addViewSongAddEvent(String title) {
-    Analytics_config().event('노트_추가_뷰__노래선택', {'곡명': title});
+    Analytics_config().event('노트_추가_뷰__노트추가', {'곡명': title});
   }
 
   //!event: 노트_상세정보_뷰__페이지뷰
@@ -123,7 +131,7 @@ class Analytics_config {
 
   //!event: 노트_상세정보_뷰__노트_삭제
   noteDeleteEvent(String title) {
-    Analytics_config().event('노트_상세정보_뷰__삭제', {'곡명': title});
+    Analytics_config().event('노트_상세정보_뷰__노트_삭제', {'곡명': title});
   }
 
   //!event: 노트_상세정보_뷰__최고음요청
