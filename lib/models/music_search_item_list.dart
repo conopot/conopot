@@ -169,60 +169,60 @@ class MusicSearchItemLists extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> getTJMusics() async {
-    return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
-  }
-
-  Future<String> getTJMusicChart() async {
-    return await rootBundle.loadString('assets/musics/chart_TJ.txt');
-  }
-
-  Future<String> getKYMusics() async {
-    return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
-  }
-
-  Future<String> getKYMusicChart() async {
-    return await rootBundle.loadString('assets/musics/chart_KY.txt');
-  }
-
-  Future<String> getHighMusics() async {
-    return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
-  }
-
-  Future<String> getCombinedMusics() async {
-    return await rootBundle.loadString('assets/musics/matching_Musics.txt');
-  }
-
-  //리소스 업데이트 코드 (개발 완료되면 풀 것)
   // Future<String> getTJMusics() async {
-  //   final file = File('$dir/musicbook_TJ.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
   // }
 
   // Future<String> getTJMusicChart() async {
-  //   final file = File('$dir/chart_TJ.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/chart_TJ.txt');
   // }
 
   // Future<String> getKYMusics() async {
-  //   final file = File('$dir/musicbook_KY.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
   // }
 
   // Future<String> getKYMusicChart() async {
-  //   final file = File('$dir/chart_KY.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/chart_KY.txt');
   // }
 
   // Future<String> getHighMusics() async {
-  //   final file = File('$dir/highest_Pitch.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
   // }
 
   // Future<String> getCombinedMusics() async {
-  //   final file = File('$dir/matching_Musics.txt');
-  //   return file.readAsString();
+  //   return await rootBundle.loadString('assets/musics/matching_Musics.txt');
   // }
+
+  //리소스 업데이트 코드 (개발 완료되면 풀 것)
+  Future<String> getTJMusics() async {
+    final file = File('$dir/musicbook_TJ.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getTJMusicChart() async {
+    final file = File('$dir/chart_TJ.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getKYMusics() async {
+    final file = File('$dir/musicbook_KY.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getKYMusicChart() async {
+    final file = File('$dir/chart_KY.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getHighMusics() async {
+    final file = File('$dir/highest_Pitch.txt');
+    return file.readAsString();
+  }
+
+  Future<String> getCombinedMusics() async {
+    final file = File('$dir/matching_Musics.txt');
+    return file.readAsString();
+  }
 
   void initFitch() {
     highestFoundItems = List.from(highestSongList);
@@ -253,8 +253,8 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   initVersion() async {
     //리소스 업데이트 코드 (개발 완료되면 주석 풀 것)
-    //dir = (await getApplicationDocumentsDirectory()).path;
-    //await checkVersionUpdate();
+    dir = (await getApplicationDocumentsDirectory()).path;
+    await checkVersionUpdate();
 
     init();
   }
