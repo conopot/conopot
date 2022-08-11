@@ -41,16 +41,17 @@ class NoteData extends ChangeNotifier {
       }
     }
 
-    Identify identify = Identify()..set('노트 개수', notes.length);
-    identify = Identify()..set('메모 노트 개수', memoCnt);
+    Identify identify = Identify()
+      ..set('노트 개수', notes.length)
+      ..set('메모 노트 개수', memoCnt);
+
+    Analytics_config().userProps(identify);
 
     await FirebaseAnalytics.instance
         .setUserProperty(name: 'noteCnt', value: notes.length.toString());
 
     await FirebaseAnalytics.instance
-        .setUserProperty(name: 'memoCnt', value: memoCnt.toString());
-
-    Analytics_config.analytics.identify(identify);
+        .setUserProperty(name: 'memoNoteCnt', value: memoCnt.toString());
 
     //!event : 애창곡_노트_뷰__페이지뷰
     Analytics_config().event('애창곡_노트_뷰__페이지뷰', {});
@@ -88,10 +89,10 @@ class NoteData extends ChangeNotifier {
 
           final Identify identify = Identify()..set('노트 개수', notes.length);
 
+          Analytics_config().userProps(identify);
+
           await FirebaseAnalytics.instance
               .setUserProperty(name: 'noteCnt', value: notes.length.toString());
-
-          Analytics_config.analytics.identify(identify);
 
           //!event: 인기 차트 - 노트 추가 이벤트
           Analytics_config().event('인기_차트__노트_추가_이벤트', {
@@ -116,13 +117,21 @@ class NoteData extends ChangeNotifier {
 
   Future<void> editNote(Note note, String memo) async {
     note.memo = memo;
+    int memoCnt = 0;
     for (Note no in notes) {
       if (note.tj_songNumber == no.tj_songNumber) {
         no.memo = memo;
       }
+      if (no.memo != "") {
+        memoCnt++;
+      }
     }
     await storage.write(key: 'notes', value: jsonEncode(notes));
-    //await storage.write(key: note.tj_songNumber, value: memo);
+
+    Identify identify = Identify()..set('메모 노트 개수', memoCnt);
+
+    Analytics_config().userProps(identify);
+
     notifyListeners();
   }
 
@@ -130,7 +139,12 @@ class NoteData extends ChangeNotifier {
   Future<void> deleteNote(Note note) async {
     notes.remove(note);
     await storage.write(key: 'notes', value: jsonEncode(notes));
-    //await storage.delete(key: note.tj_songNumber);
+
+    Identify identify = Identify()
+      ..set('노트 개수', notes.length)
+      ..add('메모 노트 개수', (note.memo == "true") ? -1 : 0);
+
+    Analytics_config().userProps(identify);
     notifyListeners();
   }
 

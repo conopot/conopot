@@ -32,6 +32,12 @@ class Analytics_config {
     analytics.trackingSessionEvents(true);
   }
 
+  //set user properties
+  void userProps(Identify identify) {
+    analytics.identify(identify);
+  }
+
+  // sending events
   void event(String eventName, Map<String, dynamic> properties) {
     //Amplitude
     analytics.logEvent(eventName, eventProperties: properties);
