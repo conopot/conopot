@@ -65,7 +65,7 @@ class _NoteListState extends State<NoteList> {
               canvasColor: Colors.transparent,
             ),
             child: ReorderableListView(
-              padding: EdgeInsets.only(bottom: screenHieght * 0.5),
+              padding: EdgeInsets.only(bottom: screenHieght * 0.3),
               children: noteData.notes
                   .map(
                     (note) => Container(

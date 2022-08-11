@@ -519,7 +519,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                   padding: EdgeInsets.all(defaultSize),
                                   child: Center(
                                       child: Text(
-                                    "측정 중지",
+                                    "측정 완료",
                                     style: TextStyle(
                                         color: kPrimaryWhiteColor,
                                         fontSize: defaultSize * 1.6,

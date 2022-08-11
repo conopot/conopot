@@ -20,6 +20,12 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+
+    _tabController.addListener(() {
+      Provider.of<MusicSearchItemLists>(context, listen: false).changeTabIndex(index: _tabController.index + 1);
+      Provider.of<NoteData>(context, listen: false).controller.text = "";
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
     super.initState();
   }
 
@@ -39,20 +45,13 @@ class _MusicBookScreenState extends State<MusicBookScreen>
         child,
       ) =>
           Scaffold(
-        appBar: AppBar(
-            centerTitle: false,
-            title: Text("노래방 책")),
+        appBar: AppBar(centerTitle: false, title: Text("노래방 책")),
         body: SafeArea(
           child: Column(
             children: [
               TabBar(
                 controller: _tabController,
                 isScrollable: true,
-                onTap: (index) {
-                  musicList.changeTabIndex(index: index + 1);
-                  Provider.of<NoteData>(context, listen: false).controller.text = "";
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorColor: kMainColor,
                 labelColor: kPrimaryWhiteColor,

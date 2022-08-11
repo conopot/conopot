@@ -2,7 +2,6 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -163,13 +162,12 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                   ],
                 ),
               ),
-              Container(
+               Container(
                 margin: EdgeInsets.fromLTRB(
                     defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
                       defaultSize, defaultSize, 0, defaultSize),
-                  height: defaultSize * 9.5,
                   margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),

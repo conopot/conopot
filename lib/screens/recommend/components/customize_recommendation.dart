@@ -35,7 +35,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                       fontSize: defaultSize * 2,
                       fontWeight: FontWeight.w600)),
               Spacer(),
-              if (widget.musicList.userMaxPitch != -1)
+              if (widget.musicList.userMaxPitch != -1 && widget.musicList.customizeRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
                     //!event: 추천_뷰__맞춤_추천_더보기

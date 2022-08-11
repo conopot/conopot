@@ -41,7 +41,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(
-                  bottom: screenHeight * 0.5),
+                  bottom: screenHeight * 0.3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
