@@ -20,12 +20,6 @@ class _MusicBookScreenState extends State<MusicBookScreen>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-
-    _tabController.addListener(() {
-      Provider.of<MusicSearchItemLists>(context, listen: false).changeTabIndex(index: _tabController.index + 1);
-      Provider.of<NoteData>(context, listen: false).controller.text = "";
-      FocusScope.of(context).requestFocus(FocusNode());
-    });
     super.initState();
   }
 
@@ -50,6 +44,14 @@ class _MusicBookScreenState extends State<MusicBookScreen>
           child: Column(
             children: [
               TabBar(
+                onTap: (index) {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .changeTabIndex(index: index + 1);
+                  Provider.of<NoteData>(context, listen: false)
+                      .controller
+                      .text = "";
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
                 controller: _tabController,
                 isScrollable: true,
                 indicatorSize: TabBarIndicatorSize.label,
@@ -76,6 +78,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
               SearchBar(musicList: musicList),
               Expanded(
                 child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: [
                     SearchList(musicList: musicList),
