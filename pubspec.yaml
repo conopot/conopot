@@ -69,6 +69,7 @@ dependencies:
   path_provider: ^2.0.11
   flutter_archive: ^5.0.0
   archive: ^3.3.1
+  shared_preferences: ^2.0.15
 
 
 
