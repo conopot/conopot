@@ -251,10 +251,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     customizeRecommendationList = highestResults;
   }
 
-  initVersion() async {
+  initVersion(bool isConnected) async {
     //리소스 업데이트 코드 (개발 완료되면 주석 풀 것)
     dir = (await getApplicationDocumentsDirectory()).path;
-    await checkVersionUpdate();
+    if (isConnected) await checkVersionUpdate();
 
     init();
   }
