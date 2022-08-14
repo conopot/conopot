@@ -7,6 +7,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,11 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
     /// 사용자 노트 초기화 (local storage)
     await Provider.of<NoteData>(context, listen: false).initNotes();
-
     await SizeConfig().init(context);
-
     await RecommendationItemList().initRecommendationList();
-
+ 
     /// 2초 후 MainScreen 전환 (replace)
     Timer(const Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(

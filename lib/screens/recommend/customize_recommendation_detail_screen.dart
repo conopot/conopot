@@ -27,8 +27,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: ListView.builder(
-            padding: EdgeInsets.only(
-                  bottom: screenHeight * 0.3),
+          padding: EdgeInsets.only(bottom: screenHeight * 0.3),
           itemCount: songList.length,
           itemBuilder: (context, index) {
             String songNumber = songList[index].tj_songNumber;
@@ -81,6 +80,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
 
                       Provider.of<NoteData>(context, listen: false)
                           .showAddNoteDialogWithInfo(context,
+                              isTj: true,
                               songNumber: songNumber,
                               title: title,
                               singer: singer);

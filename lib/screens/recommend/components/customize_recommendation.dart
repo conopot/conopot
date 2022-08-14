@@ -35,17 +35,22 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                       fontSize: defaultSize * 2,
                       fontWeight: FontWeight.w600)),
               Spacer(),
-              if (widget.musicList.userMaxPitch != -1 && widget.musicList.customizeRecommendationList.isNotEmpty)
+              if (widget.musicList.userMaxPitch != -1 &&
+                  widget.musicList.customizeRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
                     //!event: 추천_뷰__맞춤_추천_더보기
-                    Analytics_config().clickCustomizeRecommendationButtonEvent();
+                    Analytics_config()
+                        .clickCustomizeRecommendationButtonEvent();
 
                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CustomizeRecommendationDetailScreen(title: "맞춤 추천", songList: widget.musicList.customizeRecommendationList)));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CustomizeRecommendationDetailScreen(
+                                    title: "맞춤 추천",
+                                    songList: widget.musicList
+                                        .customizeRecommendationList)));
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(
@@ -104,7 +109,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     height: 185,
                     child: GridView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: widget.musicList.customizeRecommendationList.length,
+                      itemCount:
+                          widget.musicList.customizeRecommendationList.length,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 60,
@@ -112,13 +118,21 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 15),
                       itemBuilder: (context, index) {
-                        String songNumber = widget.musicList.customizeRecommendationList[index].tj_songNumber;
-                        String title = widget.musicList.customizeRecommendationList[index].tj_title;
-                        String singer = widget.musicList.customizeRecommendationList[index].tj_singer;
+                        String songNumber = widget.musicList
+                            .customizeRecommendationList[index].tj_songNumber;
+                        String title = widget.musicList
+                            .customizeRecommendationList[index].tj_title;
+                        String singer = widget.musicList
+                            .customizeRecommendationList[index].tj_singer;
 
                         return GestureDetector(
                           onTap: () {
-                            Provider.of<NoteData>(context, listen: false).showAddNoteDialogWithInfo(context, songNumber: songNumber, title : title, singer : singer);
+                            Provider.of<NoteData>(context, listen: false)
+                                .showAddNoteDialogWithInfo(context,
+                                    isTj: true,
+                                    songNumber: songNumber,
+                                    title: title,
+                                    singer: singer);
                           },
                           child: GridTile(
                             child: Container(

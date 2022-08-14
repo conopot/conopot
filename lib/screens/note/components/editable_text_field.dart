@@ -59,9 +59,9 @@ class _EditableTextFieldState extends State<EditableTextField> {
             )
         ],
       ),
-      SizedBox(height: defaultSize * 2),
+      SizedBox(height: defaultSize),
       Container(
-          padding: EdgeInsets.only(left: defaultSize * 0.9),
+          padding: EdgeInsets.only(left: defaultSize),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               color: kPrimaryGreyColor),

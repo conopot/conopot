@@ -36,7 +36,10 @@ class RecommendationDetailScreen extends StatelessWidget {
                 onTap: () {
                   Provider.of<NoteData>(context, listen: false)
                       .showAddNoteDialogWithInfo(context,
-                          songNumber: songNumber, title: title, singer: singer);
+                          isTj: true,
+                          songNumber: songNumber,
+                          title: title,
+                          singer: singer);
                 },
                 child: Container(
                   margin: EdgeInsets.fromLTRB(

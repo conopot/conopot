@@ -252,7 +252,8 @@ class NoteData extends ChangeNotifier {
 
   // 간단한 정보를 보여주고 애창곡노트 추가버튼이 있는 다이어로그 팝업 함수
   void showAddNoteDialogWithInfo(BuildContext context,
-      {required String songNumber,
+      {required isTj,
+      required String songNumber,
       required String title,
       required String singer}) {
     //!event: 일반_검색_뷰__노래_유튜브
@@ -336,7 +337,7 @@ class NoteData extends ChangeNotifier {
         ]),
       ),
       actions: [
-        Center(child: okButton),
+        if (isTj == true) Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
       shape: RoundedRectangleBorder(

@@ -121,6 +121,14 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           if (title != '금영 인기차트') {
                             Provider.of<NoteData>(context, listen: false)
                                 .showAddNoteDialogWithInfo(context,
+                                    isTj: true,
+                                    songNumber: songNumber,
+                                    title: songTitle,
+                                    singer: singer);
+                          } else {
+                            Provider.of<NoteData>(context, listen: false)
+                                .showAddNoteDialogWithInfo(context,
+                                    isTj: false,
                                     songNumber: songNumber,
                                     title: songTitle,
                                     singer: singer);

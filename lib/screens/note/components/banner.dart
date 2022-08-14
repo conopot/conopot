@@ -61,48 +61,58 @@ class CarouselSliderBanner extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: defaultSize * 0.3),
-        padding: EdgeInsets.all(defaultSize * 1.5),
+        padding: EdgeInsets.symmetric(horizontal:defaultSize * 1.5),
         decoration: BoxDecoration(
           color: kPrimaryLightBlackColor,
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
         ),
-        child: Row(children: [
-          SvgPicture.asset(
-            imageIcon,
-            width: defaultSize * 5,
-            height: defaultSize * 5,
-            fit: BoxFit.scaleDown,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: EdgeInsets.only(right: defaultSize * 1.5),
+              child: SvgPicture.asset(
+                imageIcon,
+                width: defaultSize * 5,
+                height: defaultSize * 5,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
           ),
-          SizedBox(width: defaultSize * 1.5),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: defaultSize * 0.5,
-              ),
-              Text(
-                sentence1,
-                style: TextStyle(
-                  fontSize: defaultSize * 1.2,
-                  color: kPrimaryWhiteColor,
-                  fontWeight: FontWeight.w500,
+          Expanded(
+            flex: 4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: defaultSize * 0.5,
                 ),
-              ),
-              SizedBox(
-                height: defaultSize * 0.2,
-              ),
-              Text(
-                sentence2,
-                style: TextStyle(
-                  fontSize: defaultSize * 1.5,
-                  color: kPrimaryWhiteColor,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  sentence1,
+                  style: TextStyle(
+                    fontSize: defaultSize * 1.2,
+                    color: kPrimaryWhiteColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: defaultSize * 0.2,
+                ),
+                Text(
+                  sentence2,
+                  style: TextStyle(
+                    fontSize: defaultSize * 1.3,
+                    color: kPrimaryWhiteColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           )
         ]),
       ),
@@ -113,7 +123,7 @@ class CarouselSliderBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
       options: CarouselOptions(
-        height: defaultSize * 9,
+        height: defaultSize * 8.5,
         enableInfiniteScroll: false,
         viewportFraction: 0.95,
         autoPlay: true,

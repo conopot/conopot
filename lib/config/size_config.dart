@@ -5,6 +5,7 @@ class SizeConfig {
   static late double screenWidth;
   static late double screenHeight;
   static late double defaultSize;
+  static late double textScaleFactor;
   static late Orientation orientation;
 
   init(BuildContext context) {
@@ -12,11 +13,10 @@ class SizeConfig {
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
     orientation = _mediaQueryData.orientation;
+    textScaleFactor = _mediaQueryData.textScaleFactor;
     
-    // On iPhone 11 the defaultSzie = 10 almost
-    // So if the screen size increase or decrease then out defaultSize also vary
     defaultSize = orientation == Orientation.landscape
-        ? screenHeight * 0.027 / MediaQuery.of(context).textScaleFactor
-        : screenWidth * 0.027 / MediaQuery.of(context).textScaleFactor;
+        ? screenHeight * 0.027
+        : screenWidth * 0.027;
   }
 }

@@ -13,6 +13,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -61,6 +62,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     );
 
     int s3Version = int.parse(response.body);
+    bool result = await InternetConnectionChecker().hasConnection;
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {

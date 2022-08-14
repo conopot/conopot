@@ -32,6 +32,14 @@ class _SearchListState extends State<SearchList> {
                   if (widget.musicList.tabIndex == 1) {
                     Provider.of<NoteData>(context, listen: false)
                         .showAddNoteDialogWithInfo(context,
+                            isTj: true,
+                            songNumber: songNumber,
+                            title: title,
+                            singer: singer);
+                  } else {
+                    Provider.of<NoteData>(context, listen: false)
+                        .showAddNoteDialogWithInfo(context,
+                            isTj: false,
                             songNumber: songNumber,
                             title: title,
                             singer: singer);

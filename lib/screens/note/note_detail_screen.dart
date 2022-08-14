@@ -115,7 +115,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             icon: Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: Icon(
-                  Icons.delete_outline_outlined,
+                  Icons.delete,
                   color: kMainColor,
                 )),
             onPressed: () {

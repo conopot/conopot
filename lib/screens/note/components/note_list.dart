@@ -65,83 +65,96 @@ class _NoteListState extends State<NoteList> {
               canvasColor: Colors.transparent,
             ),
             child: ReorderableListView(
+              buildDefaultDragHandles: false,
               padding: EdgeInsets.only(bottom: screenHieght * 0.3),
-              children: noteData.notes
-                  .map(
-                    (note) => Container(
-                      height: Platform.isIOS ? defaultSize * 9.7 : null,
-                      margin: EdgeInsets.fromLTRB(
-                          defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
-                      key: Key(
-                        '${noteData.notes.indexOf(note)}',
-                      ),
-                      child: Slidable(
-                          endActionPane: ActionPane(
-                              extentRatio: .25,
-                              motion: ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    noteData.deleteNote(note);
-                                  },
-                                  backgroundColor: kPrimaryLightBlackColor,
-                                  foregroundColor: kMainColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                  icon: Icons.delete_outlined,
-                                ),
-                              ]),
-                          child: GestureDetector(
-                            onTap: () {
-                              Analytics_config().viewNoteEvent(note);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NoteDetailScreen(
-                                    note: note,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(defaultSize * 1.25,
-                                  defaultSize * 1.25, 0, defaultSize * 1.25),
-                              key: Key(
-                                '${noteData.notes.indexOf(note)}',
-                              ),
-                              margin: EdgeInsets.fromLTRB(
-                                  0, 0, defaultSize * 0.5, 0),
-                              decoration: BoxDecoration(
+              children: noteData.notes.map(
+                (note) {
+                  return Container(
+                    margin: EdgeInsets.fromLTRB(
+                        defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
+                    key: Key(
+                      '${noteData.notes.indexOf(note)}',
+                    ),
+                    child: Slidable(
+                        endActionPane: ActionPane(
+                            extentRatio: .18,
+                            motion: ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  noteData.deleteNote(note);
+                                },
+                                backgroundColor: kPrimaryLightBlackColor,
+                                foregroundColor: kMainColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8)),
-                                color: kPrimaryLightBlackColor,
+                                icon: Icons.delete,
                               ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${note.tj_title}',
-                                        style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                          fontSize: defaultSize * 1.4,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                            ]),
+                        child: GestureDetector(
+                          onTap: () {
+                            Analytics_config().viewNoteEvent(note);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NoteDetailScreen(
+                                  note: note,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: note.memo.isEmpty ? defaultSize * 7 * SizeConfig.textScaleFactor: defaultSize * 8,
+                            key: Key(
+                              '${noteData.notes.indexOf(note)}',
+                            ),
+                            margin:
+                                EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                              color: kPrimaryLightBlackColor,
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize),
+                                  child: ReorderableDragStartListener(
+                                      index: noteData.notes.indexOf(note),
+                                      child: Icon(
+                                        Icons.drag_handle,
+                                        color: kPrimaryLightGreyColor,
+                                      )),
+                                ),
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${note.tj_title}',
+                                      style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.4,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      Text(
-                                        '${note.tj_singer}',
-                                        style: TextStyle(
-                                          color: kPrimaryLightWhiteColor,
-                                          fontSize: defaultSize * 1.2,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    if (note.memo.isEmpty)...[
+                                      SizedBox(height: defaultSize * 0.3)
+                                    ],
+                                    Text(
+                                      '${note.tj_singer}',
+                                      style: TextStyle(
+                                        color: kPrimaryLightWhiteColor,
+                                        fontSize: defaultSize * 1.2,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                      SizedBox(height: defaultSize),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    if (note.memo.isNotEmpty) ...[
+                                      SizedBox(height: defaultSize * 0.3),
                                       Container(
                                         padding:
                                             EdgeInsets.all(defaultSize * 0.5),
@@ -152,41 +165,45 @@ class _NoteListState extends State<NoteList> {
                                             Radius.circular(8),
                                           ),
                                         ),
-                                        child: Text(
-                                          note.memo,
-                                          style: TextStyle(
-                                              color: kPrimaryLightWhiteColor,
-                                              fontSize: defaultSize * 1.2,
-                                              fontWeight: FontWeight.w400),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            note.memo,
+                                            style: TextStyle(
+                                                color: kPrimaryLightWhiteColor,
+                                                fontSize: defaultSize * 1.2,
+                                                fontWeight: FontWeight.w400),
+                                          ),
                                         ),
                                       )
-                                    ],
-                                  )),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: defaultSize),
-                                    child: SizedBox(
-                                        width: defaultSize * 5,
-                                        child: Center(
-                                          child: _userSettingInfo(
-                                              Provider.of<MusicSearchItemLists>(
-                                                      context,
-                                                      listen: true)
-                                                  .userNoteSetting,
-                                              note,
-                                              Provider.of<MusicSearchItemLists>(
-                                                      context,
-                                                      listen: true)
-                                                  .userMaxPitch),
-                                        )),
-                                  ),
-                                ],
-                              ),
+                                    ]
+                                  ],
+                                )),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize),
+                                  child: SizedBox(
+                                      width: defaultSize * 5,
+                                      child: Center(
+                                        child: _userSettingInfo(
+                                            Provider.of<MusicSearchItemLists>(
+                                                    context,
+                                                    listen: true)
+                                                .userNoteSetting,
+                                            note,
+                                            Provider.of<MusicSearchItemLists>(
+                                                    context,
+                                                    listen: true)
+                                                .userMaxPitch),
+                                      )),
+                                ),
+                              ],
                             ),
-                          )),
-                    ),
-                  )
-                  .toList(),
+                          ),
+                        )),
+                  );
+                },
+              ).toList(),
               onReorder: (oldIndex, newIndex) {
                 setState(() {
                   if (newIndex > oldIndex) {
