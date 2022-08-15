@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -7,6 +9,7 @@ import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -17,16 +20,93 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  List<Widget> _widgetOptions = <Widget>[NoteScreen(), MusicBookScreen(), RecommendScreen()];
+  double defaultSize = SizeConfig.defaultSize;
+  List<Widget> _widgetOptions = <Widget>[
+    NoteScreen(),
+    MusicBookScreen(),
+    RecommendScreen()
+  ];
+
+  // 앱 종료여부 확인 다이어로그
+  Future<bool> showExitPopup(context) async {
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: kDialogColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("앱을 종료하시겠습니까?",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontWeight: FontWeight.w400)),
+                SizedBox(height: defaultSize * 2),
+                Row(
+                  children: [
+                    Expanded(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("취소",
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontWeight: FontWeight.w600)),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(kPrimaryGreyColor),
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ))))),
+                    SizedBox(width: defaultSize * 1.5),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          SystemNavigator.pop();
+                        },
+                        child: Text("종료하기",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontWeight: FontWeight.w600)),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(kMainColor),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ))),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        if (_selectedIndex == 0) {
+          return showExitPopup(context);
+        } else {
+          (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
+                  as BottomNavigationBar)
+              .onTap!(0);
+          return false;
+        }
       },
       child: Scaffold(
         body: _widgetOptions.elementAt(_selectedIndex),
@@ -66,14 +146,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
                 ),
               ),
               BottomNavigationBarItem(
-                icon: Padding(padding: EdgeInsets.only(bottom: defaultSize * 0.2),child: SvgPicture.asset("assets/icons/recommend.svg", height: defaultSize * 1.7, width: defaultSize * 1.7)),
+                icon: Padding(
+                    padding: EdgeInsets.only(bottom: defaultSize * 0.2),
+                    child: SvgPicture.asset("assets/icons/recommend.svg",
+                        height: defaultSize * 1.7, width: defaultSize * 1.7)),
                 label: "추천",
-                activeIcon: Padding(padding: EdgeInsets.only(bottom: defaultSize * 0.2),child: SvgPicture.asset("assets/icons/recommend_click.svg",height: defaultSize * 1.7, width: defaultSize * 1.7)),
+                activeIcon: Padding(
+                    padding: EdgeInsets.only(bottom: defaultSize * 0.2),
+                    child: SvgPicture.asset("assets/icons/recommend_click.svg",
+                        height: defaultSize * 1.7, width: defaultSize * 1.7)),
               ),
             ],
             onTap: (index) {
               if (index == 1) {
-                Provider.of<MusicSearchItemLists>(context, listen: false).changeTabIndex(index: 1);
+                Provider.of<MusicSearchItemLists>(context, listen: false)
+                    .changeTabIndex(index: 1);
               }
               setState(() {
                 _selectedIndex = index;
