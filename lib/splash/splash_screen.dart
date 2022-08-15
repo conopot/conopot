@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (prefs.getBool('first_run') ?? true) {
       FlutterSecureStorage storage = FlutterSecureStorage();
-      await storage.deleteAll();
+      await storage.delete(key: 'userVersion');
       prefs.setBool('first_run', false);
     }
 
