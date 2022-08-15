@@ -9,10 +9,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
+  MobileAds.instance.initialize();
   // 세로 화면 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -66,7 +68,10 @@ class MyApp extends StatelessWidget {
               visualDensity: VisualDensity.adaptivePlatformDensity,
               cupertinoOverrideTheme: CupertinoThemeData(
                   textTheme: CupertinoTextThemeData(
-                pickerTextStyle: TextStyle(color: kPrimaryWhiteColor, fontSize: 20, fontWeight: FontWeight.w500),
+                pickerTextStyle: TextStyle(
+                    color: kPrimaryWhiteColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500),
               ))),
           home: const SplashScreen(),
           navigatorObservers: [

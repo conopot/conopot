@@ -1,16 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
@@ -22,6 +26,70 @@ class NoteData extends ChangeNotifier {
   TextEditingController controller = TextEditingController();
 
   final storage = new FlutterSecureStorage();
+
+  bool noteAddInterstitialSetting = true;
+
+  // AdMob
+  int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
+  Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-1461012385298546/1703495459',
+          'ios': 'ca-app-pub-1461012385298546/3994331462',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  int maxFailedLoadAttempts = 3;
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId:
+            Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
 
   initNotes() async {
     // Read all values
@@ -196,6 +264,16 @@ class NoteData extends ChangeNotifier {
               backgroundColor: kMainColor,
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
+
+          //Google Admob event
+          noteAddCount++;
+          notifyListeners();
+          noteAddInterstitialSetting = Firebase_Remote_Config()
+              .remoteConfig
+              .getBool('noteAddInterstitialSetting');
+          if (noteAddCount % 5 == 0 && noteAddInterstitialSetting) {
+            _showInterstitialAd();
+          }
         }
       },
       child: Text("추가",
@@ -289,6 +367,16 @@ class NoteData extends ChangeNotifier {
               backgroundColor: kMainColor,
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
+
+          //Google Admob event
+          noteAddCount++;
+          notifyListeners();
+          noteAddInterstitialSetting = Firebase_Remote_Config()
+              .remoteConfig
+              .getBool('noteAddInterstitialSetting');
+          if (noteAddCount % 5 == 0 && noteAddInterstitialSetting) {
+            _showInterstitialAd();
+          }
         }
       },
       child: Text("애창곡 노트에 추가",

@@ -71,6 +71,9 @@ dependencies:
   archive: ^3.3.1
   shared_preferences: ^2.0.15
 
+  google_mobile_ads: ^2.0.0
+  firebase_remote_config: ^2.0.14
+
 
 
 dev_dependencies:

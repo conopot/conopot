@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/config/size_config.dart';
@@ -77,6 +78,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
+    //Admob 전면광고 캐싱
+    await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
+
+    //firebase remote config 초기화
+    await Firebase_Remote_Config().init();
+    await Firebase_Remote_Config().remoteConfig.fetchAndActivate();
+
     // 첫 설치 사용자라면, 로컬 스토리지를 모두 비운다.
     final prefs = await SharedPreferences.getInstance();
 

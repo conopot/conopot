@@ -2,15 +2,19 @@ import 'dart:io';
 
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -22,6 +26,17 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
+  //AdMob
+  Map<String, String> App_Quit_Banner_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-1461012385298546/6974183177',
+          'ios': 'ca-app-pub-1461012385298546/6068295613',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/6300978111',
+          'ios': 'ca-app-pub-3940256099942544/2934735716',
+        };
+
   int _selectedIndex = 0;
   double defaultSize = SizeConfig.defaultSize;
   List<Widget> _widgetOptions = <Widget>[
@@ -30,8 +45,22 @@ class _MainScreenState extends State<MainScreen>
     RecommendScreen()
   ];
 
+  //firebase admob
+  bool quitBannerSetting = true;
+
+  @override
+  void initState() {
+    setState(() {
+      //firebase 원격 설정
+      //firebase에서 종료 시 배너 광고 출력 여부를 판단
+      quitBannerSetting =
+          Firebase_Remote_Config().remoteConfig.getBool('quitBannerSetting');
+    });
+    super.initState();
+  }
+
   // 앱 종료여부 확인 다이어로그
-  Future<bool> showExitPopup(context) async {
+  Future<bool> showExitPopup(context, BannerAd banner) async {
     return await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -43,10 +72,28 @@ class _MainScreenState extends State<MainScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("앱을 종료하시겠습니까?",
-                    style: TextStyle(
-                        color: kPrimaryLightWhiteColor,
-                        fontWeight: FontWeight.w400)),
+                (quitBannerSetting == true)
+                    ? Column(
+                        children: [
+                          Container(
+                            height: 250,
+                            width: 300,
+                            child: AdWidget(
+                              ad: banner,
+                            ),
+                          ),
+                          SizedBox(
+                            height: defaultSize * 2,
+                          ),
+                        ],
+                      )
+                    : Text(""),
+                Center(
+                  child: Text("앱을 종료하시겠습니까?",
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          fontWeight: FontWeight.w400)),
+                ),
                 SizedBox(height: defaultSize * 2),
                 Row(
                   children: [
@@ -60,8 +107,8 @@ class _MainScreenState extends State<MainScreen>
                                     color: kPrimaryLightWhiteColor,
                                     fontWeight: FontWeight.w600)),
                             style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(kPrimaryGreyColor),
+                                backgroundColor: MaterialStateProperty.all(
+                                    kPrimaryGreyColor),
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
@@ -97,10 +144,29 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+
+    //AdMob
+    TargetPlatform os = Theme.of(context).platform;
+
+    BannerAd banner = BannerAd(
+      listener: BannerAdListener(
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print("onAdFailedToLoad");
+        },
+        onAdLoaded: (_) {
+          print("onAdLoaded");
+        },
+      ),
+      size: AdSize.mediumRectangle,
+      adUnitId: App_Quit_Banner_UNIT_ID[
+          os == TargetPlatform.iOS ? 'ios' : 'android']!,
+      request: AdRequest(),
+    )..load();
+
     return WillPopScope(
       onWillPop: () async {
         if (_selectedIndex == 0) {
-          return showExitPopup(context);
+          return showExitPopup(context, banner);
         } else {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)

@@ -40,6 +40,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <meta-data
+              android:name="com.google.android.gms.ads.APPLICATION_ID"
+              android:value="ca-app-pub-1461012385298546~2861187547"/>
             <provider android:authorities="com.facebook.app.FacebookContentProvider776644653770250"
     android:name="com.facebook.FacebookContentProvider"
     android:exported="true" />
