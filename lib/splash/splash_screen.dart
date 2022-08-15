@@ -83,7 +83,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     //firebase remote config 초기화
     await Firebase_Remote_Config().init();
-    await Firebase_Remote_Config().remoteConfig.fetchAndActivate();
 
     // 첫 설치 사용자라면, 로컬 스토리지를 모두 비운다.
     final prefs = await SharedPreferences.getInstance();
