@@ -119,7 +119,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   color: kMainColor,
                 )),
             onPressed: () {
-              _showDeleteDialog(context);
+              Provider.of<NoteData>(context, listen:false).showDeleteDialog(context, widget.note);
             },
           ),
         ],
@@ -546,53 +546,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     );
   }
 
-  void _showDeleteDialog(BuildContext context) {
-    Widget deleteButton = ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kMainColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ))),
-      onPressed: () {
-        Analytics_config().noteDeleteEvent(widget.note.tj_title);
-        Provider.of<NoteData>(context, listen: false).deleteNote(widget.note);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      },
-      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600)),
-    );
-
-    Widget cancelButton = ElevatedButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ))),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text("취소", style: TextStyle(fontWeight: FontWeight.w600)));
-
-    AlertDialog alert = AlertDialog(
-      content: Text(
-        "노트를 삭제 하시겠습니까?",
-        style:
-            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
-      ),
-      actions: [
-        cancelButton,
-        deleteButton,
-      ],
-      backgroundColor: kDialogColor,
-    );
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(child: alert);
-        });
-  }
 }
 
 void play(String fitch) async {

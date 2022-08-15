@@ -81,8 +81,8 @@ class _NoteListState extends State<NoteList> {
                             motion: ScrollMotion(),
                             children: [
                               SlidableAction(
-                                onPressed: (context) {
-                                  noteData.deleteNote(note);
+                                onPressed: (value) {
+                                  Provider.of<NoteData>(context, listen:false).showDeleteDialog(context, note);
                                 },
                                 backgroundColor: kPrimaryLightBlackColor,
                                 foregroundColor: kMainColor,

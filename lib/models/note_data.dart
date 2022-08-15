@@ -349,4 +349,53 @@ class NoteData extends ChangeNotifier {
           return alert;
         });
   }
+
+  //노트 삭제여부 확인 팝업 함수
+  void showDeleteDialog(BuildContext context, Note note) {
+    Widget deleteButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        Analytics_config().noteDeleteEvent(note.tj_title);
+        deleteNote(note);
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      },
+      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600)),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("취소", style: TextStyle(fontWeight: FontWeight.w600)));
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "노트를 삭제 하시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        deleteButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
 }
