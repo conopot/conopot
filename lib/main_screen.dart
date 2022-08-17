@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -9,7 +7,6 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +26,7 @@ class _MainScreenState extends State<MainScreen>
   //AdMob
   Map<String, String> App_Quit_Banner_UNIT_ID = kReleaseMode
       ? {
+          //release 모드일때 (실기기 사용자)
           'android': 'ca-app-pub-1461012385298546/6974183177',
           'ios': 'ca-app-pub-1461012385298546/6068295613',
         }
@@ -46,7 +44,8 @@ class _MainScreenState extends State<MainScreen>
   ];
 
   //firebase admob
-  bool quitBannerSetting = true;
+  bool quitBannerSetting = false;
+  bool bannerExist = true;
 
   @override
   void initState() {
@@ -72,7 +71,7 @@ class _MainScreenState extends State<MainScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                (quitBannerSetting == true)
+                (quitBannerSetting == true && bannerExist == true)
                     ? Column(
                         children: [
                           Container(
@@ -151,10 +150,16 @@ class _MainScreenState extends State<MainScreen>
     BannerAd banner = BannerAd(
       listener: BannerAdListener(
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print("onAdFailedToLoad");
+          //print("onAdFailedToLoad");
+          setState(() {
+            bannerExist = false;
+          });
         },
         onAdLoaded: (_) {
-          print("onAdLoaded");
+          //print("onAdLoaded");
+          setState(() {
+            bannerExist = true;
+          });
         },
       ),
       size: AdSize.mediumRectangle,

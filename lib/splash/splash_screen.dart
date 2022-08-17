@@ -26,11 +26,17 @@ class _SplashScreenState extends State<SplashScreen> {
     //인터넷 연결 확인
     bool result = await InternetConnectionChecker().hasConnection;
 
+    //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
+    bool musicUpdateSetting = false;
+    musicUpdateSetting =
+        Firebase_Remote_Config().remoteConfig.getBool('musicUpdateSetting');
+
+    //버전이 존재하는지 체크한다.
+    final storage = new FlutterSecureStorage();
+    String? userVersionStr = await storage.read(key: 'userVersion');
+
     //인터넷 연결이 안되어있다면
     if (result == false) {
-      //버전이 존재하는지 체크한다.
-      final storage = new FlutterSecureStorage();
-      String? userVersionStr = await storage.read(key: 'userVersion');
       //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
       if (userVersionStr == null) {
         setState(() {
@@ -57,9 +63,14 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     //인터넷 연결이 되어있다면
     else {
+      //만약 버전이 없다면, remote config 상관없이 뭐라도 받아오는 것이 낫다.
+      if (userVersionStr == null) {
+        musicUpdateSetting = true;
+      }
+
       /// 노래방 곡 관련 초기화
       await Provider.of<MusicSearchItemLists>(context, listen: false)
-          .initVersion(true);
+          .initVersion(musicUpdateSetting);
 
       /// 사용자 노트 초기화 (local storage)
       await Provider.of<NoteData>(context, listen: false).initNotes();

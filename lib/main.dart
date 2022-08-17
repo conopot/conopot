@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
   // 세로 화면 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 

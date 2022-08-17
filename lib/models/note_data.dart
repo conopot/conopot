@@ -27,7 +27,13 @@ class NoteData extends ChangeNotifier {
 
   final storage = new FlutterSecureStorage();
 
-  bool noteAddInterstitialSetting = true;
+  bool noteAddInterstitialSetting = false;
+
+  static final AdRequest request = AdRequest(
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    nonPersonalizedAds: true,
+  );
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -49,7 +55,7 @@ class NoteData extends ChangeNotifier {
     InterstitialAd.load(
         adUnitId:
             Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-        request: const AdRequest(),
+        request: request,
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             print('$ad loaded');
@@ -271,7 +277,9 @@ class NoteData extends ChangeNotifier {
           noteAddInterstitialSetting = Firebase_Remote_Config()
               .remoteConfig
               .getBool('noteAddInterstitialSetting');
-          if (noteAddCount % 5 == 0 && noteAddInterstitialSetting) {
+          if (noteAddCount % 5 == 0 &&
+              noteAddInterstitialSetting &&
+              _interstitialAd != null) {
             _showInterstitialAd();
           }
         }
@@ -374,7 +382,9 @@ class NoteData extends ChangeNotifier {
           noteAddInterstitialSetting = Firebase_Remote_Config()
               .remoteConfig
               .getBool('noteAddInterstitialSetting');
-          if (noteAddCount % 5 == 0 && noteAddInterstitialSetting) {
+          if (noteAddCount % 5 == 0 &&
+              noteAddInterstitialSetting &&
+              _interstitialAd != null) {
             _showInterstitialAd();
           }
         }
