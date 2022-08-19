@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen>
   }
 
   // 앱 종료여부 확인 다이어로그
-  Future<bool> showExitPopup(context, BannerAd banner) async {
+  Future<bool> showExitPopup(context) async {
     return await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -71,22 +71,6 @@ class _MainScreenState extends State<MainScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                (quitBannerSetting == true && bannerExist == true)
-                    ? Column(
-                        children: [
-                          Container(
-                            height: 250,
-                            width: 300,
-                            child: AdWidget(
-                              ad: banner,
-                            ),
-                          ),
-                          SizedBox(
-                            height: defaultSize * 2,
-                          ),
-                        ],
-                      )
-                    : Text(""),
                 Center(
                   child: Text("앱을 종료하시겠습니까?",
                       style: TextStyle(
@@ -144,34 +128,10 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
 
-    //AdMob
-    TargetPlatform os = Theme.of(context).platform;
-
-    BannerAd banner = BannerAd(
-      listener: BannerAdListener(
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          //print("onAdFailedToLoad");
-          setState(() {
-            bannerExist = false;
-          });
-        },
-        onAdLoaded: (_) {
-          //print("onAdLoaded");
-          setState(() {
-            bannerExist = true;
-          });
-        },
-      ),
-      size: AdSize.mediumRectangle,
-      adUnitId: App_Quit_Banner_UNIT_ID[
-          os == TargetPlatform.iOS ? 'ios' : 'android']!,
-      request: AdRequest(),
-    )..load();
-
     return WillPopScope(
       onWillPop: () async {
         if (_selectedIndex == 0) {
-          return showExitPopup(context, banner);
+          return showExitPopup(context);
         } else {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)

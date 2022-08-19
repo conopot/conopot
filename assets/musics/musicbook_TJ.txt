@@ -23150,6 +23150,9 @@ Cold Feet^Tayo Sound^23930^
 Sans toi ma mie^Adamo^23931^
 26^Lauv^23932^
 Jimmy Cooks^Drake(Feat.21 Savage)^23933^
+Till I Collapse(리얼스틸OST)^Eminem(Feat.Nate Dogg)^23934^
+World's Smallest Violin^AJR^23935^
+Jail^Kanye West^23936^
 Seoul Blues^자우림^24001^
 가면^태진아^24002^
 아, 대한민국...^정태춘^24003^
@@ -43177,6 +43180,7 @@ Always^에이핑크^48999^
 내사랑세종^김성아^49172^
 친구가좋아^임명숙^49173^
 예산으로떠나요^명미^49174^
+화가나서한말이라고^금성훈^49175^
 미운날^이해리^49481^
 그대가나를본다면^반하나^49482^
 어느봄날^이벼리,이준환^49483^
@@ -48089,6 +48093,8 @@ Gold('ビルディバイド -#FFFFFF(コードホワイト)-' OP)^EGOIST^68632^
 クロノスタシス(劇場版'名探偵コナン ハロウィンの花嫁' 主題歌)^BUMP OF CHICKEN^68637^
 未来は風のように(ラブライブ！スーパースター‼ED)^Liella!^68638^
 フクロウ^KOKIA^68639^
+PAKU^asmi^68640^
+だって今日まで恋煩い(デジモンゴーストゲーム ED)^BMK^68641^
 AMOUR^张学友^70001^
 爱不爱我^零点乐队^70002^
 别爱我^郑中基^70005^
@@ -54115,9 +54121,30 @@ AURA^우주소녀^82045^
 옷깃만스쳐도인연입니다^김중연^82047^
 Nerdy^퍼플키스^82048^
 알아요^RM,정국^82049^
+거북이(Remix Ver.)^MC몽(Feat.효린)^82050^
+Hidden Castle^김뮤지엄^82051^
+우리, 다시(Us, Again)^세븐틴^82052^
+그럴까(Can it be)(뮤지컬'웃는남자'OST)^박효신^82053^
+게임의시작(The Game Begins)(뮤지컬'데스노트'OST)^김준수^82054^
+온통그대뿐인나죠(환혼OST)^신용재^82055^
+와요와요^강혜연^82056^
 약속[約束]^김호중^82057^
 괴짜(Freak)^지코^82058^
+주마등^김호중^82059^
+BRB^H1GHR MUSIC^82060^
+Trash Talk^지코(Feat.창모)^82061^
+친구^김호중^82062^
+Red Pill(Born from the Blue Pt. II)^저스디스(Prod.코드쿤스트)^82063^
+너의로맨스에내이름을써줘^104(백사)(Prod.IVY GROUND)^82064^
+발목을잡지마^조정민^82065^
 이브닝^유주(YUJU)(Feat.빅나티(서동현))^82066^
+Road^숀(SHAUN)^82067^
+노래해요^김호중(Duet with 최백호)^82068^
+Yellow^주시크(Joosiq)(Feat.런치)^82069^
+Do Not Go Gentle Into That Good Night^저스디스(Feat.KWAII,던말릭,GongGongGoo009)(Prod.Humbert)^82070^
+Attention^NewJeans^82071^
+Hype boy^NewJeans^82072^
+FOREVER 1^소녀시대^82073^
 自从有了你^赵薇^82113^
 我们的爱^F.I.R.^82131^
 Take My Hand^陈慧琳^82135^

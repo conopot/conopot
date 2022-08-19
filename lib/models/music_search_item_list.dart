@@ -171,29 +171,29 @@ class MusicSearchItemLists extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<String> getTJMusics() async {
-  //   return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
-  // }
+  Future<String> firstSessionGetTJMusics() async {
+    return await rootBundle.loadString('assets/musics/musicbook_TJ.txt');
+  }
 
-  // Future<String> getTJMusicChart() async {
-  //   return await rootBundle.loadString('assets/musics/chart_TJ.txt');
-  // }
+  Future<String> firstSessionGetTJMusicChart() async {
+    return await rootBundle.loadString('assets/musics/chart_TJ.txt');
+  }
 
-  // Future<String> getKYMusics() async {
-  //   return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
-  // }
+  Future<String> firstSessionGetKYMusics() async {
+    return await rootBundle.loadString('assets/musics/musicbook_KY.txt');
+  }
 
-  // Future<String> getKYMusicChart() async {
-  //   return await rootBundle.loadString('assets/musics/chart_KY.txt');
-  // }
+  Future<String> firstSessionGetKYMusicChart() async {
+    return await rootBundle.loadString('assets/musics/chart_KY.txt');
+  }
 
-  // Future<String> getHighMusics() async {
-  //   return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
-  // }
+  Future<String> firstSessionGetHighMusics() async {
+    return await rootBundle.loadString('assets/musics/highest_Pitch.txt');
+  }
 
-  // Future<String> getCombinedMusics() async {
-  //   return await rootBundle.loadString('assets/musics/matching_Musics.txt');
-  // }
+  Future<String> firstSessionGetCombinedMusics() async {
+    return await rootBundle.loadString('assets/musics/matching_Musics.txt');
+  }
 
   //리소스 업데이트 코드 (개발 완료되면 풀 것)
   Future<String> getTJMusics() async {
@@ -253,16 +253,16 @@ class MusicSearchItemLists extends ChangeNotifier {
     customizeRecommendationList = highestResults;
   }
 
-  initVersion(bool isConnected) async {
+  initVersion(bool isConnected, bool firstSession) async {
     //리소스 업데이트 코드 (개발 완료되면 주석 풀 것)
     dir = (await getApplicationDocumentsDirectory()).path;
     if (isConnected) await checkVersionUpdate();
 
-    init();
+    init(firstSession);
   }
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
-  void init() async {
+  void init(bool firstSession) async {
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
     if (value != null) {
@@ -287,12 +287,22 @@ class MusicSearchItemLists extends ChangeNotifier {
       userNoteSetting = int.parse(value);
     }
 
-    String TJMusics = await getTJMusics();
-    String TJMusicChart = await getTJMusicChart();
-    String KYMusics = await getKYMusics();
-    String KYMusicChart = await getKYMusicChart();
-    String HighMusics = await getHighMusics();
-    String CombinedMusics = await getCombinedMusics();
+    String TJMusics =
+        (firstSession) ? await firstSessionGetTJMusics() : await getTJMusics();
+    String TJMusicChart = (firstSession)
+        ? await firstSessionGetTJMusicChart()
+        : await getTJMusicChart();
+    String KYMusics =
+        (firstSession) ? await firstSessionGetKYMusics() : await getKYMusics();
+    String KYMusicChart = (firstSession)
+        ? await firstSessionGetKYMusicChart()
+        : await getKYMusicChart();
+    String HighMusics = (firstSession)
+        ? await firstSessionGetHighMusics()
+        : await getHighMusics();
+    String CombinedMusics = (firstSession)
+        ? await firstSessionGetCombinedMusics()
+        : await getCombinedMusics();
 
     LineSplitter ls = new LineSplitter();
 
