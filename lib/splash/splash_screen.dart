@@ -57,13 +57,13 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     //인터넷 연결이 되어있다면
     else {
+      //firebase remote config 초기화
+      await Firebase_Remote_Config().init();
+
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
       bool musicUpdateSetting = false;
       musicUpdateSetting =
           Firebase_Remote_Config().remoteConfig.getBool('musicUpdateSetting');
-
-      //firebase remote config 초기화
-      await Firebase_Remote_Config().init();
 
       //만약 버전이 없다면, remote config 상관없이 뭐라도 받아오는 것이 낫다.
       if (userVersionStr == null) {
