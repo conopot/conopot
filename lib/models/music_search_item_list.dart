@@ -37,6 +37,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   int userPitch = 23;
   int userMaxPitch = -1;
   int userNoteSetting = 0; //(0: 번호, 1: 최고음, 2: 최고음 차이)
+  int sessionCount = 0;
 
   final storage = new FlutterSecureStorage();
   static var httpClient = new HttpClient();
@@ -46,6 +47,19 @@ class MusicSearchItemLists extends ChangeNotifier {
   Future<Directory> get _localDirectory async {
     final directory = await getApplicationDocumentsDirectory();
     return directory;
+  }
+
+   // 유저 세션 체크
+  checkSessionCount() async{
+    String? _sessionCount = await storage.read(key: 'sessionCount');
+    if (_sessionCount == null) {
+      await storage.write(key: 'sessionCount', value: '0');
+      sessionCount = 0;
+    } else {
+      sessionCount = int.parse(_sessionCount);
+      sessionCount += 1;
+      await storage.write(key: 'sessionCount', value: sessionCount.toString());
+    }
   }
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)

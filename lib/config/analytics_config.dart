@@ -314,4 +314,49 @@ class Analytics_config {
   void clickWinterRecommendationEvent() {
     Analytics_config().event('추천_뷰__올타임_겨울', {});
   }
+
+  // !event: 리뷰요청_뷰__페이지뷰
+  void reviewRequestPageVeiwEvent() {
+    Analytics_config().event('리뷰요청_뷰__페이지뷰', {});
+  }
+
+  // !event: 리뷰요청_뷰__네_좋아요
+  void reviewRequestYesButtonEvent() {
+    Analytics_config().event('리뷰요청_뷰__네_좋아요', {});
+  }
+
+  // !event: 리뷰요청_뷰__그냥_그래요
+  void reviewRequestNoButtonEvent() {
+    Analytics_config().event('리뷰요청_뷰__그냥_그래요', {});
+  }
+
+  // !event: 스토어연결_뷰__페이지뷰
+  void storeRequestPageViewEvent() {
+    Analytics_config().event('스토어연결_뷰__페이지뷰', {});
+  }
+
+  // !event: 스토어연결_뷰__리뷰_남기기
+  void storeRequestYesButtonEvent() {
+    Analytics_config().event('스토어연결_뷰__리뷰_남기기', {});
+  }
+
+  // !event: 스토어연결_뷰__다음에요
+  void storeRequestNoButtonEvent() {
+    Analytics_config().event('스토어연결_뷰__다음에요', {});
+  }
+
+  // !event: 채널톡연결_뷰__페이지뷰
+  void channelTalkRequestPageVeiwnEvent() {
+    Analytics_config().event('채널톡연결_뷰__페이지뷰', {});
+  }
+
+  // !event: 채널톡연결_뷰__1:1_문의하기
+  void channelTalkRequestYesButtonEvent() {
+    Analytics_config().event('채널톡연결_뷰__1:1_문의하기', {});
+  }
+
+  // !event: 채널톡연결_뷰__다음에요
+  void channelTalkRequestNoButtonEvent() {
+    Analytics_config().event('채널톡연결_뷰__다음에요', {});
+  }
 }

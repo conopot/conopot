@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -89,8 +88,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
+    
     await Analytics_config().init();
     await MobileAds.instance.initialize();
+     // 유저 세션 체크
+    await Provider.of<MusicSearchItemLists>(context, listen: false).checkSessionCount();
     //Admob 전면광고 캐싱
     await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
 

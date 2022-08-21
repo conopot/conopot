@@ -73,6 +73,7 @@ dependencies:
 
   google_mobile_ads: ^2.0.1
   firebase_remote_config: ^2.0.14
+  in_app_review: ^2.0.4
 
 
 

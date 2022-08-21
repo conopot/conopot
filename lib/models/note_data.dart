@@ -8,6 +8,7 @@ import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
@@ -22,9 +25,14 @@ import 'note.dart';
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
   bool emptyCheck = false;
-  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKe
+  GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
   TextEditingController controller = TextEditingController();
+  late int noteCount;
+  late bool _isSubmitted; // 리뷰 또는 채널톡 의견 제출 여부
+  late final _currentTime; // 현재 시간
+  DateTime? _preRequestTime; // 이전 요청 시간
 
+  final InAppReview _inAppReview = InAppReview.instance;
   final storage = new FlutterSecureStorage();
 
   bool noteAddInterstitialSetting = false;
@@ -107,7 +115,7 @@ class NoteData extends ChangeNotifier {
 
       notes = savedNote;
     }
-
+    noteCount = notes.length;
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
     for (Note note in notes) {
       if (note.memo != null && note.memo != "") {
@@ -130,11 +138,21 @@ class NoteData extends ChangeNotifier {
     //!event : 애창곡_노트_뷰__페이지뷰
     Analytics_config().event('애창곡_노트_뷰__페이지뷰', {});
 
+    _currentTime = DateTime.now();
+    String? preRequestTime = await storage.read(key: 'preRequestTime');
+    preRequestTime == null
+        ? _preRequestTime = null
+        : _preRequestTime = DateFormat('yyyy-MM-dd').parse(preRequestTime);
+
+    String? isSubmitted = await storage.read(key: 'isSubmitted');
+    isSubmitted == null ? _isSubmitted = false : _isSubmitted = true;
+
     notifyListeners();
   }
 
-  Future<void> addNoteBySongNumber(
-      String songNumber, List<FitchMusic> musicList) async {
+  Future<void> addNoteBySongNumber(BuildContext context, String songNumber,
+      List<FitchMusic> musicList) async {
+    noteCount += 1;
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
         Note note = Note(
@@ -181,12 +199,34 @@ class NoteData extends ChangeNotifier {
         } else {
           emptyCheck = true;
         }
-
-        notifyListeners();
-
         break;
       }
     }
+    bool isOverlapping = false; // admob과 리뷰요청 중복 확인
+
+    //Google Admob event
+    noteAddCount++;
+    notifyListeners();
+    noteAddInterstitialSetting = Firebase_Remote_Config()
+        .remoteConfig
+        .getBool('noteAddInterstitialSetting');
+    if (noteAddCount % 5 == 0 &&
+        noteAddInterstitialSetting &&
+        _interstitialAd != null) {
+      _showInterstitialAd();
+      isOverlapping = true;
+    }
+    if (isOverlapping == false &&
+        (_preRequestTime == null ||
+            _currentTime.difference(_preRequestTime).inDays > 20) &&
+        !_isSubmitted &&
+        noteCount >= 5 &&
+        Provider.of<MusicSearchItemLists>(context, listen: false)
+                .sessionCount >=
+            5) {
+      showReviewDialog(context);
+    }
+    notifyListeners();
   }
 
   Future<void> editNote(Note note, String memo) async {
@@ -211,6 +251,7 @@ class NoteData extends ChangeNotifier {
 
   //local storage 에도 삭제 작업 필요
   Future<void> deleteNote(Note note) async {
+    noteCount -= 1;
     notes.remove(note);
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
@@ -244,11 +285,12 @@ class NoteData extends ChangeNotifier {
 
     Widget okButton = ElevatedButton(
       onPressed: () {
+        Navigator.of(context).pop();
         Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
+            context,
             songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
-        Navigator.of(context).pop();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           Fluttertoast.showToast(
               msg: "이미 등록된 곡입니다 😢",
@@ -270,18 +312,6 @@ class NoteData extends ChangeNotifier {
               backgroundColor: kMainColor,
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
-
-          //Google Admob event
-          noteAddCount++;
-          notifyListeners();
-          noteAddInterstitialSetting = Firebase_Remote_Config()
-              .remoteConfig
-              .getBool('noteAddInterstitialSetting');
-          if (noteAddCount % 5 == 0 &&
-              noteAddInterstitialSetting &&
-              _interstitialAd != null) {
-            _showInterstitialAd();
-          }
         }
       },
       child: Text("추가",
@@ -349,6 +379,7 @@ class NoteData extends ChangeNotifier {
     Widget okButton = ElevatedButton(
       onPressed: () {
         addNoteBySongNumber(
+            context,
             songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
@@ -375,18 +406,6 @@ class NoteData extends ChangeNotifier {
               backgroundColor: kMainColor,
               textColor: kPrimaryWhiteColor,
               fontSize: defaultSize * 1.6);
-
-          //Google Admob event
-          noteAddCount++;
-          notifyListeners();
-          noteAddInterstitialSetting = Firebase_Remote_Config()
-              .remoteConfig
-              .getBool('noteAddInterstitialSetting');
-          if (noteAddCount % 5 == 0 &&
-              noteAddInterstitialSetting &&
-              _interstitialAd != null) {
-            _showInterstitialAd();
-          }
         }
       },
       child: Text("애창곡 노트에 추가",
@@ -494,6 +513,301 @@ class NoteData extends ChangeNotifier {
         context: context,
         builder: (BuildContext context) {
           return Container(child: alert);
+        });
+  }
+
+  // 리뷰 요청 다이어로그
+  Future<bool> showReviewDialog(context) async {
+    // !event: 리뷰요청_뷰__페이지뷰
+    Analytics_config().reviewRequestPageVeiwEvent();
+    double defaultSize = SizeConfig.defaultSize;
+    _preRequestTime = _currentTime;
+    storage.write(
+        key: 'preRequestTime',
+        value: DateFormat('yyyy-MM-dd').format(_preRequestTime!));
+
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: kDialogColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/splash.png",
+                  width: defaultSize * 10,
+                  height: defaultSize * 10,
+                ),
+                SizedBox(height: defaultSize * 3),
+                Text("애창곡노트가 마음에 드세요?",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.8,
+                        color: kPrimaryLightWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(height: defaultSize * 3),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // !event: 리뷰요청_뷰__네_좋아요
+                        Analytics_config().reviewRequestYesButtonEvent();
+                        Navigator.of(context).pop();
+                        showOpenStoreDialog(context);
+                      },
+                      child: Text("네! 좋아요!",
+                          style: TextStyle(
+                              fontSize: defaultSize * 1.2,
+                              color: kPrimaryLightWhiteColor,
+                              fontWeight: FontWeight.w600)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(kMainColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )))),
+                ),
+                SizedBox(width: defaultSize * 1.5),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // !event: 리뷰요청_뷰__그냥_그래요
+                      Analytics_config().reviewRequestNoButtonEvent();
+                      Navigator.of(context).pop();
+                      showChannelTalkDialog(context);
+                    },
+                    child: Text("그냥 그래요",
+                        style: TextStyle(
+                            fontSize: defaultSize * 1.2,
+                            color: kPrimaryBlackColor,
+                            fontWeight: FontWeight.w600)),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(kPrimaryLightGreyColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ))),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 2),
+                Text("만족하실수 있는 서비스가 될 수 있도록",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.1)),
+                Text("끊임없이 노력 하겠습니다",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.1)),
+              ],
+            ),
+          );
+        });
+  }
+
+  // 스토어 오픈 다이어로그
+  Future<bool> showOpenStoreDialog(context) async {
+    // !event: 스토어연결_뷰__페이지뷰
+    Analytics_config().storeRequestPageViewEvent();
+    double defaultSize = SizeConfig.defaultSize;
+
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: kDialogColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("감사합니다! 😆",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(height: defaultSize * 2),
+                Platform.isAndroid
+                    ? Text("그렇다면 구글플레이 스토어에",
+                        style: TextStyle(
+                            fontSize: defaultSize * 1.5,
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w500))
+                    : Text("그렇다면 앱스토어에",
+                        style: TextStyle(
+                            fontSize: defaultSize * 1.5,
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w500)),
+                Text("칭찬을 남겨주세요!",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(height: defaultSize * 3),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // !event: 스토어연결_뷰__리뷰_남기기
+                        Analytics_config().storeRequestYesButtonEvent();
+                        storage.write(key: 'isSubmitted', value: 'yes');
+                        Navigator.of(context).pop();
+                        _inAppReview.openStoreListing(appStoreId: '1627953850');
+                      },
+                      child: Text("리뷰 남기기",
+                          style: TextStyle(
+                              fontSize: defaultSize * 1.2,
+                              color: kPrimaryLightWhiteColor,
+                              fontWeight: FontWeight.w600)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(kMainColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )))),
+                ),
+                SizedBox(width: defaultSize * 1.5),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // !event: 스토어연결_뷰__다음에요
+                      Analytics_config().storeRequestNoButtonEvent();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("다음에요",
+                        style: TextStyle(
+                            fontSize: defaultSize * 1.2,
+                            color: kPrimaryBlackColor,
+                            fontWeight: FontWeight.w600)),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(kPrimaryLightGreyColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ))),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 2),
+                Text("리뷰는 저희에게 큰 힘이 됩니다!",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.1)),
+              ],
+            ),
+          );
+        });
+  }
+
+  // 채널톡 오픈 다이어로그
+  Future<bool> showChannelTalkDialog(context) async {
+    // !event: 채널톡연결_뷰__페이지뷰
+    Analytics_config().channelTalkRequestPageVeiwnEvent();
+    double defaultSize = SizeConfig.defaultSize;
+
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: kDialogColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("죄송합니다.",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryLightWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                Text("불편한 점이나 건의사항을",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryLightWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                Text("저희에게 알려주세요!",
+                    style: TextStyle(
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryLightWhiteColor,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(height: defaultSize * 3),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // !event: 채널톡연결_뷰__1:1_문의하기
+                        Analytics_config().channelTalkRequestYesButtonEvent();
+                        storage.write(key: 'isSubmitted', value: 'yes');
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => ChannelTalkScreen()),
+                        );
+                      },
+                      child: Text("1:1 문의하기",
+                          style: TextStyle(
+                              fontSize: defaultSize * 1.2,
+                              color: kPrimaryLightWhiteColor,
+                              fontWeight: FontWeight.w600)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(kMainColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )))),
+                ),
+                SizedBox(width: defaultSize * 1.5),
+                SizedBox(
+                  width: defaultSize * 20,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // !event: 채널톡연결_뷰__다음에요
+                      Analytics_config().channelTalkRequestNoButtonEvent();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("다음에요",
+                        style: TextStyle(
+                            fontSize: defaultSize * 1.2,
+                            color: kPrimaryBlackColor,
+                            fontWeight: FontWeight.w600)),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(kPrimaryLightGreyColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ))),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 2),
+                Text("만족하실수 있는 서비스가 될 수 있도록",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.1)),
+                Text("끊임없이 노력하겠습니다",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize * 1.1)),
+              ],
+            ),
+          );
         });
   }
 }
