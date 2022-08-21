@@ -285,12 +285,13 @@ class NoteData extends ChangeNotifier {
 
     Widget okButton = ElevatedButton(
       onPressed: () {
-        Navigator.of(context).pop();
-        Provider.of<NoteData>(context, listen: false).addNoteBySongNumber(
+        addNoteBySongNumber(
             context,
             songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
+        Navigator.of(context).pop();
+        Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           Fluttertoast.showToast(
               msg: "이미 등록된 곡입니다 😢",
@@ -384,6 +385,7 @@ class NoteData extends ChangeNotifier {
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
         Navigator.of(context).pop();
+        Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           Fluttertoast.showToast(
               msg: "이미 등록된 곡입니다 😢",

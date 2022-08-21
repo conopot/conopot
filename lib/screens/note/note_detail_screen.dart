@@ -63,7 +63,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           });
         }
       } catch (e) {
-        print(e);
         setState(() {
           lyric =
               "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
@@ -119,7 +118,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                   color: kMainColor,
                 )),
             onPressed: () {
-              Provider.of<NoteData>(context, listen:false).showDeleteDialog(context, widget.note);
+              Provider.of<NoteData>(context, listen: false)
+                  .showDeleteDialog(context, widget.note);
             },
           ),
         ],
@@ -545,7 +545,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       },
     );
   }
-
 }
 
 void play(String fitch) async {
