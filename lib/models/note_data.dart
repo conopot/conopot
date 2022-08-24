@@ -323,6 +323,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
     );
@@ -332,6 +333,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
@@ -356,7 +358,8 @@ class NoteData extends ChangeNotifier {
         okButton,
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
           borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
@@ -418,6 +421,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
     );
@@ -459,7 +463,8 @@ class NoteData extends ChangeNotifier {
         if (isTj == true) Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
           borderRadius: BorderRadius.all(Radius.circular(8))),
     );
     showDialog(
@@ -476,6 +481,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
@@ -491,6 +497,7 @@ class NoteData extends ChangeNotifier {
             backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
@@ -533,7 +540,8 @@ class NoteData extends ChangeNotifier {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: kDialogColor,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
+                side: BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -571,6 +579,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -626,6 +635,7 @@ class NoteData extends ChangeNotifier {
           return AlertDialog(
             backgroundColor: kDialogColor,
             shape: RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -675,6 +685,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -698,6 +709,7 @@ class NoteData extends ChangeNotifier {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
+                          side: const BorderSide(width: 0.0),
                           borderRadius: BorderRadius.circular(30),
                         ))),
                   ),
@@ -725,6 +737,7 @@ class NoteData extends ChangeNotifier {
           return AlertDialog(
             backgroundColor: kDialogColor,
             shape: RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -771,6 +784,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -794,6 +808,7 @@ class NoteData extends ChangeNotifier {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
+                          side: const BorderSide(width: 0.0),
                           borderRadius: BorderRadius.circular(30),
                         ))),
                   ),
