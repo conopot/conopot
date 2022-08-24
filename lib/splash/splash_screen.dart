@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -9,7 +11,6 @@ import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,40 +23,14 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   checkConnection() async {
-    //인터넷 연결 확인
-    bool result = await InternetConnectionChecker().hasConnection;
-
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
 
-    //인터넷 연결이 안되어있다고 표시되면
-    if (result == false) {
-      //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
-      if (userVersionStr == null) {
-        //기존에 있는 txt 파일 사용
-        //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
-        await Provider.of<MusicSearchItemLists>(context, listen: false)
-            .initVersion(false, true);
-      } else {
-        //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
-        await Provider.of<MusicSearchItemLists>(context, listen: false)
-            .initVersion(false, false);
-      }
+    //인터넷 연결 확인
+    try {
+      final result = await InternetAddress.lookup('example.com');
 
-      /// 사용자 노트 초기화 (local storage)
-      await Provider.of<NoteData>(context, listen: false).initNotes();
-
-      await SizeConfig().init(context);
-
-      await RecommendationItemList().initRecommendationList();
-
-      /// 1.5초 후 MainScreen 전환 (replace)
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
-    }
-    //인터넷 연결이 되어있다면
-    else {
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();
 
@@ -80,7 +55,32 @@ class _SplashScreenState extends State<SplashScreen> {
 
       await RecommendationItemList().initRecommendationList();
 
-      /// 1초 후 MainScreen 전환 (replace)
+      /// MainScreen 전환 (replace)
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MainScreen()));
+    }
+    //인터넷 연결이 안 되어있다면
+    on SocketException {
+      //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
+      if (userVersionStr == null) {
+        //기존에 있는 txt 파일 사용
+        //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
+        await Provider.of<MusicSearchItemLists>(context, listen: false)
+            .initVersion(false, true);
+      } else {
+        //버전이 존재한다면 -> 버전 체크 없이 초기화 진행
+        await Provider.of<MusicSearchItemLists>(context, listen: false)
+            .initVersion(false, false);
+      }
+
+      /// 사용자 노트 초기화 (local storage)
+      await Provider.of<NoteData>(context, listen: false).initNotes();
+
+      await SizeConfig().init(context);
+
+      await RecommendationItemList().initRecommendationList();
+
+      /// MainScreen 전환 (replace)
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
@@ -88,11 +88,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
-    
     await Analytics_config().init();
     await MobileAds.instance.initialize();
-     // 유저 세션 체크
-    await Provider.of<MusicSearchItemLists>(context, listen: false).checkSessionCount();
+    // 유저 세션 체크
+    await Provider.of<MusicSearchItemLists>(context, listen: false)
+        .checkSessionCount();
     //Admob 전면광고 캐싱
     await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
 

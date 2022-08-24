@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -15,7 +16,6 @@ import 'package:conopot/models/pitch_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,41 +36,36 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   final storage = new FlutterSecureStorage();
 
   void getLyrics(String songNum) async {
-    //인터넷 연결 확인
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      String url =
-          'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
+    String url =
+        'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
 
-      try {
-        final response = await http.post(Uri.parse(url));
-
-        if (response.statusCode == 200) {
-          setState(() {
-            lyric = Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
-                .lyric;
-            lyric = lyric.replaceAll('\n\n', '\n');
-            //크롤링한 가사가 비어있는 경우
-            if (lyric == "") {
-              lyric =
-                  "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
-            }
-          });
-        } else {
-          setState(() {
-            lyric =
-                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
-          });
-        }
-      } catch (e) {
-        setState(() {
+    try {
+      final response = await http.post(Uri.parse(url));
+      if (response.statusCode != 200)
+        throw HttpException('${response.statusCode}');
+      setState(() {
+        lyric =
+            Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
+        lyric = lyric.replaceAll('\n\n', '\n');
+        //크롤링한 가사가 비어있는 경우
+        if (lyric == "") {
           lyric =
               "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
-        });
-      }
-    } else {
+        }
+      });
+    } on SocketException {
       setState(() {
         lyric = "인터넷 연결이 필요합니다 🤣\n인터넷이 연결되어있는지 확인해주세요!";
+      });
+    } on HttpException {
+      setState(() {
+        lyric =
+            "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+      });
+    } on FormatException {
+      setState(() {
+        lyric =
+            "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
       });
     }
   }
