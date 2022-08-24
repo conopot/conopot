@@ -10,8 +10,9 @@ class EmptyNoteList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(children: [
-        SizedBox(height: defaultSize * 18),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
         RichText(
           text: TextSpan(
             children: [
