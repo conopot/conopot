@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 
 class EmptyNoteList extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
+  
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(children: [
-        SizedBox(height: defaultSize * 18),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
         RichText(
           text: TextSpan(
             children: [

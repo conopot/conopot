@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,11 +25,9 @@ class _SplashScreenState extends State<SplashScreen> {
   checkConnection() async {
     //인터넷 연결 확인
     bool result = await InternetConnectionChecker().hasConnection;
-
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
-
     //인터넷 연결이 안되어있다고 표시되면
     if (result == false) {
       //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
@@ -58,28 +57,21 @@ class _SplashScreenState extends State<SplashScreen> {
     else {
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();
-
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
       bool musicUpdateSetting = false;
       musicUpdateSetting =
           Firebase_Remote_Config().remoteConfig.getBool('musicUpdateSetting');
-
       //만약 버전이 없다면, remote config 상관없이 뭐라도 받아오는 것이 낫다.
       if (userVersionStr == null) {
         musicUpdateSetting = true;
       }
-
       /// 노래방 곡 관련 초기화
       await Provider.of<MusicSearchItemLists>(context, listen: false)
           .initVersion(musicUpdateSetting, false);
-
       /// 사용자 노트 초기화 (local storage)
       await Provider.of<NoteData>(context, listen: false).initNotes();
-
       await SizeConfig().init(context);
-
       await RecommendationItemList().initRecommendationList();
-
       /// 1초 후 MainScreen 전환 (replace)
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
@@ -88,11 +80,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
-    
     await Analytics_config().init();
     await MobileAds.instance.initialize();
-     // 유저 세션 체크
-    await Provider.of<MusicSearchItemLists>(context, listen: false).checkSessionCount();
+    // 유저 세션 체크
+    await Provider.of<MusicSearchItemLists>(context, listen: false)
+        .checkSessionCount();
     //Admob 전면광고 캐싱
     await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
 
@@ -108,10 +100,28 @@ class _SplashScreenState extends State<SplashScreen> {
     checkConnection();
   }
 
+  static final String oneSignalAppId = "3dd8ef2b-8d2b-4e05-9499-479c974fed91";
+  // onesignal 설정
+  Future<void> initOneSignal() async {
+    OneSignal.shared.setAppId(oneSignalAppId);
+    // 권한 허가
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
+
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      // Will be called whenever a notification is received in foreground
+      // Display Notification, pass null param for not displaying the notification
+      event.complete(event.notification);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     init();
+    initOneSignal();
   }
 
   @override
