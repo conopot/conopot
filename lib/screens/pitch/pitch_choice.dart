@@ -10,16 +10,25 @@ import 'package:conopot/config/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PitchChoice extends StatelessWidget {
+class PitchChoice extends StatefulWidget {
   const PitchChoice({Key? key}) : super(key: key);
+
+  @override
+  State<PitchChoice> createState() => _PitchChoiceState();
+}
+
+class _PitchChoiceState extends State<PitchChoice> {
+  @override
+  void initState() {
+    super.initState();
+    // !event : 간접 음역대 측정뷰 - 페이지뷰
+    Analytics_config().event('간접_음역대_측정뷰__페이지뷰', {});
+  }
 
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
-    // !event : 간접 음역대 측정뷰 - 페이지뷰
-    Analytics_config().event('간접_음역대_측정뷰__페이지뷰', {});
-    SizeConfig().init(context);
 
     return Consumer<MusicSearchItemLists>(
         builder: (context, musicList, child) => Container(
@@ -88,36 +97,38 @@ class PitchChoice extends StatelessWidget {
                     ],
                   ),
                 ),
-                floatingActionButton: keyboardIsOpened ? null :FloatingActionButton.extended(
-                  onPressed: () => {
-                    // !event : 간접 음역대 측정뷰 - 선택완료
-                    Analytics_config().event('간접_음역대_측정뷰__선택완료', {
-                      '선택한_노래_리스트': musicList.checkedMusics
-                          .map((e) => e.tj_title)
-                          .toList()
-                    }),
-                    musicList.getMaxPitch(),
-                    if (musicList.userMaxPitch == -1)
-                      {
-                        AlertDialog(
-                          title: Text('최소 하나 이상 선택해주세요!'),
-                        ),
-                      }
-                    else
-                      {
-                        Navigator.push(
-                          context,
-                          CustomPageRoute(
-                            child:
-                                PitchResult(fitchLevel: musicList.userMaxPitch),
-                          ),
-                        ),
-                      }
-                  },
-                  backgroundColor: kMainColor,
-                  icon: Icon(Icons.check_sharp),
-                  label: Text('선택 완료'),
-                ),
+                floatingActionButton: keyboardIsOpened
+                    ? null
+                    : FloatingActionButton.extended(
+                        onPressed: () => {
+                          // !event : 간접 음역대 측정뷰 - 선택완료
+                          Analytics_config().event('간접_음역대_측정뷰__선택완료', {
+                            '선택한_노래_리스트': musicList.checkedMusics
+                                .map((e) => e.tj_title)
+                                .toList()
+                          }),
+                          musicList.getMaxPitch(),
+                          if (musicList.userMaxPitch == -1)
+                            {
+                              AlertDialog(
+                                title: Text('최소 하나 이상 선택해주세요!'),
+                              ),
+                            }
+                          else
+                            {
+                              Navigator.push(
+                                context,
+                                CustomPageRoute(
+                                  child: PitchResult(
+                                      fitchLevel: musicList.userMaxPitch),
+                                ),
+                              ),
+                            }
+                        },
+                        backgroundColor: kMainColor,
+                        icon: Icon(Icons.check_sharp),
+                        label: Text('선택 완료'),
+                      ),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
               ),

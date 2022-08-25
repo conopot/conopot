@@ -54,6 +54,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
     nowPitchName = "";
     selected1 = "1옥타브";
     selected2 = "도";
+    //!event : 직접 음역대 측정 뷰  - 페이지뷰
+    Analytics_config().event('직접_음역대_측정_뷰__페이지뷰', {});
   }
 
   Future<void> _startCapture() async {
@@ -109,7 +111,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
     AlertDialog alert = AlertDialog(
       content: Text(
         "마이크 서비스를 사용할 수 없습니다. 기기의 '설정> 개인정보 보호'에서 마이크 서비스를 켜주세요.(필수권한)",
-        style: TextStyle(fontWeight: FontWeight.w500, color: kPrimaryLightWhiteColor),
+        style: TextStyle(
+            fontWeight: FontWeight.w500, color: kPrimaryLightWhiteColor),
       ),
       actions: [
         cancelButton,
@@ -117,7 +120,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
       ],
       backgroundColor: kPrimaryLightBlackColor,
       shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8))),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
     showDialog(
@@ -288,9 +291,6 @@ class _PitchMeasureState extends State<PitchMeasure> {
 
   @override
   Widget build(BuildContext context) {
-    //!event : 직접 음역대 측정 뷰  - 페이지뷰
-    Analytics_config().event('직접_음역대_측정_뷰__페이지뷰', {});
-    SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(

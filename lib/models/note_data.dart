@@ -24,6 +24,7 @@ import 'note.dart';
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
+  List<String> userMusics = [];
   bool emptyCheck = false;
   GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
   TextEditingController controller = TextEditingController();
@@ -112,8 +113,12 @@ class NoteData extends ChangeNotifier {
       var noteJson = jsonDecode(allValues) as List;
       List<Note> savedNote =
           noteJson.map((noteIter) => Note.fromJson(noteIter)).toList();
+      List<String> savedUserMusics = noteJson
+          .map((noteIter) => Note.fromJson(noteIter).tj_songNumber)
+          .toList();
 
       notes = savedNote;
+      userMusics = savedUserMusics;
     }
     noteCount = notes.length;
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
@@ -125,7 +130,8 @@ class NoteData extends ChangeNotifier {
 
     Identify identify = Identify()
       ..set('노트 개수', notes.length)
-      ..set('메모 노트 개수', memoCnt);
+      ..set('메모 노트 개수', memoCnt)
+      ..set('유저 노트 리스트', userMusics);
 
     Analytics_config().userProps(identify);
 
@@ -177,9 +183,13 @@ class NoteData extends ChangeNotifier {
         }
         if (!flag) {
           notes.add(note);
+          userMusics.add(note.tj_songNumber);
+
           await storage.write(key: 'notes', value: jsonEncode(notes));
 
-          final Identify identify = Identify()..set('노트 개수', notes.length);
+          final Identify identify = Identify()
+            ..set('노트 개수', notes.length)
+            ..set('유저 노트 리스트', userMusics);
 
           Analytics_config().userProps(identify);
 
@@ -187,14 +197,14 @@ class NoteData extends ChangeNotifier {
               .setUserProperty(name: 'noteCnt', value: notes.length.toString());
 
           //!event: 인기 차트 - 노트 추가 이벤트
-          Analytics_config().event('인기_차트__노트_추가_이벤트', {
-            '곡_이름': note.tj_title,
-            '가수_이름': note.tj_singer,
-            'TJ_번호': note.tj_songNumber,
-            '금영_번호': note.ky_songNumber,
-            '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-            '메모_여부': note.memo
-          });
+          // Analytics_config().event('인기_차트__노트_추가_이벤트', {
+          //   '곡_이름': note.tj_title,
+          //   '가수_이름': note.tj_singer,
+          //   'TJ_번호': note.tj_songNumber,
+          //   '금영_번호': note.ky_songNumber,
+          //   '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
+          //   '메모_여부': note.memo
+          // });
           Analytics_config().musicAddEvent(note.tj_title);
         } else {
           emptyCheck = true;
@@ -253,10 +263,13 @@ class NoteData extends ChangeNotifier {
   Future<void> deleteNote(Note note) async {
     noteCount -= 1;
     notes.remove(note);
+    userMusics.remove(note.tj_songNumber);
+
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
     Identify identify = Identify()
       ..set('노트 개수', notes.length)
+      ..set('유저 노트 리스트', userMusics)
       ..add('메모 노트 개수', (note.memo == "true") ? -1 : 0);
 
     Analytics_config().userProps(identify);
@@ -323,6 +336,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
     );
@@ -332,6 +346,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
@@ -356,7 +371,8 @@ class NoteData extends ChangeNotifier {
         okButton,
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
           borderRadius: BorderRadius.all(Radius.circular(8))),
     );
 
@@ -418,6 +434,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
     );
@@ -459,7 +476,8 @@ class NoteData extends ChangeNotifier {
         if (isTj == true) Center(child: okButton),
       ],
       backgroundColor: kDialogColor,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
           borderRadius: BorderRadius.all(Radius.circular(8))),
     );
     showDialog(
@@ -476,6 +494,7 @@ class NoteData extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
@@ -491,6 +510,7 @@ class NoteData extends ChangeNotifier {
             backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
@@ -533,7 +553,8 @@ class NoteData extends ChangeNotifier {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: kDialogColor,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
+                side: BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -571,6 +592,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -626,6 +648,7 @@ class NoteData extends ChangeNotifier {
           return AlertDialog(
             backgroundColor: kDialogColor,
             shape: RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -675,6 +698,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -698,6 +722,7 @@ class NoteData extends ChangeNotifier {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
+                          side: const BorderSide(width: 0.0),
                           borderRadius: BorderRadius.circular(30),
                         ))),
                   ),
@@ -725,6 +750,7 @@ class NoteData extends ChangeNotifier {
           return AlertDialog(
             backgroundColor: kDialogColor,
             shape: RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -771,6 +797,7 @@ class NoteData extends ChangeNotifier {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                            side: const BorderSide(width: 0.0),
                             borderRadius: BorderRadius.circular(30),
                           )))),
                 ),
@@ -794,6 +821,7 @@ class NoteData extends ChangeNotifier {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
+                          side: const BorderSide(width: 0.0),
                           borderRadius: BorderRadius.circular(30),
                         ))),
                   ),

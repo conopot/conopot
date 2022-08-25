@@ -13,7 +13,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,8 +48,8 @@ class MusicSearchItemLists extends ChangeNotifier {
     return directory;
   }
 
-   // 유저 세션 체크
-  checkSessionCount() async{
+  // 유저 세션 체크
+  checkSessionCount() async {
     String? _sessionCount = await storage.read(key: 'sessionCount');
     if (_sessionCount == null) {
       await storage.write(key: 'sessionCount', value: '0');
@@ -76,7 +75,6 @@ class MusicSearchItemLists extends ChangeNotifier {
     );
 
     int s3Version = int.parse(response.body);
-    bool result = await InternetConnectionChecker().hasConnection;
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {

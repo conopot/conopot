@@ -1,4 +1,3 @@
-import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -43,8 +42,8 @@ class _NoteSearchListState extends State<NoteSearchList> {
                           Provider.of<NoteData>(context, listen: false)
                               .showAddNoteDialog(context, songNumber, title);
                           //!event: 곡 추가 뷰 - 리스트 클릭 시
-                          Analytics_config().addViewSongClickEvent(widget
-                              .musicList.combinedFoundItems[index].tj_title);
+                          // Analytics_config().addViewSongClickEvent(widget
+                          //     .musicList.combinedFoundItems[index].tj_title);
                         },
                         child: Container(
                           width: defaultSize * 35.5,
