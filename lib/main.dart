@@ -9,6 +9,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -22,6 +23,7 @@ Future<void> main() async {
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
+      KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
       runApp(const MyApp());
     },
     (error, stack) =>
