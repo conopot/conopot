@@ -2,6 +2,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -20,29 +21,10 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   double defaultSize = SizeConfig.defaultSize;
   final storage = new FlutterSecureStorage();
-  late bool _isSubscribed;
-
-  initSubscirbeState() async {
-    String? isSubscribed = await storage.read(key: 'isSubscribed');
-    bool flag;
-    if (isSubscribed != null) {
-      if (isSubscribed == 'yes') {
-        flag = true;
-      } else {
-        flag = false;
-      }
-    } else {
-      flag = true;
-    }
-    setState(() {
-      _isSubscribed = flag;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    initSubscirbeState();
     Analytics_config.analytics.logEvent("내 정보 뷰 - 페이지뷰");
   }
 
@@ -132,7 +114,7 @@ class _UserScreenState extends State<UserScreen> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      value: _isSubscribed,
+                      value: Provider.of<NoteData>(context, listen: false).isSubscribed,
                       onChanged: (bool value) async {
                         await OneSignal.shared.disablePush(!value);
                         if (value == true) {
@@ -142,7 +124,7 @@ class _UserScreenState extends State<UserScreen> {
                           await storage.write(key: 'isSubscribed', value: 'no');
                         }
                         setState(() {
-                          _isSubscribed = value;
+                          Provider.of<NoteData>(context, listen: false).isSubscribed = value;
                         });
                       }),
                 ]),
