@@ -44,9 +44,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       if (response.statusCode != 200)
         throw HttpException('${response.statusCode}');
       setState(() {
-        lyric =
-            Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
-        lyric = lyric.replaceAll('\n\n', '\n');
+        if (Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric !=
+            "") {
+          lyric =
+              Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
+        }
+        if (lyric.replaceAll('\n\n', '\n') != "") {
+          lyric = lyric.replaceAll('\n\n', '\n');
+        }
         //크롤링한 가사가 비어있는 경우
         if (lyric == "") {
           lyric =
