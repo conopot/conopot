@@ -359,4 +359,9 @@ class Analytics_config {
   void channelTalkRequestNoButtonEvent() {
     Analytics_config().event('채널톡연결_뷰__다음에요', {});
   }
+
+  //!event: 설정_뷰__공지사항
+  settingNotice() {
+    Analytics_config().event('설정_뷰__공지사항', {});
+  }
 }
