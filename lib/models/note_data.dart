@@ -32,6 +32,7 @@ class NoteData extends ChangeNotifier {
   late bool _isSubmitted; // 리뷰 또는 채널톡 의견 제출 여부
   late final _currentTime; // 현재 시간
   DateTime? _preRequestTime; // 이전 요청 시간
+  late bool isSubscribed; // 구독 여부
 
   final InAppReview _inAppReview = InAppReview.instance;
   final storage = new FlutterSecureStorage();
@@ -106,7 +107,23 @@ class NoteData extends ChangeNotifier {
     _interstitialAd = null;
   }
 
+  initSubscirbeState() async {
+    String? value = await storage.read(key: 'isSubscribed');
+    bool flag;
+    if (value != null) {
+      if (value == 'yes') {
+        flag = true;
+      } else {
+        flag = false;
+      }
+    } else {
+      flag = true;
+    }
+    isSubscribed = flag;
+  }
+
   initNotes() async {
+    initSubscirbeState();
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
