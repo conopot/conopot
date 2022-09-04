@@ -3,6 +3,7 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
+import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,34 @@ class _UserScreenState extends State<UserScreen> {
                           EdgeInsets.symmetric(horizontal: defaultSize * 2),
                       child: Row(children: [
                         Text("애창곡 노트 설정",
+                            style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.8,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Spacer(),
+                        Icon(
+                          Icons.chevron_right,
+                          color: kPrimaryWhiteColor,
+                        ),
+                      ]),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Analytics_config().settingNotice();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NoticeScreen()));
+                    },
+                    splashColor: Colors.transparent,
+                    child: Container(
+                      height: defaultSize * 4,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 2),
+                      child: Row(children: [
+                        Text("공지사항",
                             style: TextStyle(
                               color: kPrimaryWhiteColor,
                               fontSize: defaultSize * 1.8,
