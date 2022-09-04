@@ -6,6 +6,8 @@ import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 class UserScreen extends StatefulWidget {
@@ -17,11 +19,31 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   double defaultSize = SizeConfig.defaultSize;
+  final storage = new FlutterSecureStorage();
+  late bool _isSubscribed;
+
+  initSubscirbeState() async {
+    String? isSubscribed = await storage.read(key: 'isSubscribed');
+    bool flag;
+    if (isSubscribed != null) {
+      if (isSubscribed == 'yes') {
+        flag = true;
+      } else {
+        flag = false;
+      }
+    } else {
+      flag = true;
+    }
+    setState(() {
+      _isSubscribed = flag;
+    });
+  }
 
   @override
   void initState() {
-    Analytics_config.analytics.logEvent("내 정보 뷰 - 페이지뷰");
     super.initState();
+    initSubscirbeState();
+    Analytics_config.analytics.logEvent("내 정보 뷰 - 페이지뷰");
   }
 
   @override
@@ -98,7 +120,31 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                       ]),
                     ),
-                  )
+                  ),
+                  SwitchListTile(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 2),
+                      title: Text(
+                        "알림 설정",
+                        style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.8,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      value: _isSubscribed,
+                      onChanged: (bool value) async {
+                        await OneSignal.shared.disablePush(!value);
+                        if (value == true) {
+                          await storage.write(
+                              key: 'isSubscribed', value: 'yes');
+                        } else {
+                          await storage.write(key: 'isSubscribed', value: 'no');
+                        }
+                        setState(() {
+                          _isSubscribed = value;
+                        });
+                      }),
                 ]),
               ),
               floatingActionButton: Container(
