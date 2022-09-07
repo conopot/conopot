@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -12,6 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import 'package:http/http.dart' as http;
 
 class UserScreen extends StatefulWidget {
   UserScreen({Key? key}) : super(key: key);
@@ -82,26 +86,28 @@ class _UserScreenState extends State<UserScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onTap: () async {
-                      if (await AuthApi.instance.hasToken()) {
-                        try {
-                          AccessTokenInfo tokenInfo =
-                              await UserApi.instance.accessTokenInfo();
-                          print(
-                              '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
-                        } catch (error) {
-                          if (error is KakaoException &&
-                              error.isInvalidTokenError()) {
-                            print('토큰 만료 $error');
-                          } else {
-                            print('토큰 정보 조회 실패 $error');
-                          }
+                      //테스트를 위해 일단 무조건 로그인하는 로직
+                      loginTry();
+                      // if (await AuthApi.instance.hasToken()) {
+                      //   try {
+                      //     AccessTokenInfo tokenInfo =
+                      //         await UserApi.instance.accessTokenInfo();
+                      //     print(
+                      //         '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
+                      //   } catch (error) {
+                      //     if (error is KakaoException &&
+                      //         error.isInvalidTokenError()) {
+                      //       print('토큰 만료 $error');
+                      //     } else {
+                      //       print('토큰 정보 조회 실패 $error');
+                      //     }
 
-                          loginTry();
-                        }
-                      } else {
-                        print('발급된 토큰 없음');
-                        loginTry();
-                      }
+                      //     loginTry();
+                      //   }
+                      // } else {
+                      //   print('발급된 토큰 없음');
+                      //   loginTry();
+                      // }
                     },
                   ),SignInWithAppleButton(onPressed: () async {
                     final credential =
@@ -145,6 +151,7 @@ class _UserScreenState extends State<UserScreen> {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
         print('카카오톡으로 로그인 성공 ${token.accessToken}');
+        register(token);
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
 
@@ -157,6 +164,7 @@ class _UserScreenState extends State<UserScreen> {
         try {
           OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
           print('카카오계정으로 로그인 성공 ${token.accessToken}');
+          register(token);
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
         }
@@ -165,9 +173,25 @@ class _UserScreenState extends State<UserScreen> {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공 ${token.accessToken}');
+        register(token);
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
       }
     }
   }
+}
+
+void register(OAuthToken token) async {
+  String url = 'http://10.0.2.2:3000/auth/signin';
+
+  final response = await http.post(Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'accessToken': token.accessToken,
+      }));
+
+  //print(response.body);
+  print(response.headers);
 }
