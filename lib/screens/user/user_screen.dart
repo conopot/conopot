@@ -1,13 +1,17 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class UserScreen extends StatefulWidget {
   UserScreen({Key? key}) : super(key: key);
@@ -99,7 +103,18 @@ class _UserScreenState extends State<UserScreen> {
                         loginTry();
                       }
                     },
-                  ),
+                  ),SignInWithAppleButton(onPressed: () async {
+                    final credential =
+                        await SignInWithApple.getAppleIDCredential(scopes: [
+                      AppleIDAuthorizationScopes.email,
+                      AppleIDAuthorizationScopes.fullName,
+                    ]);
+                    // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
+                    // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
+                    print("authorizationCode: ${credential.authorizationCode}");
+                    print("firstName: ${credential.givenName}");
+                    print("lastName: ${credential.familyName}");
+                  })
                 ]),
               ),
               floatingActionButton: Container(
