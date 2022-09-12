@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:conopot/app_open_ad_manager.dart';
+import 'package:conopot/applifecycle_reactor.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -47,8 +51,29 @@ class _MainScreenState extends State<MainScreen>
   bool quitBannerSetting = false;
   bool bannerExist = true;
 
+  // TODO: Add _bannerAd
+  BannerAd? _bannerAd;
+
   @override
   void initState() {
+    // TODO: Load a banner ad
+    BannerAd(
+      adUnitId: App_Quit_Banner_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+      request: AdRequest(),
+      size: AdSize.mediumRectangle,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+
     setState(() {
       //firebase 원격 설정
       //firebase에서 종료 시 배너 광고 출력 여부를 판단
@@ -71,6 +96,16 @@ class _MainScreenState extends State<MainScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // TODO: Display a banner when ready
+                if (_bannerAd != null)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
+                  ),
                 Center(
                   child: Text("앱을 종료하시겠습니까?",
                       style: TextStyle(
@@ -208,5 +243,13 @@ class _MainScreenState extends State<MainScreen>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose a BannerAd object
+    _bannerAd?.dispose();
+
+    super.dispose();
   }
 }

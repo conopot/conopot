@@ -39,12 +39,6 @@ class NoteData extends ChangeNotifier {
 
   bool noteAddInterstitialSetting = false;
 
-  static final AdRequest request = AdRequest(
-    keywords: <String>['foo', 'bar'],
-    contentUrl: 'http://foo.com/bar.html',
-    nonPersonalizedAds: true,
-  );
-
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
@@ -65,7 +59,7 @@ class NoteData extends ChangeNotifier {
     InterstitialAd.load(
         adUnitId:
             Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-        request: request,
+        request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             print('$ad loaded');

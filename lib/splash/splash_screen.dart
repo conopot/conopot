@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:conopot/app_open_ad_manager.dart';
+import 'package:conopot/applifecycle_reactor.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -31,7 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //인터넷 연결 확인
     try {
       final result = await InternetAddress.lookup('example.com');
-
+      print("인터넷 연결 성공");
+      // 앱 실행 광고
+      await appOpenAds(context);
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
@@ -42,20 +46,23 @@ class _SplashScreenState extends State<SplashScreen> {
       if (userVersionStr == null) {
         musicUpdateSetting = true;
       }
+
       /// 노래방 곡 관련 초기화
       await Provider.of<MusicSearchItemLists>(context, listen: false)
           .initVersion(musicUpdateSetting, false);
+
       /// 사용자 노트 초기화 (local storage)
       await Provider.of<NoteData>(context, listen: false).initNotes();
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
       /// MainScreen 전환 (replace)
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MainScreen()));
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
+      print("인터넷 연결 실패");
       //버전이 없다면 (첫 설치 이용자라면) -> 인터넷 연결 알림 문구 띄우기
       if (userVersionStr == null) {
         //기존에 있는 txt 파일 사용
@@ -84,7 +91,6 @@ class _SplashScreenState extends State<SplashScreen> {
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
     await Analytics_config().init();
-    await MobileAds.instance.initialize();
     // 유저 세션 체크
     await Provider.of<MusicSearchItemLists>(context, listen: false)
         .checkSessionCount();
@@ -120,9 +126,19 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  appOpenAds(BuildContext context) async {
+    if (Firebase_Remote_Config().remoteConfig.getBool('appopenadSetting') ==
+        true) {
+      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
+      WidgetsBinding.instance.addObserver(AppLifecycleReactor(
+          appOpenAdManager: appOpenAdManager, context: context));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
     init();
     initOneSignal();
   }

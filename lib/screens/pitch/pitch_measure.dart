@@ -7,16 +7,21 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_result.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitchupdart/instrument_type.dart';
 import 'package:pitchupdart/pitch_handler.dart';
+import 'package:provider/provider.dart';
 
 class PitchMeasure extends StatefulWidget {
   PitchMeasure({Key? key}) : super(key: key);
@@ -45,8 +50,73 @@ class _PitchMeasureState extends State<PitchMeasure> {
   double screenHeight = SizeConfig.screenHeight;
   double screenWidth = SizeConfig.screenWidth;
 
+  bool noteAddInterstitialSetting = false;
+
+  // AdMob
+  int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
+  Map<String, String> Pitch_Measure_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-1461012385298546/4614281557',
+          'ios': 'ca-app-pub-1461012385298546/2918056509',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  int maxFailedLoadAttempts = 3;
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: Pitch_Measure_Interstitial_UNIT_ID[
+            Platform.isIOS ? 'ios' : 'android']!,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
   @override
   void initState() {
+    _interstitialAd = createInterstitialAd();
     super.initState();
     frequency = 0;
     maxFrequency = 0;
@@ -625,6 +695,14 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      //전면 광고
+                      bool pitchMeasureInterstitialSetting =
+                          Firebase_Remote_Config()
+                              .remoteConfig
+                              .getBool('pitchMeasureInterstitialSetting');
+                      if (pitchMeasureInterstitialSetting == true &&
+                          _interstitialAd != null) _showInterstitialAd();
+
                       //!event : 직접 음역대 측정 뷰  - 다시 측정하기
                       Analytics_config().event('직접_음역대_측정_뷰__선택_완료', {});
                       Navigator.push(

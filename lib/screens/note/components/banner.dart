@@ -7,10 +7,14 @@ import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class CarouselSliderBanner extends StatelessWidget {
   final double defaultSize = SizeConfig.defaultSize;
+  // CarouselSliderBanner(this._nativeAd, this._kAdIndex);
+  // NativeAd? _nativeAd;
+  // int _kAdIndex;
 
   final imageIcons = [
     "assets/icons/banner_mike.svg",
@@ -61,16 +65,14 @@ class CarouselSliderBanner extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: defaultSize * 0.3),
-        padding: EdgeInsets.symmetric(horizontal:defaultSize * 1.5),
+        padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
         decoration: BoxDecoration(
           color: kPrimaryLightBlackColor,
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Expanded(
             flex: 1,
             child: Container(
@@ -118,6 +120,14 @@ class CarouselSliderBanner extends StatelessWidget {
       ),
     );
   }
+
+  // TODO: Add _getDestinationItemIndex()
+  // int _getDestinationItemIndex(int rawIndex) {
+  //   if (rawIndex >= _kAdIndex && _nativeAd != null) {
+  //     return rawIndex - 1;
+  //   }
+  //   return rawIndex;
+  // }
 
   @override
   Widget build(BuildContext context) {
