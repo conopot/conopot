@@ -196,15 +196,6 @@ class NoteData extends ChangeNotifier {
           await FirebaseAnalytics.instance
               .setUserProperty(name: 'noteCnt', value: notes.length.toString());
 
-          //!event: 인기 차트 - 노트 추가 이벤트
-          // Analytics_config().event('인기_차트__노트_추가_이벤트', {
-          //   '곡_이름': note.tj_title,
-          //   '가수_이름': note.tj_singer,
-          //   'TJ_번호': note.tj_songNumber,
-          //   '금영_번호': note.ky_songNumber,
-          //   '매칭_여부': (note.tj_songNumber == note.ky_songNumber),
-          //   '메모_여부': note.memo
-          // });
           Analytics_config().musicAddEvent(note.tj_title);
         } else {
           emptyCheck = true;

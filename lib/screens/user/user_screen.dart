@@ -109,18 +109,23 @@ class _UserScreenState extends State<UserScreen> {
                       //   loginTry();
                       // }
                     },
-                  ),SignInWithAppleButton(onPressed: () async {
-                    final credential =
-                        await SignInWithApple.getAppleIDCredential(scopes: [
-                      AppleIDAuthorizationScopes.email,
-                      AppleIDAuthorizationScopes.fullName,
-                    ]);
-                    // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
-                    // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
-                    print("authorizationCode: ${credential.authorizationCode}");
-                    print("firstName: ${credential.givenName}");
-                    print("lastName: ${credential.familyName}");
-                  })
+                  ),
+                  Platform.isIOS
+                      ? SignInWithAppleButton(onPressed: () async {
+                          final credential =
+                              await SignInWithApple.getAppleIDCredential(
+                                  scopes: [
+                                AppleIDAuthorizationScopes.email,
+                                AppleIDAuthorizationScopes.fullName,
+                              ]);
+                          // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
+                          // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
+                          print(
+                              "authorizationCode: ${credential.authorizationCode}");
+                          print("firstName: ${credential.givenName}");
+                          print("lastName: ${credential.familyName}");
+                        })
+                      : SizedBox.shrink()
                 ]),
               ),
               floatingActionButton: Container(

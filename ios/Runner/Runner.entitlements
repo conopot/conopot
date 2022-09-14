@@ -8,9 +8,5 @@
 	<array>
 		<string>Default</string>
 	</array>
-	<key>com.apple.security.application-groups</key>
-	<array>
-		<string>group.com.swmaestro.conopot.onesignal</string>
-	</array>
 </dict>
 </plist>
