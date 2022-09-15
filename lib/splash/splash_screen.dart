@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:conopot/app_open_ad_manager.dart';
 import 'package:conopot/applifecycle_reactor.dart';
 import 'package:conopot/config/analytics_config.dart';
@@ -90,6 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
     await Analytics_config().init();
     // 유저 세션 체크
     await Provider.of<MusicSearchItemLists>(context, listen: false)
@@ -138,7 +140,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     init();
     initOneSignal();
   }
