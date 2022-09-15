@@ -29,13 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
+    print(userVersionStr);
 
     //인터넷 연결 확인
     try {
       final result = await InternetAddress.lookup('example.com');
       print("인터넷 연결 성공");
-      // 앱 실행 광고
-      await appOpenAds(context);
+
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
@@ -56,9 +56,8 @@ class _SplashScreenState extends State<SplashScreen> {
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
-      /// MainScreen 전환 (replace)
-      // Navigator.pushReplacement(
-      //     context, MaterialPageRoute(builder: (context) => MainScreen()));
+      // 앱 실행 광고
+      await appOpenAds(context);
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {

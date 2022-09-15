@@ -1,15 +1,18 @@
 import 'package:conopot/main_screen.dart';
+import 'package:conopot/models/note_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io' show Platform;
 
+import 'package:provider/provider.dart';
+
 bool canShowOpenAd = true;
 
 class AppOpenAdManager {
   Map<String, String> APP_OPEN_UNIT_ID = {
-    'android': 'ca-app-pub-1461012385298546/9733912146',
-    'ios': 'ca-app-pub-1461012385298546/1304757780',
+    'android': 'ca-app-pub-7139143792782560/8356395062',
+    'ios': 'ca-app-pub-7139143792782560/5121811348',
   };
 
   AppOpenAd? _appOpenAd;
@@ -37,6 +40,8 @@ class AppOpenAdManager {
         },
         onAdFailedToLoad: (error) {
           print('app open ad err : ${error}');
+          Provider.of<NoteData>(context, listen: false)
+              .appOpenAdUnloaded(context);
         },
       ),
     );

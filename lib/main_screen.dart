@@ -31,8 +31,8 @@ class _MainScreenState extends State<MainScreen>
   Map<String, String> App_Quit_Banner_UNIT_ID = kReleaseMode
       ? {
           //release 모드일때 (실기기 사용자)
-          'android': 'ca-app-pub-1461012385298546/6974183177',
-          'ios': 'ca-app-pub-1461012385298546/6068295613',
+          'android': 'ca-app-pub-7139143792782560/8735916434',
+          'ios': 'ca-app-pub-7139143792782560/5121811348',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/6300978111',

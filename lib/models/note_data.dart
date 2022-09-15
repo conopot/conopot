@@ -6,6 +6,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/main_screen.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
@@ -34,6 +35,8 @@ class NoteData extends ChangeNotifier {
   DateTime? _preRequestTime; // 이전 요청 시간
   late bool isSubscribed; // 구독 여부
 
+  bool isAppOpenBanner = true; //앱 오픈 배너 로드 여부
+
   final InAppReview _inAppReview = InAppReview.instance;
   final storage = new FlutterSecureStorage();
 
@@ -43,8 +46,8 @@ class NoteData extends ChangeNotifier {
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
       ? {
-          'android': 'ca-app-pub-1461012385298546/1703495459',
-          'ios': 'ca-app-pub-1461012385298546/3994331462',
+          'android': 'ca-app-pub-7139143792782560/4800293433',
+          'ios': 'ca-app-pub-7139143792782560/4696066245',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/1033173712',
@@ -54,6 +57,15 @@ class NoteData extends ChangeNotifier {
   int maxFailedLoadAttempts = 3;
   InterstitialAd? _interstitialAd;
   int _numInterstitialLoadAttempts = 0;
+
+  appOpenAdUnloaded(BuildContext context) {
+    isAppOpenBanner = false;
+
+    /// MainScreen 전환 (replace)
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainScreen()));
+    notifyListeners();
+  }
 
   createInterstitialAd() {
     InterstitialAd.load(

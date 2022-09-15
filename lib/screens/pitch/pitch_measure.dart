@@ -56,8 +56,8 @@ class _PitchMeasureState extends State<PitchMeasure> {
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   Map<String, String> Pitch_Measure_Interstitial_UNIT_ID = kReleaseMode
       ? {
-          'android': 'ca-app-pub-1461012385298546/4614281557',
-          'ios': 'ca-app-pub-1461012385298546/2918056509',
+          'android': 'ca-app-pub-7139143792782560/2745223157',
+          'ios': 'ca-app-pub-7139143792782560/1182566336',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/1033173712',
