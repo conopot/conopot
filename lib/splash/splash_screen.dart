@@ -96,7 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //Admob 전면광고 캐싱
     await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
 
-    // 첫 설치 사용자라면, 로컬 스토리지를 모두 비운다.
+    // 첫 설치 사용자라면, 로컬 스토리지를 비운다.
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.getBool('first_run') ?? true) {

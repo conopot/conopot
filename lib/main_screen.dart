@@ -75,8 +75,6 @@ class _MainScreenState extends State<MainScreen>
     ).load();
 
     setState(() {
-      //firebase 원격 설정
-      //firebase에서 종료 시 배너 광고 출력 여부를 판단
       quitBannerSetting =
           Firebase_Remote_Config().remoteConfig.getBool('quitBannerSetting');
     });
