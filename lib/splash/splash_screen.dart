@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
-    final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    if (Platform.isIOS) final status = await AppTrackingTransparency.requestTrackingAuthorization();
     await Analytics_config().init();
     // 유저 세션 체크
     await Provider.of<MusicSearchItemLists>(context, listen: false)
