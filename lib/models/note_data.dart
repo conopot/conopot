@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
+import 'package:http/http.dart' as http;
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
@@ -119,6 +120,7 @@ class NoteData extends ChangeNotifier {
 
       notes = savedNote;
       userMusics = savedUserMusics;
+      print('넘겨줄 사용자 저장 음악 데이터 : ${json.encode(userMusics)}');
     }
     noteCount = notes.length;
     int memoCnt = 0; //전체 노트 중 메모를 한 노트의 수
@@ -830,5 +832,55 @@ class NoteData extends ChangeNotifier {
             ),
           );
         });
+  }
+
+  // 저장한 노트들 백업하기
+  Future<void> saveNotes() async {
+    String url = 'http://10.0.2.2:3000/user/backup/save';
+    String? jwtToken = await storage.read(key: 'jwt');
+    if (jwtToken != null) {
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': jwtToken,
+          },
+          body: jsonEncode({
+            "notes": jsonEncode(userMusics),
+          }),
+        );
+
+        print(response.body);
+      } catch (err) {
+        throw HttpException('$err');
+      }
+    }
+  }
+
+  // 저장한 노트들 가져오기
+  Future<void> loadNotes() async {
+    String url = 'http://10.0.2.2:3000/user/backup/load';
+    String? jwtToken = await storage.read(key: 'jwt');
+    if (jwtToken != null) {
+      try {
+        final response = await http.get(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': jwtToken,
+          },
+        );
+
+        print(response.body);
+      } catch (err) {
+        throw HttpException('$err');
+      }
+    }
+  }
+
+  // JWT 토큰 저장하기
+  writeJWT(String? jwtToken) async {
+    await storage.write(key: 'jwt', value: jwtToken);
   }
 }

@@ -9,11 +9,14 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
+  //Flutter 환경변수 .env 파일 경로 로드
+  await dotenv.load(fileName: 'assets/config/.env');
 
   // 세로 화면 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
