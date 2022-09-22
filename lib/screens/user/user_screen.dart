@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:conopot/models/note_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,11 +12,18 @@ import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'package:http/http.dart' as http;
+
+const String USER_SERVER_URL =
+    'https://port-0-conopotuserserver-2qr6k24l7ya85sc.gksl1.cloudtype.app';
+
+// const String USER_SERVER_URL =
+//     'https://port-0-conopotuserserver-2qr6k24l7ya85sc.gksl1.cloudtype.app';
 
 class UserScreen extends StatefulWidget {
   UserScreen({Key? key}) : super(key: key);
@@ -87,29 +95,10 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     onTap: () async {
                       //테스트를 위해 일단 무조건 로그인하는 로직
-                      loginTry();
-                      // if (await AuthApi.instance.hasToken()) {
-                      //   try {
-                      //     AccessTokenInfo tokenInfo =
-                      //         await UserApi.instance.accessTokenInfo();
-                      //     print(
-                      //         '토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
-                      //   } catch (error) {
-                      //     if (error is KakaoException &&
-                      //         error.isInvalidTokenError()) {
-                      //       print('토큰 만료 $error');
-                      //     } else {
-                      //       print('토큰 정보 조회 실패 $error');
-                      //     }
-
-                      //     loginTry();
-                      //   }
-                      // } else {
-                      //   print('발급된 토큰 없음');
-                      //   loginTry();
-                      // }
+                      kakaologin(context);
                     },
                   ),
+                  // IOS 유저인 경우만 버튼 표시
                   Platform.isIOS
                       ? SignInWithAppleButton(onPressed: () async {
                           final credential =
@@ -122,10 +111,32 @@ class _UserScreenState extends State<UserScreen> {
                           // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
                           print(
                               "authorizationCode: ${credential.authorizationCode}");
+                          print("identityToken: ${credential.identityToken}");
+                          print("email: ${credential.email}");
                           print("firstName: ${credential.givenName}");
                           print("lastName: ${credential.familyName}");
+                          appleRegister(context, credential);
                         })
-                      : SizedBox.shrink()
+                      : SizedBox.shrink(),
+                  GestureDetector(
+                    child: Text(
+                      "저장한 노트 백업하기",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () async {
+                      Provider.of<NoteData>(context, listen: false).saveNotes();
+                    },
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      "저장한 노트 불러오기",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () async {
+                      Provider.of<NoteData>(context, listen: false).loadNotes();
+                      ;
+                    },
+                  ),
                 ]),
               ),
               floatingActionButton: Container(
@@ -151,12 +162,13 @@ class _UserScreenState extends State<UserScreen> {
             ));
   }
 
-  void loginTry() async {
+  void kakaologin(BuildContext context) async {
+    // 카카오톡이 설치되어있는 경우
     if (await isKakaoTalkInstalled()) {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공 ${token.accessToken}');
-        register(token);
+        print('카카오톡으로 로그인 성공');
+        kakaoRegister(context, token);
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
 
@@ -165,38 +177,92 @@ class _UserScreenState extends State<UserScreen> {
         if (error is PlatformException && error.code == 'CANCELED') {
           return;
         }
-        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
-        try {
-          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-          print('카카오계정으로 로그인 성공 ${token.accessToken}');
-          register(token);
-        } catch (error) {
-          print('카카오계정으로 로그인 실패 $error');
-        }
       }
+      // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
     } else {
-      try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-        print('카카오계정으로 로그인 성공 ${token.accessToken}');
-        register(token);
-      } catch (error) {
-        print('카카오계정으로 로그인 실패 $error');
-      }
+      loginKakaoAccount(context);
     }
   }
 }
 
-void register(OAuthToken token) async {
-  String url = 'http://10.0.2.2:3000/auth/signin';
+Future<void> loginKakaoAccount(BuildContext context) async {
+  try {
+    OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+    print('카카오계정으로 로그인 성공 ${token.accessToken}');
+    kakaoRegister(context, token);
+  } catch (error) {
+    print('카카오계정으로 로그인 실패 $error');
+  }
+}
 
-  final response = await http.post(Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'accessToken': token.accessToken,
-      }));
+// 토큰을 이용해 kakao 정보를 백엔드로 넘겨준다(등록)
+void kakaoRegister(BuildContext context, OAuthToken token) async {
+  String url = '$USER_SERVER_URL/auth/kakao/signin';
 
-  //print(response.body);
-  print(response.headers);
+  try {
+    final response = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'accessToken': token.accessToken,
+        }));
+
+    print("응답 헤더 : ${response.headers}");
+    print("응답 바디 : ${response.body}");
+
+    //jwt 토큰 반환
+    String? jwtToken = response.headers['authorization'];
+    print("jwt 토큰 : ${jwtToken}");
+
+    //로컬 스토리지에 jwt 토큰 저장
+    Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
+
+    Map<String, dynamic> payload = Jwt.parseJwt(jwtToken!);
+    print("jwt 내부 회원정보(payload) : ${payload}");
+  } catch (err) {
+    print("카카오 로그인 백엔드 연결 실패 : ${err}");
+  }
+}
+
+// 토큰을 이용해 kakao 정보를 백엔드로 넘겨준다(등록)
+void appleRegister(
+    BuildContext context, AuthorizationCredentialAppleID credential) async {
+  String url = '$USER_SERVER_URL/auth/apple/signin';
+  print("애플 로그인 시도");
+
+  try {
+    String? username = '${credential.familyName}${credential.givenName}';
+    final response = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'appleIdToken': credential.identityToken,
+          'username': username,
+          'email': credential.email,
+        }));
+
+    //서버측에서 토큰 검증을 성공한 경우 (서버에 사용자 정보 저장)
+    if (response.statusCode == 200) {
+      print("애플 로그인 성공");
+      print("응답 헤더 : ${response.headers}");
+      print("응답 바디 : ${response.body}");
+
+      //jwt 토큰 반환
+      String? jwtToken = response.headers['authorization'];
+      print("jwt 토큰 : ${jwtToken}");
+
+      //로컬 스토리지에 jwt 토큰 저장
+      Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
+
+      Map<String, dynamic> payload = Jwt.parseJwt(credential.identityToken!);
+      print("jwt 내부 회원정보(payload) : ${payload}");
+    } else {
+      //토큰 검증에 실패한 경우
+      print("애플 로그인 토큰 검증 실패");
+    }
+  } catch (err) {
+    print("애플 로그인 백엔드 연결 실패 : ${err}");
+  }
 }
