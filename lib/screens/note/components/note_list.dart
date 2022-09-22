@@ -82,7 +82,8 @@ class _NoteListState extends State<NoteList> {
                             children: [
                               SlidableAction(
                                 onPressed: (value) {
-                                  Provider.of<NoteData>(context, listen:false).showDeleteDialog(context, note);
+                                  Provider.of<NoteData>(context, listen: false)
+                                      .showDeleteDialog(context, note);
                                 },
                                 backgroundColor: kPrimaryLightBlackColor,
                                 foregroundColor: kMainColor,
@@ -104,7 +105,9 @@ class _NoteListState extends State<NoteList> {
                             );
                           },
                           child: Container(
-                            height: note.memo.isEmpty ? defaultSize * 7 * SizeConfig.textScaleFactor: defaultSize * 8,
+                            height: note.memo.isEmpty
+                                ? defaultSize * 7 * SizeConfig.textScaleFactor
+                                : defaultSize * 8,
                             key: Key(
                               '${noteData.notes.indexOf(note)}',
                             ),
@@ -141,7 +144,7 @@ class _NoteListState extends State<NoteList> {
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    if (note.memo.isEmpty)...[
+                                    if (note.memo.isEmpty) ...[
                                       SizedBox(height: defaultSize * 0.3)
                                     ],
                                     Text(
@@ -209,9 +212,8 @@ class _NoteListState extends State<NoteList> {
                   if (newIndex > oldIndex) {
                     newIndex -= 1;
                   }
-                  final Note note = noteData.notes.removeAt(oldIndex);
-                  noteData.notes.insert(newIndex, note);
-                  Provider.of<NoteData>(context, listen: false).reorderEvent();
+                  Provider.of<NoteData>(context, listen: false)
+                      .reorderEvent(oldIndex, newIndex);
                 });
               },
             ),
