@@ -12,6 +12,7 @@ import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -280,8 +281,15 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reorderEvent() async {
+  //노트 순서 변경 함수
+  Future<void> reorderEvent(int oldIndex, int newIndex) async {
+    final Note note = notes.removeAt(oldIndex);
+    notes.insert(newIndex, note);
+    final String userMusic = userMusics.removeAt(oldIndex);
+    userMusics.insert(newIndex, userMusic);
     await storage.write(key: 'notes', value: jsonEncode(notes));
+    print(1);
+    notifyListeners();
   }
 
   // 노트추가 다이어로그 팝업 함수
@@ -836,7 +844,8 @@ class NoteData extends ChangeNotifier {
 
   // 저장한 노트들 백업하기
   Future<void> saveNotes() async {
-    String url = 'http://10.0.2.2:3000/user/backup/save';
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    String url = '$serverURL/user/backup/save';
     String? jwtToken = await storage.read(key: 'jwt');
     if (jwtToken != null) {
       try {
@@ -860,7 +869,8 @@ class NoteData extends ChangeNotifier {
 
   // 저장한 노트들 가져오기
   Future<void> loadNotes() async {
-    String url = 'http://10.0.2.2:3000/user/backup/load';
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    String url = '$serverURL/user/backup/load';
     String? jwtToken = await storage.read(key: 'jwt');
     if (jwtToken != null) {
       try {
