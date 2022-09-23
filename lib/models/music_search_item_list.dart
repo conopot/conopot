@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:amplitude_flutter/identify.dart';
 import 'package:archive/archive.dart';
 import 'package:conopot/config/analytics_config.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/music_search_item.dart';
@@ -31,6 +32,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> combinedFoundItems = [];
   List<bool> isChecked = [];
   List<FitchMusic> checkedMusics = [];
+  Set<Note> entireNote = new Set<Note>();
 
   int tabIndex = 1; // TJ or 금영
   int userPitch = 23;
@@ -449,6 +451,19 @@ class MusicSearchItemLists extends ChangeNotifier {
             search_keyword_title_singer: tj_title + tj_singer,
             search_keyword_singer_title: tj_singer + tj_title));
       }
+      Note note = Note(
+          tj_title,
+          tj_singer,
+          tj_songNumber,
+          ky_title,
+          ky_singer,
+          ky_songNumber,
+          gender,
+          pitchNum,
+          "",
+          0,
+        );
+      entireNote.add(note);
     }
 
     combinedFoundItems = combinedSongList;

@@ -75,6 +75,10 @@ dependencies:
   in_app_review: ^2.0.4
   onesignal_flutter: ^3.0.0
   app_tracking_transparency: ^2.0.2+4
+  kakao_flutter_sdk: ^1.2.2
+  sign_in_with_apple: ^4.1.0
+  flutter_dotenv: ^5.0.2
+  jwt_decode: ^0.3.1
 
 
 
@@ -112,6 +116,7 @@ flutter:
     - assets/musics/recommendation/popular/
     - assets/musics/recommendation/season/
     - assets/musics/recommendation/tema/
+    - assets/config/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

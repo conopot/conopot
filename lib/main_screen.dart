@@ -11,6 +11,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
+import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +45,8 @@ class _MainScreenState extends State<MainScreen>
   List<Widget> _widgetOptions = <Widget>[
     NoteScreen(),
     MusicBookScreen(),
-    RecommendScreen()
+    RecommendScreen(),
+    UserScreen(),
   ];
 
   //firebase admob
@@ -179,6 +181,7 @@ class _MainScreenState extends State<MainScreen>
               border: Border(
                   top: BorderSide(color: kPrimaryWhiteColor, width: 0.1))),
           child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             key: Provider.of<NoteData>(context, listen: false).globalKey,
             selectedFontSize: defaultSize * 1.2,
             unselectedFontSize: defaultSize * 1.2,
@@ -211,17 +214,26 @@ class _MainScreenState extends State<MainScreen>
               ),
               BottomNavigationBarItem(
                 icon: Padding(
-                    padding: EdgeInsets.only(bottom: defaultSize * 0.2),
+                    padding: EdgeInsets.only(bottom: 5),
                     child: SvgPicture.asset("assets/icons/recommend.svg",
-                        height: defaultSize * 1.7, width: defaultSize * 1.7)),
+                        height: 17, width: 17)),
                 label: "추천",
                 activeIcon: Padding(
-                    padding: EdgeInsets.only(bottom: defaultSize * 0.2),
+                    padding: EdgeInsets.only(bottom: 5),
                     child: SvgPicture.asset("assets/icons/recommend_click.svg",
-                        height: defaultSize * 1.7, width: defaultSize * 1.7)),
+                        height: 17, width: 17)),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
+                label: "MY",
+                activeIcon: Icon(
+                  Icons.perm_identity,
+                  color: kMainColor,
+                ),
               ),
             ],
             onTap: (index) {
+              // TJ탭
               if (index == 1) {
                 Provider.of<MusicSearchItemLists>(context, listen: false)
                     .changeTabIndex(index: 1);

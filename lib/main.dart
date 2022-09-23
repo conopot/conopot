@@ -10,11 +10,14 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await Analytics_config().init();
+  await dotenv.load(fileName: "assets/config/.env");
   MobileAds.instance.initialize();
   // 세로 화면 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -24,6 +27,7 @@ Future<void> main() async {
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
+      KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
       runApp(const MyApp());
     },
     (error, stack) =>

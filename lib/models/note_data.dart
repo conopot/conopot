@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -13,6 +13,7 @@ import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -862,5 +863,219 @@ class NoteData extends ChangeNotifier {
             ),
           );
         });
+  }
+
+  //노트 삭제여부 확인 팝업 함수
+  void showBackupDialog(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
+    Widget backupButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        saveNotes();
+      },
+      child: Text("백업하기", style: TextStyle(fontWeight: FontWeight.w600)),
+    );
+
+    Widget getButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          loadNotes(context);
+        },
+        child: Text("가져오기",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+
+    AlertDialog alert = AlertDialog(
+      content: IntrinsicHeight(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Center(
+              child: Text("백업 및 가져오기",
+                  style: TextStyle(color: kPrimaryWhiteColor))),
+          SizedBox(height: defaultSize * 3),
+          Text(
+            "애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제하더라도 편리하게 다시 가져올 수 있어요!",
+            style: TextStyle(color: kPrimaryWhiteColor),
+          )
+        ]),
+      ),
+      actions: [
+        getButton,
+        backupButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
+
+  // 저장한 노트들 백업하기
+  Future<void> saveNotes() async {
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    String url = '$serverURL/user/backup/save';
+    String? jwtToken = await storage.read(key: 'jwt');
+    if (jwtToken != null) {
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': jwtToken,
+          },
+          body: jsonEncode({
+            "notes": jsonEncode(userMusics),
+          }),
+        );
+        print(response.body);
+      } catch (err) {
+        throw HttpException('$err');
+      }
+    }
+  }
+
+  // 저장한 노트들 가져오기
+  Future<void> loadNotes(BuildContext context) async {
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    String url = '$serverURL/user/backup/load';
+    String? jwtToken = await storage.read(key: 'jwt');
+    if (jwtToken != null) {
+      try {
+        final response = await http.get(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': jwtToken,
+          },
+        );
+        print(response.body);
+        List<String> songNumberList = [];
+        String tmp = "";
+        for (int i = 0; i < response.body.length; i++) {
+          if (response.body[i].compareTo("0") >= 0 &&
+              (response.body[i].compareTo('9') == 0 ||
+                  response.body[i].compareTo('9') == -1)) {
+                    tmp += response.body[i];
+                  }
+          else {
+            if (tmp.isNotEmpty) {
+              songNumberList.add(tmp);
+              tmp = "";
+            }
+          }
+        }
+        Set<Note> entireNote = Provider.of<MusicSearchItemLists>(context, listen: false).entireNote;
+        for (int i = 0; i < songNumberList.length; i++) {
+          Note note = entireNote.firstWhere((element) => element.tj_songNumber == songNumberList[i]);
+          bool flag = false;
+          for (int j = 0; j < notes.length; j++) {
+            if (notes[j].tj_songNumber == note.tj_songNumber) {
+              flag = true;
+            }
+          }
+          if (!flag) {
+            notes.add(note);
+            userMusics.add(note.tj_songNumber);
+          }
+        }
+        await storage.write(key: 'notes', value: jsonEncode(notes));
+      } catch (err) {
+        throw HttpException('$err');
+      }
+    }
+    notifyListeners();
+  }
+
+  //노트 삭제여부 확인 팝업 함수
+  void showDeleteAccountDialog(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
+    Widget okButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        deleteAccount();
+      },
+      child: Text("회원탈퇴", style: TextStyle(fontWeight: FontWeight.w600)),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("취소",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+
+    AlertDialog alert = AlertDialog(
+      content: IntrinsicHeight(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "정말로 회원탈퇴를 진행하시겠어요?",
+            style: TextStyle(color: kPrimaryWhiteColor),
+          )
+        ]),
+      ),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
+
+  // 회원탈퇴
+  Future<void> deleteAccount() async {
+    String? serverURL = dotenv.env['USER_SERVER_URL'];
+    String url = '$serverURL/user/delete/account';
+    String? jwtToken = await storage.read(key: 'jwt');
+    if (jwtToken != null) {
+      try {
+        final response = await http.put(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': jwtToken,
+          },
+        );
+        print(response.body);
+      } catch (err) {
+        throw HttpException('$err');
+      }
+    }
+  }
+
+  // JWT 토큰 저장하기
+  writeJWT(String? jwtToken) async {
+    await storage.write(key: 'jwt', value: jwtToken);
   }
 }

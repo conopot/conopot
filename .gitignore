@@ -129,3 +129,4 @@ app.*.symbols
 # .firebaserc
 # firebase-debug.log
 
+.env
