@@ -39,7 +39,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
         child,
       ) =>
           Scaffold(
-        appBar: AppBar(centerTitle: false, title: Text("노래방 책")),
+        appBar: AppBar(centerTitle: false, title: Text("노래방 책", style: TextStyle(fontWeight: FontWeight.w700),)),
         body: SafeArea(
           child: Column(
             children: [

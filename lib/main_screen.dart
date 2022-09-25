@@ -202,12 +202,12 @@ class _MainScreenState extends State<MainScreen>
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.search,
+                  Icons.book,
                   color: kPrimaryWhiteColor,
                 ),
-                label: "검색",
+                label: "노래방 책",
                 activeIcon: Icon(
-                  Icons.search,
+                  Icons.book,
                   color: kMainColor,
                 ),
               ),
@@ -224,7 +224,7 @@ class _MainScreenState extends State<MainScreen>
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
-                label: "MY",
+                label: "내 정보",
                 activeIcon: Icon(
                   Icons.perm_identity,
                   color: kMainColor,

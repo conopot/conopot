@@ -46,8 +46,7 @@ class NoteData extends ChangeNotifier {
 
   bool isLogined = false; //사용자 로그인 여부
   String userNickname = "사용자 ID";
-
-  String backUpDate = "저장되지 않음";
+  String backUpDate = "없음";
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -878,52 +877,60 @@ class NoteData extends ChangeNotifier {
         });
   }
 
-  //노트 삭제여부 확인 팝업 함수
+  //노트 백업및 가져오기 다이어로그 팝업 함수
   void showBackupDialog(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    Widget backupButton = ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(kMainColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            side: const BorderSide(width: 0.0),
-            borderRadius: BorderRadius.circular(8),
-          ))),
-      onPressed: () {
-        saveNotes();
-        Navigator.of(context).pop();
-      },
-      child: Text("백업하기", style: TextStyle(fontWeight: FontWeight.w600)),
-    );
-
-    Widget getButton = ElevatedButton(
+    double screenWidth = SizeConfig.screenWidth;
+    Widget backupButton = Container(
+      width: screenWidth * 0.3,
+      child: ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            backgroundColor: MaterialStateProperty.all(kMainColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               side: const BorderSide(width: 0.0),
               borderRadius: BorderRadius.circular(8),
             ))),
-        onPressed: () async {
-          await loadNotes(context);
+        onPressed: () {
+          saveNotes();
           Navigator.of(context).pop();
         },
-        child: Text("가져오기",
-            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+        child: Text("백업하기", style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
+    );
+
+    Widget getButton = Container(
+      width: screenWidth * 0.3,
+      child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                side: const BorderSide(width: 0.0),
+                borderRadius: BorderRadius.circular(8),
+              ))),
+          onPressed: () async {
+            await loadNotes(context);
+            Navigator.of(context).pop();
+          },
+          child: Text("가져오기",
+              style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor))),
+    );
 
     AlertDialog alert = AlertDialog(
       content: IntrinsicHeight(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Center(
               child: Text("백업 및 가져오기",
-                  style: TextStyle(color: kPrimaryWhiteColor))),
-          SizedBox(height: defaultSize * 3),
+                  style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+          SizedBox(height: defaultSize * 2),
           Text(
-            "애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제하더라도 편리하게 다시 가져올 수 있어요!",
-            style: TextStyle(color: kPrimaryWhiteColor),
+            "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요!",
+            style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )
         ]),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
         getButton,
         backupButton,

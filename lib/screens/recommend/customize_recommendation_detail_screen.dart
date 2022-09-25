@@ -5,7 +5,6 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,35 +34,40 @@ class _CustomizeRecommendationDetailScreenState
   final storage = new FlutterSecureStorage();
 
   void requestCFApi() async {
+    widget.musicList.recommendRequest = true;
+    storage.write(key: "recommendRequest", value: 'true');
     await EasyLoading.show(status: '분석중 입니다...');
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
+    List<String> musicArr =
+        Provider.of<NoteData>(context, listen: false).userMusics;
+    if (musicArr.length > 20) {
+      // 저장한 노트수가 20개 보다 많은 경우 자르기
+      musicArr = musicArr.sublist(0, 20);
+    }
     Future<dynamic> myFuture = new Future(() async {
       final response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode({
-          "musicArr": Provider.of<NoteData>(context, listen: false)
-              .userMusics
-              .toString()
-        }),
+        body: jsonEncode({"musicArr": musicArr.toString()}),
       );
       return response;
     });
     myFuture.then((response) {
       if (response.statusCode == 200) {
         String? recommendList = response.body;
-        print(recommendList);
-        if (recommendList != null)
+        if (recommendList != null) {
           widget.musicList.saveAiRecommendationList(recommendList);
-        widget.musicList.recommendRequest = true;
-        storage.write(key: "recommendRequest", value: 'true');
-        setState(() {});
-        EasyLoading.showSuccess('분석에 성공했습니다!');
+          setState(() {});
+          EasyLoading.showSuccess('분석에 성공했습니다!');
+        } else {
+          setState(() {});
+          EasyLoading.showError('분석을 위한 데이터가 부족합니다😿\n노트를 좀더 추가해주세요');
+        }
       } else {
         setState(() {});
-        EasyLoading.showError('분석에 실패했습니다😿\n채널톡에 문의해주세요');
+        EasyLoading.showError('서버 문제가 발생했습니다😿\n채널톡에 문의해주세요');
       }
     }, onError: (e) {
       setState(() {});
@@ -83,8 +87,11 @@ class _CustomizeRecommendationDetailScreenState
         actions: [
           GestureDetector(
             onTap: () {
-              requestCFApi();
-              setState(() {});
+              if (Provider.of<NoteData>(context, listen: false).userMusics.length < 5) {
+                EasyLoading.showError('최소 5개 이상의 노트를 추가해 주세요 🙀');
+              } else {
+                requestCFApi();
+              }
             },
             child: Center(
               child: Padding(
@@ -151,7 +158,6 @@ class _CustomizeRecommendationDetailScreenState
                       //!event: 추천_뷰__맞춤_추천_리스트_아이템_클릭
                       Analytics_config()
                           .clickCustomizeRecommendationListItemEvent();
-
                       Provider.of<NoteData>(context, listen: false)
                           .showAddNoteDialogWithInfo(context,
                               isTj: true,

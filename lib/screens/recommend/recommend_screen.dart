@@ -36,7 +36,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
       ) =>
           Scaffold(
         appBar: AppBar(
-          title: Text("추천"),
+          title: Text("추천",style: TextStyle(fontWeight: FontWeight.w700)),
           centerTitle: false,
         ),
         body: SafeArea(

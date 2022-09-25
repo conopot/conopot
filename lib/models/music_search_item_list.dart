@@ -749,5 +749,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       }
     }
     await storage.write(key: 'aiRecommendationList', value: jsonEncode(aiRecommendationList));
+    notifyListeners();
   }
 }

@@ -4,12 +4,10 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
-import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/login_screen.dart';
-import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -47,7 +45,7 @@ class _UserScreenState extends State<UserScreen> {
             Scaffold(
               appBar: AppBar(
                 title: Text(
-                  "MY",
+                  "내 정보",
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 centerTitle: false,
@@ -68,7 +66,7 @@ class _UserScreenState extends State<UserScreen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SvgPicture.asset("assets/icons/profile.svg"),
-                              SizedBox(width: defaultSize),
+                              SizedBox(width: defaultSize * 2),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -131,14 +129,7 @@ class _UserScreenState extends State<UserScreen> {
                               children: [
                                 Row(children: [
                                   Text(
-                                    "내 애창곡 노트",
-                                    style: TextStyle(
-                                        fontSize: defaultSize * 1.5,
-                                        color: kPrimaryWhiteColor),
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    "백업 및 가져오기",
+                                    "내 애창곡 노트 백업 및 가져오기",
                                     style: TextStyle(
                                         fontSize: defaultSize * 1.5,
                                         color: kMainColor),
@@ -146,10 +137,10 @@ class _UserScreenState extends State<UserScreen> {
                                   SizedBox(width: defaultSize),
                                 ]),
                                 Text(
-                                  "동기화 날짜 : $backUpDate",
+                                  "마지막 백업 : $backUpDate",
                                   style: TextStyle(
                                     color: kPrimaryLightWhiteColor,
-                                    fontSize: defaultSize * 1.3,
+                                    fontSize: defaultSize * 1.2,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -165,7 +156,7 @@ class _UserScreenState extends State<UserScreen> {
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
                         child: Column(children: [
-                          SizedBox(height: defaultSize * 1.5),
+                          SizedBox(height: defaultSize * 2),
                           InkWell(
                             onTap: () {
                               Analytics_config().settingNotice();
@@ -252,7 +243,7 @@ class _UserScreenState extends State<UserScreen> {
                                 )
                               : SizedBox.shrink(),
                           (loginState == true)
-                              ? SizedBox(height: defaultSize * 2.5)
+                              ? SizedBox(height: defaultSize * 3)
                               : SizedBox.shrink(),
                           //회원탈퇴 버튼
                           (loginState == true)
@@ -267,7 +258,7 @@ class _UserScreenState extends State<UserScreen> {
                                     padding: EdgeInsets.symmetric(
                                         horizontal: defaultSize * 1.5),
                                     child: Row(children: [
-                                      Text("회원탈퇴",
+                                      Text("탈퇴하기",
                                           style: TextStyle(
                                             color: kPrimaryWhiteColor,
                                             fontSize: defaultSize * 1.5,
@@ -279,8 +270,8 @@ class _UserScreenState extends State<UserScreen> {
                                 )
                               : SizedBox.shrink(),
                           (loginState == true)
-                              ? SizedBox(height: defaultSize * 1.5)
-                              : SizedBox.shrink(),
+                              ? SizedBox(height: defaultSize * 2)
+                              : SizedBox(height: defaultSize)
                         ]),
                       ),
                     ),
@@ -289,8 +280,8 @@ class _UserScreenState extends State<UserScreen> {
               ),
               floatingActionButton: Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 15, 15),
-                width: defaultSize * 7.2,
-                height: defaultSize * 7.2,
+                width: defaultSize * 4.8,
+                height: defaultSize * 4.8,
                 child: FittedBox(
                   child: FloatingActionButton(
                     elevation: 5.0,

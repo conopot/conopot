@@ -3,8 +3,6 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 class PitchRecommendationDetailScreen extends StatelessWidget {
@@ -23,7 +21,44 @@ class PitchRecommendationDetailScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: ListView.builder(
+        child: songList.isEmpty ? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: defaultSize * 3),
+                Text(
+                    "내 음악대에 맞는 노래가 없습니다 😢",
+                    style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                SizedBox(height: defaultSize),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+                    child: Text(
+                        "1. 음역대를 측정해 주세요.",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 0.25),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+                    child: Text(
+                        "2. 너무 낮은 음역대가 측정 됐을 경우 결과를 볼 수 없습니다 다시 측정해 주세요.",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                  ),
+                ),
+              ],
+            ) : ListView.builder(
             padding: EdgeInsets.only(bottom: screenHeight * 0.3),
             itemCount: songList.length,
             itemBuilder: (context, index) {

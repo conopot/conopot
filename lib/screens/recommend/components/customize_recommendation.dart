@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -33,35 +30,40 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
   final storage = new FlutterSecureStorage();
 
   void requestCFApi() async {
+    widget.musicList.recommendRequest = true;
+    storage.write(key: "recommendRequest", value: 'true');
     await EasyLoading.show(status: '분석중 입니다...');
     String url = 'https://recommendcf-pfenq2lbpq-du.a.run.app/recommendCF';
+    List<String> musicArr =
+        Provider.of<NoteData>(context, listen: false).userMusics;
+    if (musicArr.length > 20) {
+      // 저장한 노트수가 20개 보다 많은 경우 자르기
+      musicArr = musicArr.sublist(0, 20);
+    }
     Future<dynamic> myFuture = new Future(() async {
       final response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode({
-          "musicArr": Provider.of<NoteData>(context, listen: false)
-              .userMusics
-              .toString()
-        }),
+        body: jsonEncode({"musicArr": musicArr.toString()}),
       );
       return response;
     });
     myFuture.then((response) {
       if (response.statusCode == 200) {
         String? recommendList = response.body;
-        print(recommendList);
-        if (recommendList != null)
+        if (recommendList != null) {
           widget.musicList.saveAiRecommendationList(recommendList);
-        widget.musicList.recommendRequest = true;
-        storage.write(key: "recommendRequest", value: 'true');
-        setState(() {});
-        EasyLoading.showSuccess('분석에 성공했습니다!');
+          setState(() {});
+          EasyLoading.showSuccess('분석에 성공했습니다!');
+        } else {
+          setState(() {});
+          EasyLoading.showError('분석을 위한 데이터가 부족합니다😿\n노트를 좀더 추가해주세요');
+        }
       } else {
         setState(() {});
-        EasyLoading.showError('분석에 실패했습니다😿\n채널톡에 문의해주세요');
+        EasyLoading.showError('서버 문제가 발생했습니다😿\n채널톡에 문의해주세요');
       }
     }, onError: (e) {
       setState(() {});
@@ -83,8 +85,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                       fontSize: defaultSize * 2,
                       fontWeight: FontWeight.w600)),
               Spacer(),
-              if (widget.notes.length >= 5 &&
-                  widget.musicList.aiRecommendationList.isNotEmpty)
+              if (widget.musicList.aiRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
                     //!event: 추천_뷰__맞춤_추천_더보기
@@ -122,17 +123,18 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
           ),
         ),
         SizedBox(height: defaultSize * 2),
-        if (widget.notes.length < 5) ...[
+        if (widget.notes.length < 5 &&
+            widget.musicList.recommendRequest == false) ...[
           // 저장한 노트 개수가 5개 미만일 때
           Container(
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.25),
-            padding: EdgeInsets.symmetric(vertical: defaultSize * 5),
+            padding: EdgeInsets.symmetric(vertical: defaultSize * 3),
             decoration: BoxDecoration(
                 color: kPrimaryLightBlackColor,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Center(
-                child: Text("AI분석을 위해 노트를 5개이상 추가해주세요 😸",
+                child: Text("분석을 위해 노트를 최소 5개이상 추가해주세요 😸",
                     style: TextStyle(
                         color: kPrimaryWhiteColor,
                         fontWeight: FontWeight.w400,
@@ -140,7 +142,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
           )
         ] else if (widget.notes.length >= 5 &&
             widget.musicList.recommendRequest == false) ...[
-          // 저장한 노트 개수가 5개 이상이지만 api 호출을 하지 않았을 때
+          // 저장한 노트 개수가 5개 이상이지만 호출을 하지 않았을 때
           Container(
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.25),
@@ -179,23 +181,74 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
               ],
             )),
           )
-        ] else if (widget.notes.length >= 5 &&
-            widget.musicList.recommendRequest == true &&
+        ] else if (widget.musicList.recommendRequest == true &&
             widget.musicList.aiRecommendationList.isEmpty) ...[
-          // 저장한 노트 개수가 5개 이상이고 api 호출을 했지만 추천을 받지 못했을 때
+          // api 호출을 했지만 추천을 받지 못했을 때
           Container(
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.25),
-            padding: EdgeInsets.symmetric(vertical: defaultSize * 5),
+            padding: EdgeInsets.symmetric(vertical: defaultSize * 3),
             decoration: BoxDecoration(
                 color: kPrimaryLightBlackColor,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Center(
-                child: Text("미안해요 분석을 실패했어요 노트를 좀 더 추가해주세요 😹",
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                    "미안해요 분석을 실패했어요 😹",
                     style: TextStyle(
                         color: kPrimaryWhiteColor,
                         fontWeight: FontWeight.w400,
-                        fontSize: defaultSize * 1.5))),
+                        fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                SizedBox(height: defaultSize),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                    child: Text(
+                        "1. 인터넷 연결을 확인해주세요.",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 0.25),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                    child: Text(
+                        "2. 인터넷 연결이 잘 됐지만 결과가 나오지 않는다면 노트를 좀 더 추가한 후에 다시 시도해주세요.",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 1.5),
+                GestureDetector(
+                  onTap: () {
+                    requestCFApi();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(defaultSize * 1.5,
+                        defaultSize, defaultSize * 1.5, defaultSize),
+                    decoration: BoxDecoration(
+                        color: kMainColor,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(30))),
+                    child: Text(
+                      "AI분석 요청하기",
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.3,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           )
         ] else ...[
           Container(

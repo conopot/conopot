@@ -55,7 +55,6 @@ class SeasonRecommendation extends StatelessWidget {
                         Analytics_config().clickWinterRecommendationEvent();
                         break;
                     }
-
                     Navigator.push(
                         context,
                         MaterialPageRoute(
