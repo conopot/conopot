@@ -31,6 +31,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> combinedFoundItems = [];
   List<bool> isChecked = [];
   List<FitchMusic> checkedMusics = [];
+  Map<String, String> youtubeURL = {};
 
   int tabIndex = 1; // TJ or 금영
   int userPitch = 23;
@@ -316,6 +317,9 @@ class MusicSearchItemLists extends ChangeNotifier {
         ? await firstSessionGetCombinedMusics()
         : await getCombinedMusics();
 
+    // youtube url 로드
+    String youtubeURLString = await rootBundle.loadString('assets/musics/youtube_Url.txt');
+
     LineSplitter ls = new LineSplitter();
 
     List<String> contents = ls.convert(TJMusics);
@@ -335,6 +339,10 @@ class MusicSearchItemLists extends ChangeNotifier {
     //최고음 db 파싱
     contents = ls.convert(HighMusics);
 
+    // youtube url 파싱
+    List<String> youtubeURLArray = ls.convert(youtubeURLString);
+    parseURL(youtubeURLArray, youtubeURL);
+    
     late String tj_songNumber, gender;
     late int pitchNum;
 
@@ -459,6 +467,7 @@ class MusicSearchItemLists extends ChangeNotifier {
             string.pitchNum <= userMaxPitch + 1))
         .toList();
     isChecked = List<bool>.filled(highestFoundItems.length, false);
+    
 
     notifyListeners();
   }
@@ -534,7 +543,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     });
   }
 
-  // 검색 필터링 기능(곡 추가 시 검색)
+  // 검색 필터링 기능(금영 곡 추가 시 검색)
   void runKYFilter(String enteredKeyword) {
     results = [];
     enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
@@ -665,5 +674,27 @@ class MusicSearchItemLists extends ChangeNotifier {
           search_keyword_title_singer: title + singer,
           search_keyword_singer_title: singer + title));
     }
+  }
+
+  // youtube url 파싱 함수
+  void parseURL(List<String> youtubeURLArray, Map<String, String> youtubeURL) {
+    for (String str in youtubeURLArray) {
+      int firstSeperatorIdx = str.indexOf('^'); // 첫번째 구분자 인덱스
+      int secondSeperatorIdx = str.lastIndexOf('^'); // 두번째 구분자 인덱스
+      // ^가 없을 경우 예외처리
+      if (firstSeperatorIdx == -1) continue;
+      String songNumber = str.substring(0, firstSeperatorIdx);
+      String URL = str.substring(firstSeperatorIdx + 1, secondSeperatorIdx);
+      youtubeURL[songNumber] = URL;
+    }
+  }
+
+  // 노트 상세정보에서 같은 가수가 부른 노래를 찾는 함수
+  List<FitchMusic> findSongbySameSinger(String singer, String title) {
+    List<FitchMusic> result = [];
+    result = combinedSongList
+        .where((e) => (e.tj_singer == singer && e.tj_title != title))
+        .toList();
+    return result;
   }
 }

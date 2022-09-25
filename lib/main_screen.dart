@@ -122,7 +122,7 @@ class _MainScreenState extends State<MainScreen>
                             },
                             child: Text("취소",
                                 style: TextStyle(
-                                    color: kPrimaryLightWhiteColor,
+                                    color: kMainColor,
                                     fontWeight: FontWeight.w600)),
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(

@@ -97,7 +97,7 @@ class RequestPitchInfoButton extends StatelessWidget {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)))),
-        child: const Text("취소", style: TextStyle(fontWeight: FontWeight.w600)));
+        child: const Text("취소", style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
 
     AlertDialog alert = AlertDialog(
       content: Text(

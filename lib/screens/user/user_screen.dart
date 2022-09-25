@@ -104,6 +104,7 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                   ),
                   SwitchListTile(
+                      activeColor: kMainColor,
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: defaultSize * 2),
                       title: Text(

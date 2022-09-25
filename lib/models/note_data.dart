@@ -379,6 +379,7 @@ class NoteData extends ChangeNotifier {
         "취소",
         style: TextStyle(
           fontWeight: FontWeight.w600,
+          color: kMainColor
         ),
       ),
     );
@@ -525,7 +526,7 @@ class NoteData extends ChangeNotifier {
         deleteNote(note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
-      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600)),
+      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600,)),
     );
 
     Widget cancelButton = ElevatedButton(
@@ -539,7 +540,7 @@ class NoteData extends ChangeNotifier {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text("취소", style: TextStyle(fontWeight: FontWeight.w600)));
+        child: Text("취소", style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
 
     AlertDialog alert = AlertDialog(
       content: Text(

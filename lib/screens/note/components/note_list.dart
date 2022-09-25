@@ -88,7 +88,7 @@ class _NoteListState extends State<NoteList> {
                                 foregroundColor: kMainColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8)),
-                                icon: Icons.delete,
+                                icon: Icons.delete_outlined,
                               ),
                             ]),
                         child: GestureDetector(

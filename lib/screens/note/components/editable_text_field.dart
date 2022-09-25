@@ -49,7 +49,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
             style: TextStyle(
                 color: kPrimaryWhiteColor,
                 fontSize: defaultSize * 1.5,
-                fontWeight: FontWeight.w600),
+                fontWeight: FontWeight.w500),
           ),
           Spacer(),
           if (_isEditingText == true)
