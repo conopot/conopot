@@ -83,7 +83,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                       fontSize: defaultSize * 2,
                       fontWeight: FontWeight.w600)),
               Spacer(),
-              if (widget.musicList.aiRecommendationList.isNotEmpty)
+              if (widget.notes.length >= 5 &&
+                  widget.musicList.aiRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
                     //!event: 추천_뷰__맞춤_추천_더보기
@@ -94,8 +95,11 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 CustomizeRecommendationDetailScreen(
-                                    title: "맞춤 추천",
-                                    songList: widget.musicList
+                                    musicList: widget.musicList,
+                                    title: "AI 추천",
+                                    songList: Provider.of<MusicSearchItemLists>(
+                                            context,
+                                            listen: true)
                                         .aiRecommendationList)));
                   },
                   child: Container(
@@ -118,7 +122,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
           ),
         ),
         SizedBox(height: defaultSize * 2),
-        if (widget.notes.length < 5 && widget.musicList.recommendRequest == false) ...[
+        if (widget.notes.length < 5) ...[
           // 저장한 노트 개수가 5개 미만일 때
           Container(
             width: double.infinity,
