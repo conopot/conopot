@@ -83,8 +83,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                       fontSize: defaultSize * 2,
                       fontWeight: FontWeight.w600)),
               Spacer(),
-              if (widget.notes.length >= 5 &&
-                  widget.musicList.aiRecommendationList.isNotEmpty)
+              if (widget.musicList.aiRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
                     //!event: 추천_뷰__맞춤_추천_더보기
@@ -119,7 +118,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
           ),
         ),
         SizedBox(height: defaultSize * 2),
-        if (widget.notes.length < 5) ...[
+        if (widget.notes.length < 5 && widget.musicList.recommendRequest == false) ...[
           // 저장한 노트 개수가 5개 미만일 때
           Container(
             width: double.infinity,
