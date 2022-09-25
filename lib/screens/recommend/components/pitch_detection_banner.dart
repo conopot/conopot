@@ -82,10 +82,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                                 fontWeight: FontWeight.w400)),
                         SizedBox(height: defaultSize * 2),
                         GestureDetector(
-                          onTap: () {
-                            // 여기 삭제
-                            Provider.of<MusicSearchItemLists>(context, listen: false).aiRecommendationList = [];
-                            Provider.of<MusicSearchItemLists>(context, listen: false).recommendRequest = false;                       
+                          onTap: () {                       
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
