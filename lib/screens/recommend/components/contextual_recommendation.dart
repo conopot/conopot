@@ -79,9 +79,14 @@ class ContextualRecommendation extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PitchRecommendationDetailScreen(
-                                  title: titleList[index],
-                                  songList: Provider.of<MusicSearchItemLists>(context, listen: false).customizeRecommendationList)));
+                              builder: (context) =>
+                                  PitchRecommendationDetailScreen(
+                                      title: titleList[index],
+                                      songList:
+                                          Provider.of<MusicSearchItemLists>(
+                                                  context,
+                                                  listen: false)
+                                              .customizeRecommendationList)));
                     } else {
                       Navigator.push(
                           context,
