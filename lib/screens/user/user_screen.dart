@@ -24,16 +24,16 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   double defaultSize = SizeConfig.defaultSize;
   final storage = new FlutterSecureStorage();
-
   @override
   void initState() {
+    Analytics_config().settingPageView();
     super.initState();
-    Analytics_config.analytics.logEvent("내 정보 뷰 - 페이지뷰");
   }
 
   @override
   Widget build(BuildContext context) {
-    Analytics_config().settingPageView();
+    var loginState = Provider.of<NoteData>(context, listen: true).isLogined;
+
     return Consumer<MusicSearchItemLists>(
         builder: (
       context,
@@ -56,10 +56,12 @@ class _UserScreenState extends State<UserScreen> {
                       color: kPrimaryLightBlackColor,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                          (loginState == false)
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()))
+                              : SizedBox.shrink();
                         },
                         child: Row(children: [
                           SvgPicture.asset("assets/icons/profile.svg"),
@@ -68,13 +70,15 @@ class _UserScreenState extends State<UserScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "로그인",
+                                (loginState == false) ? "로그인" : "사용자 ID",
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 1.8),
                               ),
                               Text(
-                                "백업 기능 및 다양한 서비스를 이용해보세요!!",
+                                (loginState == false)
+                                    ? "백업 기능 및 다양한 서비스를 이용해보세요!!"
+                                    : "",
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 1.2),
@@ -82,50 +86,56 @@ class _UserScreenState extends State<UserScreen> {
                             ],
                           ),
                           Spacer(),
-                          Icon(
-                            Icons.chevron_right,
-                            color: kPrimaryWhiteColor,
-                          ),
+                          (loginState == false)
+                              ? Icon(
+                                  Icons.chevron_right,
+                                  color: kPrimaryWhiteColor,
+                                )
+                              : SizedBox.shrink(),
                         ]),
                       ),
                     ),
                     SizedBox(height: defaultSize),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
-                      color: kPrimaryLightBlackColor,
-                      child: IntrinsicHeight(
-                          child: Column(
-                        children: [
-                          SizedBox(height: defaultSize * 1.5),
-                          InkWell(
-                            onTap: () {
-                              Provider.of<NoteData>(context, listen: false)
-                                  .showBackupDialog(context);
-                            },
-                            splashColor: Colors.transparent,
-                            child: Row(children: [
-                              Text(
-                                "내 애창곡 노트",
-                                style: TextStyle(
-                                    fontSize: defaultSize * 1.5,
-                                    color: kPrimaryWhiteColor),
-                              ),
-                              Spacer(),
-                              Text(
-                                "백업 및 가져오기",
-                                style: TextStyle(
-                                    fontSize: defaultSize * 1.5,
-                                    color: kMainColor),
-                              ),
-                              SizedBox(width: defaultSize),
-                            ]),
-                          ),
-                          SizedBox(height: defaultSize * 1.5),
-                        ],
-                      )),
-                    ),
-                    SizedBox(height: defaultSize),
+                    (Provider.of<NoteData>(context, listen: false).isLogined ==
+                            true)
+                        ? Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: defaultSize * 1.5),
+                            color: kPrimaryLightBlackColor,
+                            child: IntrinsicHeight(
+                                child: Column(
+                              children: [
+                                SizedBox(height: defaultSize * 1.5),
+                                InkWell(
+                                  onTap: () {
+                                    Provider.of<NoteData>(context,
+                                            listen: false)
+                                        .showBackupDialog(context);
+                                  },
+                                  splashColor: Colors.transparent,
+                                  child: Row(children: [
+                                    Text(
+                                      "내 애창곡 노트",
+                                      style: TextStyle(
+                                          fontSize: defaultSize * 1.5,
+                                          color: kPrimaryWhiteColor),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      "백업 및 가져오기",
+                                      style: TextStyle(
+                                          fontSize: defaultSize * 1.5,
+                                          color: kMainColor),
+                                    ),
+                                    SizedBox(width: defaultSize),
+                                  ]),
+                                ),
+                                SizedBox(height: defaultSize * 1.5),
+                              ],
+                            )),
+                          )
+                        : SizedBox.shrink(),
+                    SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
@@ -158,7 +168,7 @@ class _UserScreenState extends State<UserScreen> {
                               ]),
                             ),
                           ),
-                          SizedBox(height: defaultSize),
+                          SizedBox(height: defaultSize * 1.5),
                           SwitchListTile(
                               activeColor: kMainColor,
                               contentPadding: EdgeInsets.symmetric(
@@ -186,28 +196,68 @@ class _UserScreenState extends State<UserScreen> {
                                 setState(() {
                                   Provider.of<NoteData>(context, listen: false)
                                       .isSubscribed = value;
+                                  Provider.of<NoteData>(context, listen: false)
+                                      .isLogined = value;
                                 });
                               }),
-                          SizedBox(height: defaultSize),
-                          InkWell(
-                            onTap: () {
-                              Provider.of<NoteData>(context, listen: false).showDeleteAccountDialog(context);
-                            },
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: defaultSize * 1.5),
-                              child: Row(children: [
-                                Text("회원탈퇴",
-                                    style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                              ]),
-                            ),
-                          ),
-                          SizedBox(height: defaultSize * 1.5),
+                          (loginState == true)
+                              ? SizedBox(height: defaultSize * 1.5)
+                              : SizedBox.shrink(),
+                          //로그아웃 버튼
+                          (loginState == true)
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      Provider.of<NoteData>(context,
+                                              listen: false)
+                                          .showAccountDialog(context, "logout");
+                                    });
+                                  },
+                                  splashColor: Colors.transparent,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize * 1.5),
+                                    child: Row(children: [
+                                      Text("로그아웃",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                    ]),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          (loginState == true)
+                              ? SizedBox(height: defaultSize * 2.5)
+                              : SizedBox.shrink(),
+                          //회원탈퇴 버튼
+                          (loginState == true)
+                              ? InkWell(
+                                  onTap: () {
+                                    Provider.of<NoteData>(context,
+                                            listen: false)
+                                        .showAccountDialog(context, "delete");
+                                  },
+                                  splashColor: Colors.transparent,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize * 1.5),
+                                    child: Row(children: [
+                                      Text("회원탈퇴",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      SizedBox(height: defaultSize * 1.5),
+                                    ]),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          (loginState == true)
+                              ? SizedBox(height: defaultSize * 1.5)
+                              : SizedBox.shrink(),
                         ]),
                       ),
                     ),

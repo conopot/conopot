@@ -452,17 +452,17 @@ class MusicSearchItemLists extends ChangeNotifier {
             search_keyword_singer_title: tj_singer + tj_title));
       }
       Note note = Note(
-          tj_title,
-          tj_singer,
-          tj_songNumber,
-          ky_title,
-          ky_singer,
-          ky_songNumber,
-          gender,
-          pitchNum,
-          "",
-          0,
-        );
+        tj_title,
+        tj_singer,
+        tj_songNumber,
+        ky_title,
+        ky_singer,
+        ky_songNumber,
+        gender,
+        pitchNum,
+        "",
+        0,
+      );
       entireNote.add(note);
     }
 

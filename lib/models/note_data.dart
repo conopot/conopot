@@ -43,6 +43,8 @@ class NoteData extends ChangeNotifier {
 
   bool noteAddInterstitialSetting = false;
 
+  bool isLogined = false; //사용자 로그인 여부
+
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
@@ -129,8 +131,16 @@ class NoteData extends ChangeNotifier {
     isSubscribed = flag;
   }
 
+  //Splash 화면에서 로그인 상태 확인
+  initLoginState() async {
+    String? jwt = await storage.read(key: 'jwt');
+    if (jwt != null) isLogined = true;
+    notifyListeners();
+  }
+
   initNotes() async {
     initSubscirbeState();
+    initLoginState();
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
@@ -968,18 +978,20 @@ class NoteData extends ChangeNotifier {
           if (response.body[i].compareTo("0") >= 0 &&
               (response.body[i].compareTo('9') == 0 ||
                   response.body[i].compareTo('9') == -1)) {
-                    tmp += response.body[i];
-                  }
-          else {
+            tmp += response.body[i];
+          } else {
             if (tmp.isNotEmpty) {
               songNumberList.add(tmp);
               tmp = "";
             }
           }
         }
-        Set<Note> entireNote = Provider.of<MusicSearchItemLists>(context, listen: false).entireNote;
+        Set<Note> entireNote =
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .entireNote;
         for (int i = 0; i < songNumberList.length; i++) {
-          Note note = entireNote.firstWhere((element) => element.tj_songNumber == songNumberList[i]);
+          Note note = entireNote.firstWhere(
+              (element) => element.tj_songNumber == songNumberList[i]);
           bool flag = false;
           for (int j = 0; j < notes.length; j++) {
             if (notes[j].tj_songNumber == note.tj_songNumber) {
@@ -999,8 +1011,8 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  //노트 삭제여부 확인 팝업 함수
-  void showDeleteAccountDialog(BuildContext context) {
+  //노트 삭제여부 확인 팝업 함수 (command: "delete"(계정삭제), "logout"(로그아웃))
+  void showAccountDialog(BuildContext context, String command) {
     double defaultSize = SizeConfig.defaultSize;
     Widget okButton = ElevatedButton(
       style: ButtonStyle(
@@ -1011,9 +1023,15 @@ class NoteData extends ChangeNotifier {
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () {
-        deleteAccount();
+        if (command == "delete")
+          deleteAccount();
+        else
+          logoutAccount();
+
+        Navigator.of(context).pop();
       },
-      child: Text("회원탈퇴", style: TextStyle(fontWeight: FontWeight.w600)),
+      child: Text((command == "delete") ? "회원탈퇴" : "로그아웃",
+          style: TextStyle(fontWeight: FontWeight.w600)),
     );
 
     Widget cancelButton = ElevatedButton(
@@ -1034,7 +1052,7 @@ class NoteData extends ChangeNotifier {
       content: IntrinsicHeight(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            "정말로 회원탈퇴를 진행하시겠어요?",
+            (command == "delete") ? "정말로 회원탈퇴를 진행하시겠어요?" : "로그아웃 하시겠습니까?",
             style: TextStyle(color: kPrimaryWhiteColor),
           )
         ]),
@@ -1072,10 +1090,22 @@ class NoteData extends ChangeNotifier {
         throw HttpException('$err');
       }
     }
+    //로그아웃 처리
+    await logoutAccount();
+  }
+
+  // 로그아웃
+  Future<void> logoutAccount() async {
+    //jwt 토큰 삭제
+    await storage.delete(key: 'jwt');
+    isLogined = false;
+    notifyListeners();
   }
 
   // JWT 토큰 저장하기
   writeJWT(String? jwtToken) async {
     await storage.write(key: 'jwt', value: jwtToken);
+    isLogined = true;
+    notifyListeners();
   }
 }

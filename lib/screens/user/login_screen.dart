@@ -152,7 +152,10 @@ void kakaoRegister(BuildContext context, OAuthToken token) async {
     //로컬 스토리지에 jwt 토큰 저장
     Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
     Map<String, dynamic> payload = Jwt.parseJwt(jwtToken!);
+
     print("jwt 내부 회원정보(payload) : ${payload}");
+
+    Navigator.of(context).pop();
   } catch (err) {
     print("카카오 로그인 백엔드 연결 실패 : ${err}");
   }
@@ -192,6 +195,8 @@ void appleRegister(
 
       Map<String, dynamic> payload = Jwt.parseJwt(credential.identityToken!);
       print("jwt 내부 회원정보(payload) : ${payload}");
+
+      Navigator.of(context).pop();
     } else {
       //토큰 검증에 실패한 경우
       print("애플 로그인 토큰 검증 실패");
