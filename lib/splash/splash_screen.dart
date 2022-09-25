@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //첫 세션일때 광고 띄우지 않기
       if (Provider.of<MusicSearchItemLists>(context, listen: false)
               .sessionCount >
-          1) {
+          0) {
         // 앱 실행 광고
         await appOpenAds(context);
       } else {

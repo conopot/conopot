@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -11,6 +13,7 @@ import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +36,7 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     var loginState = Provider.of<NoteData>(context, listen: true).isLogined;
+    var backUpDate = Provider.of<NoteData>(context, listen: true).backUpDate;
 
     return Consumer<MusicSearchItemLists>(
         builder: (
@@ -63,78 +67,102 @@ class _UserScreenState extends State<UserScreen> {
                                       builder: (context) => LoginScreen()))
                               : SizedBox.shrink();
                         },
-                        child: Row(children: [
-                          SvgPicture.asset("assets/icons/profile.svg"),
-                          SizedBox(width: defaultSize),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                (loginState == false) ? "로그인" : "사용자 ID",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.8),
+                              SvgPicture.asset("assets/icons/profile.svg"),
+                              SizedBox(width: defaultSize),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    (loginState == false)
+                                        ? "로그인"
+                                        : Provider.of<NoteData>(context,
+                                                listen: true)
+                                            .userNickname,
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.8),
+                                  ),
+                                  (loginState == false)
+                                      ? Text(
+                                          "백업 기능 및 다양한 서비스를 이용해보세요!!",
+                                          style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              fontSize: defaultSize * 1.2),
+                                        )
+                                      : SizedBox.shrink(),
+                                ],
                               ),
-                              Text(
-                                (loginState == false)
-                                    ? "백업 기능 및 다양한 서비스를 이용해보세요!!"
-                                    : "",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.2),
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          (loginState == false)
-                              ? Icon(
-                                  Icons.chevron_right,
-                                  color: kPrimaryWhiteColor,
-                                )
-                              : SizedBox.shrink(),
-                        ]),
+                              Spacer(),
+                              (loginState == false)
+                                  ? Icon(
+                                      Icons.chevron_right,
+                                      color: kPrimaryWhiteColor,
+                                    )
+                                  : SizedBox.shrink(),
+                            ]),
                       ),
                     ),
                     SizedBox(height: defaultSize),
-                    (Provider.of<NoteData>(context, listen: false).isLogined ==
-                            true)
-                        ? Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: defaultSize * 1.5),
-                            color: kPrimaryLightBlackColor,
-                            child: IntrinsicHeight(
-                                child: Column(
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+                      color: kPrimaryLightBlackColor,
+                      child: IntrinsicHeight(
+                          child: Column(
+                        children: [
+                          SizedBox(height: defaultSize * 1.5),
+                          InkWell(
+                            onTap: () {
+                              (loginState == true)
+                                  ? backUpDialog()
+                                  : Fluttertoast.showToast(
+                                      msg: "로그인 후 이용가능합니다",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Color(0xFFFF7878),
+                                      textColor: kPrimaryWhiteColor,
+                                      fontSize: defaultSize * 1.6);
+                              ;
+                            },
+                            splashColor: Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: defaultSize * 1.5),
-                                InkWell(
-                                  onTap: () {
-                                    Provider.of<NoteData>(context,
-                                            listen: false)
-                                        .showBackupDialog(context);
-                                  },
-                                  splashColor: Colors.transparent,
-                                  child: Row(children: [
-                                    Text(
-                                      "내 애창곡 노트",
-                                      style: TextStyle(
-                                          fontSize: defaultSize * 1.5,
-                                          color: kPrimaryWhiteColor),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      "백업 및 가져오기",
-                                      style: TextStyle(
-                                          fontSize: defaultSize * 1.5,
-                                          color: kMainColor),
-                                    ),
-                                    SizedBox(width: defaultSize),
-                                  ]),
+                                Row(children: [
+                                  Text(
+                                    "내 애창곡 노트",
+                                    style: TextStyle(
+                                        fontSize: defaultSize * 1.5,
+                                        color: kPrimaryWhiteColor),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    "백업 및 가져오기",
+                                    style: TextStyle(
+                                        fontSize: defaultSize * 1.5,
+                                        color: kMainColor),
+                                  ),
+                                  SizedBox(width: defaultSize),
+                                ]),
+                                Text(
+                                  "동기화 날짜 : $backUpDate",
+                                  style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontSize: defaultSize * 1.3,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                                SizedBox(height: defaultSize * 1.5),
                               ],
-                            )),
-                          )
-                        : SizedBox.shrink(),
+                            ),
+                          ),
+                          SizedBox(height: defaultSize * 1.5),
+                        ],
+                      )),
+                    ),
                     SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
@@ -196,8 +224,6 @@ class _UserScreenState extends State<UserScreen> {
                                 setState(() {
                                   Provider.of<NoteData>(context, listen: false)
                                       .isSubscribed = value;
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .isLogined = value;
                                 });
                               }),
                           (loginState == true)
@@ -285,5 +311,22 @@ class _UserScreenState extends State<UserScreen> {
                 ),
               ),
             ));
+  }
+
+  backUpDialog() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      print("인터넷 연결 성공");
+      Provider.of<NoteData>(context, listen: false).showBackupDialog(context);
+    } on SocketException {
+      Fluttertoast.showToast(
+          msg: "인터넷 연결 후 이용가능합니다",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xFFFF7878),
+          textColor: kPrimaryWhiteColor,
+          fontSize: defaultSize * 1.6);
+    }
   }
 }

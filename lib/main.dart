@@ -22,12 +22,13 @@ Future<void> main() async {
   // 세로 화면 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+  KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
+
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(
     () async {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
-      KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
       runApp(const MyApp());
     },
     (error, stack) =>

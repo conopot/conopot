@@ -20,6 +20,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note.dart';
@@ -44,6 +45,9 @@ class NoteData extends ChangeNotifier {
   bool noteAddInterstitialSetting = false;
 
   bool isLogined = false; //사용자 로그인 여부
+  String userNickname = "사용자 ID";
+
+  String backUpDate = "저장되지 않음";
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -141,6 +145,7 @@ class NoteData extends ChangeNotifier {
   initNotes() async {
     initSubscirbeState();
     initLoginState();
+    initAccountInfo();
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
@@ -888,6 +893,7 @@ class NoteData extends ChangeNotifier {
           ))),
       onPressed: () {
         saveNotes();
+        Navigator.of(context).pop();
       },
       child: Text("백업하기", style: TextStyle(fontWeight: FontWeight.w600)),
     );
@@ -902,6 +908,7 @@ class NoteData extends ChangeNotifier {
             ))),
         onPressed: () {
           loadNotes(context);
+          Navigator.of(context).pop();
         },
         child: Text("가져오기",
             style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
@@ -951,6 +958,10 @@ class NoteData extends ChangeNotifier {
           }),
         );
         print(response.body);
+        //백업 날짜 기록
+        backUpDate = DateFormat("yyyy-MM-dd hh:mm:ss a").format(DateTime.now());
+        print(backUpDate);
+        notifyListeners();
       } catch (err) {
         throw HttpException('$err');
       }
@@ -1107,5 +1118,21 @@ class NoteData extends ChangeNotifier {
     await storage.write(key: 'jwt', value: jwtToken);
     isLogined = true;
     notifyListeners();
+  }
+
+  initAccountInfo() async {
+    String? jwtToken = await storage.read(key: 'jwt');
+
+    if (jwtToken != null) {
+      Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
+      print("jwt 내부 회원정보(payload) : ${payload}");
+
+      //사용자 닉네임 저장
+      print("사용자 닉네임 : ${payload["nickname"]}");
+
+      userNickname = payload["nickname"];
+
+      notifyListeners();
+    }
   }
 }

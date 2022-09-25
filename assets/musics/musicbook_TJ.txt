@@ -23168,6 +23168,11 @@ TV^Billie Eilish^23948^
 SCAR^24KGoldn,sokodomo(Prod.BOYCOLD)^23949^
 Hopelessly devoted to you(From 'Grease')^Olivia Newton John^23950^
 Loving You Keeps Me Alive(From 'Dracula')^James Barbour^23951^
+Super Freaky Girl^Nicki Minaj^23952^
+I Won't^AJR^23953^
+Stay With Me^Calvin Harris,Justin Timberlake,Halsey,Pharrell Williams^23954^
+Guitars and Drugs^John K^23955^
+Down Under^Men at work^23956^
 Seoul Blues^자우림^24001^
 가면^태진아^24002^
 아, 대한민국...^정태춘^24003^
@@ -43202,6 +43207,7 @@ Always^에이핑크^48999^
 인생길^김영원^49179^
 복덩이^이왕^49180^
 자화상^김남욱^49181^
+내뱃살^수니킴^49182^
 미운날^이해리^49481^
 그대가나를본다면^반하나^49482^
 어느봄날^이벼리,이준환^49483^
@@ -48127,6 +48133,9 @@ With Us^JO1^68649^
 ALIVE^ClariS^68651^
 虹色のPuddle^にじさんじ^68652^
 Scars^Nenashi^68653^
+青へ^LIP×LIP^68654^
+ベルベットの詩^back number^68655^
+4:00A.M.^大貫 妙子^68656^
 AMOUR^张学友^70001^
 爱不爱我^零点乐队^70002^
 别爱我^郑中基^70005^
@@ -54320,14 +54329,49 @@ RING ma Bell(what a wonderful world)^Billlie^82225^
 어쩔수가없나봐^김나영(Prod.정키)^82227^
 사랑속엔언제나^허회경^82228^
 좋은일이있을거야^제이레빗^82229^
+여우별^시드사운드,Ms.Valentine^82230^
+조용히완전히영원히^너드커넥션(Nerd Connection)^82231^
+감당^최유리^82232^
 섹시느낌^Balming Tiger,Omega Sapien,bj wnjn,Mudd the student(Feat.RM(방탄소년단))^82233^
 B에게쓰는편지^박재정^82234^
 포장마차에서^김현중^82235^
+LIKE THIS^STAYC(스테이씨)^82236^
+바람이분다^박강수^82237^
+바로나^박강수,박창근^82238^
+가을나그네^소리새^82239^
 라이언일병^래원(Layone),조광일,안병웅^82240^
 너를부르는바람(A Pining Wind)^마크툽(MAKTUB)^82241^
+일과이분의일^츄(이달의소녀)^82242^
+사랑은왜^전우성(노을)^82243^
 爱我别走^张震岳^82244^
+그시절우리는^김재환^82245^
+Same Scent^원어스^82246^
+나는이별이에요^저스디스(Feat.소유)(Prod.로코베리)^82247^
+Queen of Hearts^트와이스^82248^
+알수없는길(뮤지컬'더라스트키스' OST)^전동석^82249^
+Oye Como Va^김호중^82250^
+비밀번호 486^BIGONE(빅원)^82251^
+나의꽃나의그대^윤딴딴^82252^
+숲^최유리^82253^
+망태할아버지^과나^82254^
+SURRENDER^이창섭^82255^
+새삥^지코(Prod.지코)(Feat.호미들)^82256^
 农民^Beyond^82257^
+LAW^윤미래,비비(BIBI)(Prod.Czaer)^82258^
+츤데레^순순희^82259^
+One In A Billion(DARK MOON: 달의제단OST)^ENHYPEN^82260^
+Villain^소녀시대^82261^
+Basics^트와이스^82262^
+비밀의메시지(I'll Only Love You More)(뮤지컬'데스노트'OST)^정선아^82263^
+인생은뷰티풀(인생은뷰티풀: 비타돌체OST)^김호중^82266^
+슬픈등(인생은뷰티풀: 비타돌체OST)^김호중^82267^
+아버지사진^임재범^82268^
 离歌^信乐团^82274^
+술이뭐길래^지아,허각^82277^
+Braindead^시온^82278^
+사랑의시작은고백에서부터(Romance)(웹툰'연애의발견' X 전상근)^전상근^82279^
+그대얼굴^홍진영^82287^
+Sunflower(P.E.L)^최유정(Weki Meki)^82288^
 你的微笑^F.I.R.^82323^
 我痛苦^杜丽莎^82398^
 Crazy Rock^张国荣^82471^
@@ -56293,10 +56337,15 @@ AKUCINTAPADAMU^DIANPIESESHA^90010^
 AKUJATUHCINTA^BROERY^90013^
 MULANYABIASASAJA^MERIAMBELINA^90016^
 AKUSAYANGKAMU^CINDYCLAUDIA^90019^
+堕^Zyboy^90021^
+座位(电视剧(三十而已)片尾曲)^金池^90023^
 ANAKKAMBINGSAYA^^90025^
+等风也等你^阮妍霏^90026^
+万里挑一(电视剧(关于唐医生的一切)的主题曲)^周深^90027^
 ANGINMALAM^FAVOURITE'S^90028^
 ANTARABENCIDANRINDU^ENDANGSTAURINA^90030^
 Kemesraan^Iwan Fals^90031^
+浪漫升温^胡宸Chen,RE-D^90033^
 APASALAHDANDOSAKU^D'LLOYD^90034^
 APUSE^GRACESIMON^90039^
 ASINGSINGSO^TRIOAMBISI^90042^
