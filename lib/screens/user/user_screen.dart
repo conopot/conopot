@@ -50,7 +50,7 @@ class _UserScreenState extends State<UserScreen> {
                   "MY",
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
-                centerTitle: true,
+                centerTitle: false,
               ),
               body: SafeArea(
                 child: Column(
@@ -61,10 +61,7 @@ class _UserScreenState extends State<UserScreen> {
                       child: InkWell(
                         onTap: () {
                           (loginState == false)
-                              ? Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()))
+                              ? loginEnter()
                               : SizedBox.shrink();
                         },
                         child: Row(
@@ -316,8 +313,26 @@ class _UserScreenState extends State<UserScreen> {
   backUpDialog() async {
     try {
       final result = await InternetAddress.lookup('example.com');
-      print("인터넷 연결 성공");
+      //("인터넷 연결 성공");
       Provider.of<NoteData>(context, listen: false).showBackupDialog(context);
+    } on SocketException {
+      Fluttertoast.showToast(
+          msg: "인터넷 연결 후 이용가능합니다",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xFFFF7878),
+          textColor: kPrimaryWhiteColor,
+          fontSize: defaultSize * 1.6);
+    }
+  }
+
+  loginEnter() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      //("인터넷 연결 성공");
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } on SocketException {
       Fluttertoast.showToast(
           msg: "인터넷 연결 후 이용가능합니다",

@@ -30,12 +30,12 @@ class _SplashScreenState extends State<SplashScreen> {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
     String? userVersionStr = await storage.read(key: 'userVersion');
-    print(userVersionStr);
+    //print(userVersionStr);
 
     //인터넷 연결 확인
     try {
       final result = await InternetAddress.lookup('example.com');
-      print("인터넷 연결 성공");
+      //("인터넷 연결 성공");
 
       //firebase remote config 초기화
       await Firebase_Remote_Config().init();

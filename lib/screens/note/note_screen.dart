@@ -87,15 +87,6 @@ class _NoteScreenState extends State<NoteScreen> {
               fontWeight: FontWeight.w700,
             ),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserScreen()));
-              },
-            ),
-          ],
         ),
         floatingActionButton: (!noteData.notes.isEmpty)
             ? Container(

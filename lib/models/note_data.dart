@@ -81,13 +81,11 @@ class NoteData extends ChangeNotifier {
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
-            print('$ad loaded');
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error.');
             _numInterstitialLoadAttempts += 1;
             _interstitialAd = null;
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
@@ -99,19 +97,18 @@ class NoteData extends ChangeNotifier {
 
   void _showInterstitialAd() {
     if (_interstitialAd == null) {
-      print('Warning: attempt to show interstitial before loaded.');
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (InterstitialAd ad) =>
           print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
+        //print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         createInterstitialAd();
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
+        //print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
         createInterstitialAd();
       },
@@ -906,8 +903,8 @@ class NoteData extends ChangeNotifier {
               side: const BorderSide(width: 0.0),
               borderRadius: BorderRadius.circular(8),
             ))),
-        onPressed: () {
-          loadNotes(context);
+        onPressed: () async {
+          await loadNotes(context);
           Navigator.of(context).pop();
         },
         child: Text("가져오기",
@@ -957,10 +954,10 @@ class NoteData extends ChangeNotifier {
             "notes": jsonEncode(userMusics),
           }),
         );
-        print(response.body);
         //백업 날짜 기록
         backUpDate = DateFormat("yyyy-MM-dd hh:mm:ss a").format(DateTime.now());
-        print(backUpDate);
+        await storage.write(key: 'backupdate', value: backUpDate);
+
         notifyListeners();
       } catch (err) {
         throw HttpException('$err');
@@ -982,7 +979,6 @@ class NoteData extends ChangeNotifier {
             'Authorization': jwtToken,
           },
         );
-        print(response.body);
         List<String> songNumberList = [];
         String tmp = "";
         for (int i = 0; i < response.body.length; i++) {
@@ -1084,6 +1080,9 @@ class NoteData extends ChangeNotifier {
 
   // 회원탈퇴
   Future<void> deleteAccount() async {
+    //로그아웃 처리
+    await logoutAccount();
+
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     String url = '$serverURL/user/delete/account';
     String? jwtToken = await storage.read(key: 'jwt');
@@ -1096,13 +1095,10 @@ class NoteData extends ChangeNotifier {
             'Authorization': jwtToken,
           },
         );
-        print(response.body);
       } catch (err) {
         throw HttpException('$err');
       }
     }
-    //로그아웃 처리
-    await logoutAccount();
   }
 
   // 로그아웃
@@ -1125,14 +1121,15 @@ class NoteData extends ChangeNotifier {
 
     if (jwtToken != null) {
       Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
-      print("jwt 내부 회원정보(payload) : ${payload}");
-
-      //사용자 닉네임 저장
-      print("사용자 닉네임 : ${payload["nickname"]}");
-
       userNickname = payload["nickname"];
-
-      notifyListeners();
     }
+
+    String? storage_backupdate = await storage.read(key: 'backupdate');
+
+    if (storage_backupdate != null) {
+      backUpDate = storage_backupdate;
+    }
+
+    notifyListeners();
   }
 }

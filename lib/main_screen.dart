@@ -70,7 +70,6 @@ class _MainScreenState extends State<MainScreen>
           });
         },
         onAdFailedToLoad: (ad, err) {
-          print('Failed to load a banner ad: ${err.message}');
           ad.dispose();
         },
       ),

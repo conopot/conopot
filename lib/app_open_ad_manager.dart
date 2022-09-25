@@ -32,14 +32,12 @@ class AppOpenAdManager {
       request: AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
-          print('$ad loaded');
           _appOpenLoadTime = DateTime.now();
           _appOpenAd = ad;
 
           showAdIfAvailable(context);
         },
         onAdFailedToLoad: (error) {
-          print('app open ad err : ${error}');
           Provider.of<NoteData>(context, listen: false)
               .appOpenAdUnloaded(context);
         },
@@ -50,18 +48,15 @@ class AppOpenAdManager {
   void showAdIfAvailable(BuildContext context) {
     if (!canShowOpenAd) return;
     if (!isAdAvailable) {
-      print('Tried to show ad before available.');
       loadAd(context);
       return;
     }
     if (_isShowingAd) {
       canShowOpenAd = false;
-      print('Tried to show ad while already showing an ad.');
       return;
     }
 
     if (DateTime.now().subtract(maxCacheDuration).isAfter(_appOpenLoadTime!)) {
-      print('Maximum cache duration exceeded. Loading another ad.');
       _appOpenAd!.dispose();
       _appOpenAd = null;
       loadAd(context);
@@ -71,16 +66,13 @@ class AppOpenAdManager {
     _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (ad) {
         _isShowingAd = true;
-        print('$ad onAdShowedFullScreenContent');
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
         _isShowingAd = false;
         ad.dispose();
         _appOpenAd = null;
       },
       onAdDismissedFullScreenContent: (ad) {
-        print('$ad onAdDismissedFullScreenContent');
         _isShowingAd = false;
         ad.dispose();
         _appOpenAd = null;

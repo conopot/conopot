@@ -79,12 +79,12 @@ class LoginScreen extends StatelessWidget {
                                 ]);
                             // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
                             // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
-                            print(
-                                "authorizationCode: ${credential.authorizationCode}");
-                            print("identityToken: ${credential.identityToken}");
-                            print("email: ${credential.email}");
-                            print("firstName: ${credential.givenName}");
-                            print("lastName: ${credential.familyName}");
+                            // print(
+                            //     "authorizationCode: ${credential.authorizationCode}");
+                            // print("identityToken: ${credential.identityToken}");
+                            // print("email: ${credential.email}");
+                            // print("firstName: ${credential.givenName}");
+                            // print("lastName: ${credential.familyName}");
                             appleRegister(context, credential);
                           }),
                     )
@@ -99,10 +99,10 @@ class LoginScreen extends StatelessWidget {
     if (await isKakaoTalkInstalled()) {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-        print('카카오톡으로 로그인 성공');
+        // print('카카오톡으로 로그인 성공');
         kakaoRegister(context, token);
       } catch (error) {
-        print('카카오톡으로 로그인 실패 $error');
+        //print('카카오톡으로 로그인 실패 $error');
 
         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
@@ -120,10 +120,10 @@ class LoginScreen extends StatelessWidget {
 Future<void> loginKakaoAccount(BuildContext context) async {
   try {
     OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-    print('카카오계정으로 로그인 성공 ${token.accessToken}');
+    //print('카카오계정으로 로그인 성공 ${token.accessToken}');
     kakaoRegister(context, token);
   } catch (error) {
-    print('카카오계정으로 로그인 실패 $error');
+    //print('카카오계정으로 로그인 실패 $error');
   }
 }
 
@@ -142,19 +142,19 @@ void kakaoRegister(BuildContext context, OAuthToken token) async {
           'accessToken': token.accessToken,
         }));
 
-    print("응답 헤더 : ${response.headers}");
-    print("응답 바디 : ${response.body}");
+    //print("응답 헤더 : ${response.headers}");
+    //print("응답 바디 : ${response.body}");
 
     //jwt 토큰 반환
     String? jwtToken = response.headers['authorization'];
-    print("jwt 토큰 : ${jwtToken}");
+    //print("jwt 토큰 : ${jwtToken}");
 
     //로그인 성공 시 처리
     loginSuccess(jwtToken, context);
 
     Navigator.of(context).pop();
   } catch (err) {
-    print("카카오 로그인 백엔드 연결 실패 : ${err}");
+    //print("카카오 로그인 백엔드 연결 실패 : ${err}");
   }
 }
 
@@ -163,7 +163,7 @@ void appleRegister(
     BuildContext context, AuthorizationCredentialAppleID credential) async {
   String? serverURL = dotenv.env['USER_SERVER_URL'];
   String url = '$serverURL/auth/apple/signin';
-  print("애플 로그인 시도");
+  //print("애플 로그인 시도");
 
   try {
     String? username = '${credential.familyName}${credential.givenName}';
@@ -179,13 +179,13 @@ void appleRegister(
 
     //서버측에서 토큰 검증을 성공한 경우 (서버에 사용자 정보 저장)
     if (response.statusCode == 200) {
-      print("애플 로그인 성공");
-      print("응답 헤더 : ${response.headers}");
-      print("응답 바디 : ${response.body}");
+      //print("애플 로그인 성공");
+      //print("응답 헤더 : ${response.headers}");
+      //print("응답 바디 : ${response.body}");
 
       //jwt 토큰 반환
       String? jwtToken = response.headers['authorization'];
-      print("jwt 토큰 : ${jwtToken}");
+      //print("jwt 토큰 : ${jwtToken}");
 
       //로그인 성공 시 처리
       loginSuccess(jwtToken, context);
@@ -193,10 +193,10 @@ void appleRegister(
       Navigator.of(context).pop();
     } else {
       //토큰 검증에 실패한 경우
-      print("애플 로그인 토큰 검증 실패");
+      //print("애플 로그인 토큰 검증 실패");
     }
   } catch (err) {
-    print("애플 로그인 백엔드 연결 실패 : ${err}");
+    //print("애플 로그인 백엔드 연결 실패 : ${err}");
   }
 }
 

@@ -80,18 +80,18 @@ class MusicSearchItemLists extends ChangeNotifier {
 
     //버전 정보가 없는 첫 설치 이용자라면 -> 파일 내려받기
     if (userVersionStr == null) {
-      print("신규 사용자");
+      //print("신규 사용자");
       await fileUpdate();
       storage.write(key: 'userVersion', value: s3Version.toString());
     } else {
       int userVersion = int.parse(userVersionStr);
       //만약 s3에 있는 버전이 더 신 버전이라면 다운로드가 필요하다.
       if (s3Version > userVersion) {
-        print("업데이트가 필요한 사용자");
+        //print("업데이트가 필요한 사용자");
         await fileUpdate();
         storage.write(key: 'userVersion', value: s3Version.toString());
       } else {
-        print("이미 업데이트된 버전을 갖고 있는 사용자");
+        //print("이미 업데이트된 버전을 갖고 있는 사용자");
       }
     }
 
@@ -134,8 +134,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
     //zip file download
     var zippedFile = await _downloadFile(url, "Musics.zip");
-
-    //print("??");
 
     //unzip and save in path provider(device storage)
     await unarchiveAndSave(zippedFile);
