@@ -57,8 +57,16 @@ class _SplashScreenState extends State<SplashScreen> {
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
-      // 앱 실행 광고
-      await appOpenAds(context);
+      //첫 세션일때 광고 띄우지 않기
+      if (Provider.of<MusicSearchItemLists>(context, listen: false)
+              .sessionCount >
+          1) {
+        // 앱 실행 광고
+        await appOpenAds(context);
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      }
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
@@ -90,7 +98,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
-    if (Platform.isIOS) final status = await AppTrackingTransparency.requestTrackingAuthorization();
+    if (Platform.isIOS)
+      final status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
     await Analytics_config().init();
     // 유저 세션 체크
     await Provider.of<MusicSearchItemLists>(context, listen: false)
