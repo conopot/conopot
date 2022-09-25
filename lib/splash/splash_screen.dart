@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:conopot/app_open_ad_manager.dart';
 import 'package:conopot/applifecycle_reactor.dart';
 import 'package:conopot/config/analytics_config.dart';
@@ -56,8 +57,16 @@ class _SplashScreenState extends State<SplashScreen> {
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
 
-      // 앱 실행 광고
-      await appOpenAds(context);
+      //첫 세션일때 광고 띄우지 않기
+      if (Provider.of<MusicSearchItemLists>(context, listen: false)
+              .sessionCount >
+          1) {
+        // 앱 실행 광고
+        await appOpenAds(context);
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      }
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
@@ -89,6 +98,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// 앱 실행 시 얻어야 하는 정보들 수집
   void init() async {
+    if (Platform.isIOS)
+      final status =
+          await AppTrackingTransparency.requestTrackingAuthorization();
     await Analytics_config().init();
     // 유저 세션 체크
     await Provider.of<MusicSearchItemLists>(context, listen: false)
@@ -96,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //Admob 전면광고 캐싱
     await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
 
-    // 첫 설치 사용자라면, 로컬 스토리지를 모두 비운다.
+    // 첫 설치 사용자라면, 로컬 스토리지를 비운다.
     final prefs = await SharedPreferences.getInstance();
 
     if (prefs.getBool('first_run') ?? true) {
@@ -135,7 +147,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     init();
     initOneSignal();
   }
