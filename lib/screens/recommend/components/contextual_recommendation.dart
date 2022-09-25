@@ -2,13 +2,25 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item.dart';
+import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/pitch_music.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:conopot/screens/recommend/pitch_reommendation_detail_screen.dart';
 import 'package:conopot/screens/recommend/recommendation_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 class ContextualRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  List<String> titleList = ['여심저격', '커플 끼리', '분위기 UP', '지치고 힘들 때', '비올 때'];
+  List<String> titleList = [
+    '내 음역대',
+    '여심저격',
+    '커플 끼리',
+    '분위기 UP',
+    '지치고 힘들 때',
+    '비올 때'
+  ];
   List<List<MusicSearchItem>> songList = [
     RecommendationItemList.loveList,
     RecommendationItemList.duetList,
@@ -38,34 +50,46 @@ class ContextualRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    switch(index) {
+                    switch (index) {
                       case 0:
+                        // 이벤트
+                        break;
+                      case 1:
                         //!event: 추천_뷰__여심저격
                         Analytics_config().clickLoveRecommendationEvent();
                         break;
-                      case 1:
+                      case 2:
                         //!event: 추천_뷰__커플끼리
                         Analytics_config().clickCoupleRecommendationEvent();
                         break;
-                      case 2:
+                      case 3:
                         //!event: 추천_뷰__분위기UP
                         Analytics_config().clickTensionUpRecommendationEvent();
                         break;
-                      case 3:
+                      case 4:
                         //!event: 추천_뷰__지치고힘들때
                         Analytics_config().clickTiredRecommendationEvent();
                         break;
-                      case 4:
+                      case 5:
                         //!evnet: 추천_뷰__비올 때
                         Analytics_config().clickRainRecommendationEvent();
                         break;
                     }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RecommendationDetailScreen(
-                                title: titleList[index],
-                                songList: songList[index])));
+                    if (index == 0) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PitchRecommendationDetailScreen(
+                                  title: titleList[index],
+                                  songList: Provider.of<MusicSearchItemLists>(context, listen: false).customizeRecommendationList)));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RecommendationDetailScreen(
+                                  title: titleList[index],
+                                  songList: songList[index - 1])));
+                    }
                   },
                   child: Container(
                     margin: EdgeInsets.only(right: defaultSize * 2),

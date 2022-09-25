@@ -27,6 +27,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> highestSongList = [];
   List<FitchMusic> highestFoundItems = [];
   List<FitchMusic> customizeRecommendationList = [];
+  List<FitchMusic> aiRecommendationList = [];
   List<FitchMusic> highestResults = [];
   List<FitchMusic> combinedSongList = [];
   List<FitchMusic> combinedFoundItems = [];
@@ -34,6 +35,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   List<FitchMusic> checkedMusics = [];
   Map<String, String> youtubeURL = {};
   Set<Note> entireNote = new Set<Note>();
+  bool recommendRequest = false;
 
   int tabIndex = 1; // TJ or 금영
   int userPitch = 23;
@@ -62,6 +64,12 @@ class MusicSearchItemLists extends ChangeNotifier {
       sessionCount += 1;
       await storage.write(key: 'sessionCount', value: sessionCount.toString());
     }
+    // 추천 요청 api 요청 여부
+    String? recommend = await storage.read(key: 'recommendRequest');
+    if (recommend != null) {
+      recommendRequest = true;
+    }
+    notifyListeners();
   }
 
   //유저 음악 버전 체크 (true: 최신버전, false: 버전 업데이트 필요)
@@ -284,6 +292,14 @@ class MusicSearchItemLists extends ChangeNotifier {
       userPitch = int.parse(value);
       userMaxPitch = userPitch;
     }
+    // 추천 리스트 초기화
+    String? allValues = await storage.read(key: 'aiRecommendationList');
+    if (allValues != null) {
+      var FitchMusicList = jsonDecode(allValues) as List;
+      List<FitchMusic> recommendList =
+          FitchMusicList.map((noteIter) => FitchMusic.fromJson(noteIter)).toList();
+      aiRecommendationList = recommendList;
+    }
 
     final Identify identify = Identify()
       ..set('최고음 측정 여부', (userMaxPitch != -1))
@@ -320,7 +336,8 @@ class MusicSearchItemLists extends ChangeNotifier {
         : await getCombinedMusics();
 
     // youtube url 로드
-    String youtubeURLString = await rootBundle.loadString('assets/musics/youtube_Url.txt');
+    String youtubeURLString =
+        await rootBundle.loadString('assets/musics/youtube_Url.txt');
 
     LineSplitter ls = new LineSplitter();
 
@@ -344,7 +361,7 @@ class MusicSearchItemLists extends ChangeNotifier {
     // youtube url 파싱
     List<String> youtubeURLArray = ls.convert(youtubeURLString);
     parseURL(youtubeURLArray, youtubeURL);
-    
+
     late String tj_songNumber, gender;
     late int pitchNum;
 
@@ -424,40 +441,40 @@ class MusicSearchItemLists extends ChangeNotifier {
         int pitchNum = songNumberToPitchNum[tj_songNumber]!;
 
         highestSongList.add(FitchMusic(
-            tj_title: tj_title,
-            tj_singer: tj_singer,
-            tj_songNumber: tj_songNumber,
-            ky_title: ky_title,
-            ky_singer: ky_singer,
-            ky_songNumber: ky_songNumber,
-            gender: gender,
-            pitchNum: pitchNum,
-            search_keyword_title_singer: tj_title + tj_singer,
-            search_keyword_singer_title: tj_singer + tj_title));
+            tj_title,
+            tj_singer,
+            tj_songNumber,
+            ky_title,
+            ky_singer,
+            ky_songNumber,
+            gender,
+            pitchNum,
+            tj_title + tj_singer,
+            tj_singer + tj_title));
 
         combinedSongList.add(FitchMusic(
-            tj_title: tj_title,
-            tj_singer: tj_singer,
-            tj_songNumber: tj_songNumber,
-            ky_title: ky_title,
-            ky_singer: ky_singer,
-            ky_songNumber: ky_songNumber,
-            gender: gender,
-            pitchNum: pitchNum,
-            search_keyword_title_singer: tj_title + tj_singer,
-            search_keyword_singer_title: tj_singer + tj_title));
+            tj_title,
+            tj_singer,
+            tj_songNumber,
+            ky_title,
+            ky_singer,
+            ky_songNumber,
+            gender,
+            pitchNum,
+            tj_title + tj_singer,
+            tj_singer + tj_title));
       } else {
         combinedSongList.add(FitchMusic(
-            tj_title: tj_title,
-            tj_singer: tj_singer,
-            tj_songNumber: tj_songNumber,
-            ky_title: ky_title,
-            ky_singer: ky_singer,
-            ky_songNumber: ky_songNumber,
-            gender: '?',
-            pitchNum: 0,
-            search_keyword_title_singer: tj_title + tj_singer,
-            search_keyword_singer_title: tj_singer + tj_title));
+            tj_title,
+            tj_singer,
+            tj_songNumber,
+            ky_title,
+            ky_singer,
+            ky_songNumber,
+            '?',
+            0,
+            tj_title + tj_singer,
+            tj_singer + tj_title));
       }
       Note note = Note(
         tj_title,
@@ -482,7 +499,6 @@ class MusicSearchItemLists extends ChangeNotifier {
             string.pitchNum <= userMaxPitch + 1))
         .toList();
     isChecked = List<bool>.filled(highestFoundItems.length, false);
-    
 
     notifyListeners();
   }
@@ -711,5 +727,29 @@ class MusicSearchItemLists extends ChangeNotifier {
         .where((e) => (e.tj_singer == singer && e.tj_title != title))
         .toList();
     return result;
+  }
+
+  // AI추천 곡 저장
+  void saveAiRecommendationList(String response) async{
+    aiRecommendationList = [];
+    String tmp = "";
+    for (int i = 0; i < response.length; i++) {
+      if (response[i].compareTo("0") >= 0 &&
+          (response[i].compareTo('9') == 0 ||
+              response[i].compareTo('9') == -1)) {
+        tmp += response[i];
+      } else {
+        if (tmp.isNotEmpty) {
+          for (FitchMusic fitchMusic in combinedSongList) {
+            if (fitchMusic.tj_songNumber == tmp) {
+              aiRecommendationList.add(fitchMusic);
+              break;
+            }
+          }
+          tmp = "";
+        }
+      }
+    }
+    await storage.write(key: 'aiRecommendationList', value: jsonEncode(aiRecommendationList));
   }
 }

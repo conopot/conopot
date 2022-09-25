@@ -47,7 +47,7 @@ class CustomizeRecommendationDetailScreen extends StatelessWidget {
                       width: defaultSize * 6.5,
                       child: Center(
                         child: Text(
-                          pitchNumToString[pitchNum],
+                          songNumber,
                           style: TextStyle(
                             color: kMainColor,
                             fontSize: defaultSize * 1.1,
