@@ -12,7 +12,7 @@ bool canShowOpenAd = true;
 class AppOpenAdManager {
   Map<String, String> APP_OPEN_UNIT_ID = {
     'android': 'ca-app-pub-7139143792782560/8356395062',
-    'ios': 'ca-app-pub-7139143792782560/5121811348',
+    'ios': 'ca-app-pub-7139143792782560/6434893013',
   };
 
   AppOpenAd? _appOpenAd;
