@@ -389,10 +389,7 @@ class NoteData extends ChangeNotifier {
       },
       child: Text(
         "취소",
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: kMainColor
-        ),
+        style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor),
       ),
     );
 
@@ -538,7 +535,10 @@ class NoteData extends ChangeNotifier {
         deleteNote(note);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
-      child: Text("삭제", style: TextStyle(fontWeight: FontWeight.w600,)),
+      child: Text("삭제",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
     );
 
     Widget cancelButton = ElevatedButton(
@@ -552,7 +552,8 @@ class NoteData extends ChangeNotifier {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text("취소", style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+        child: Text("취소",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
 
     AlertDialog alert = AlertDialog(
       content: Text(
@@ -914,7 +915,8 @@ class NoteData extends ChangeNotifier {
             Navigator.of(context).pop();
           },
           child: Text("가져오기",
-              style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor))),
+              style:
+                  TextStyle(fontWeight: FontWeight.w600, color: kMainColor))),
     );
 
     AlertDialog alert = AlertDialog(
@@ -922,11 +924,13 @@ class NoteData extends ChangeNotifier {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Center(
               child: Text("백업 및 가져오기",
-                  style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
           SizedBox(height: defaultSize * 2),
           Text(
             "현재 애창곡 노트에 저장한 애창곡들을 서버에 백업하고 핸드폰이 바뀌거나 앱을 삭제 하더라도 편리하게 다시 가져올 수 있어요!",
-            style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
+            style: TextStyle(
+                color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
           )
         ]),
       ),
@@ -947,6 +951,8 @@ class NoteData extends ChangeNotifier {
 
   // 저장한 노트들 백업하기
   Future<void> saveNotes() async {
+    //!event: 내정보_뷰__백업하기
+    Analytics_config().backUpNoteEvent();
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     String url = '$serverURL/user/backup/save';
     String? jwtToken = await storage.read(key: 'jwt');
@@ -975,6 +981,8 @@ class NoteData extends ChangeNotifier {
 
   // 저장한 노트들 가져오기
   Future<void> loadNotes(BuildContext context) async {
+    //!event: 내정보_뷰__가져오기
+    Analytics_config().loadNoteEvent();
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     String url = '$serverURL/user/backup/load';
     String? jwtToken = await storage.read(key: 'jwt');
@@ -1088,6 +1096,8 @@ class NoteData extends ChangeNotifier {
 
   // 회원탈퇴
   Future<void> deleteAccount() async {
+    //!event: 내정보_뷰__탈퇴하기
+    Analytics_config().userunregisterEvent();
     //로그아웃 처리
     await logoutAccount();
 
@@ -1111,6 +1121,8 @@ class NoteData extends ChangeNotifier {
 
   // 로그아웃
   Future<void> logoutAccount() async {
+    //!event: 내정보_뷰__로그아웃
+    Analytics_config().userlogoutEvent();
     //jwt 토큰 삭제
     await storage.delete(key: 'jwt');
     isLogined = false;

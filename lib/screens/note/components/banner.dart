@@ -17,26 +17,26 @@ class CarouselSliderBanner extends StatelessWidget {
   // int _kAdIndex;
 
   final imageIcons = [
-    "assets/icons/banner_mike.svg",
     "assets/icons/banner_cat.svg",
+    "assets/icons/banner_mike.svg",
     "assets/icons/banner_music_score.svg",
   ];
 
   final sentence1 = [
-    "노래방 전투력 측정 😎",
     "노래방에서 부를 노래를 찾고 계신가요? 😮",
+    "노래방 전투력 측정 😎",
     "최고음 표시가 가능한 것을 아시나요? 🧐",
   ];
 
   final sentence2 = [
-    "당신의 음역대를 측정해보세요",
     "추천탭에서 노래를 추천받아 보세요!",
+    "당신의 음역대를 측정해보세요",
     "우측 상단 [설정] - [애창곡 노트 설정]",
   ];
 
   final screen = [
-    PitchMainScreen(),
     Container(),
+    PitchMainScreen(),
     NoteSettingScreen(),
   ];
 
@@ -46,13 +46,13 @@ class CarouselSliderBanner extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // !event 배너 클릭 이벤트
-        if (itemIndex == 1) {
+        if (itemIndex == 0) {
           Analytics_config().noteViewBannerRecommandEvent();
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(2);
         } else {
-          if (itemIndex == 0) {
+          if (itemIndex == 1) {
             Analytics_config().noteViewBannerMeasureEvent();
           } else {
             Analytics_config().noteViewBannerNoteSettingEvent();

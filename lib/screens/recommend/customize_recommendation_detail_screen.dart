@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,6 +36,61 @@ class CustomizeRecommendationDetailScreen extends StatefulWidget {
 class _CustomizeRecommendationDetailScreenState
     extends State<CustomizeRecommendationDetailScreen> {
   final storage = new FlutterSecureStorage();
+
+  Map<String, String> AI_Recommand_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/8456175834',
+          'ios': 'ca-app-pub-7139143792782560/1894351507',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  int maxFailedLoadAttempts = 3;
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AI_Recommand_Interstitial_UNIT_ID[
+            Platform.isIOS ? 'ios' : 'android']!,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        ad.dispose();
+        createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
 
   void requestCFApi() async {
     widget.musicList.recommendRequest = true;
@@ -76,6 +135,12 @@ class _CustomizeRecommendationDetailScreenState
   }
 
   @override
+  void initState() {
+    _interstitialAd = createInterstitialAd();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     double screenHeight = SizeConfig.screenHeight;
@@ -87,10 +152,21 @@ class _CustomizeRecommendationDetailScreenState
         actions: [
           GestureDetector(
             onTap: () {
-              if (Provider.of<NoteData>(context, listen: false).userMusics.length < 5) {
+              //!event: 추천_뷰__AI추천_더보기
+              Analytics_config().clickReAIRecommendationEvent();
+              if (Provider.of<NoteData>(context, listen: false)
+                      .userMusics
+                      .length <
+                  5) {
                 EasyLoading.showError('최소 5개 이상의 노트를 추가해 주세요 🙀');
               } else {
                 requestCFApi();
+                //전면 광고
+                bool pitchMeasureInterstitialSetting = Firebase_Remote_Config()
+                    .remoteConfig
+                    .getBool('pitchMeasureInterstitialSetting');
+                if (pitchMeasureInterstitialSetting == true &&
+                    _interstitialAd != null) _showInterstitialAd();
               }
             },
             child: Center(

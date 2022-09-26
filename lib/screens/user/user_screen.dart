@@ -111,6 +111,7 @@ class _UserScreenState extends State<UserScreen> {
                           SizedBox(height: defaultSize * 1.5),
                           InkWell(
                             onTap: () {
+                              //!event:
                               (loginState == true)
                                   ? backUpDialog()
                                   : Fluttertoast.showToast(
@@ -319,6 +320,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   loginEnter() async {
+    //!event: 내정보_뷰__로그인
+    Analytics_config().userloginEvent();
     try {
       final result = await InternetAddress.lookup('example.com');
       //("인터넷 연결 성공");

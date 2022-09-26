@@ -36,19 +36,24 @@ class _RecommendScreenState extends State<RecommendScreen> {
       ) =>
           Scaffold(
         appBar: AppBar(
-          title: Text("추천",style: TextStyle(fontWeight: FontWeight.w700)),
+          title: Text("추천", style: TextStyle(fontWeight: FontWeight.w700)),
           centerTitle: false,
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-                  bottom: screenHeight * 0.3),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PitchDetectionBanner(musicList: musicList, notes: Provider.of<NoteData>(context, listen: true).notes,), // 음역대 측정하기 버튼 배너
+                PitchDetectionBanner(
+                  musicList: musicList,
+                  notes: Provider.of<NoteData>(context, listen: true).notes,
+                ), // 음역대 측정하기 버튼 배너
                 SizedBox(height: defaultSize * 2),
-                CustomizeRecommendation(musicList: musicList, notes:Provider.of<NoteData>(context, listen: true).notes,), // 맞춤 추천
+                CustomizeRecommendation(
+                  musicList: musicList,
+                  notes: Provider.of<NoteData>(context, listen: true).notes,
+                ), // 맞춤 추천
                 SizedBox(height: defaultSize * 2),
                 PopularSongRecommendation(), // 인기 추천
                 SizedBox(height: defaultSize * 2),

@@ -88,9 +88,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
               if (widget.musicList.aiRecommendationList.isNotEmpty)
                 GestureDetector(
                   onTap: () {
-                    //!event: 추천_뷰__맞춤_추천_더보기
-                    Analytics_config()
-                        .clickCustomizeRecommendationButtonEvent();
+                    //!event: 추천_뷰__AI추천_노트추가하러가기
+                    Analytics_config().clickAINoteAddRecommendationEvent();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -161,6 +160,8 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                 SizedBox(height: defaultSize * 1.5),
                 GestureDetector(
                   onTap: () {
+                    //!event: 추천_뷰__AI추천받기
+                    Analytics_config().clickAIRecommendationEvent();
                     requestCFApi();
                   },
                   child: Container(
@@ -194,23 +195,23 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                    "미안해요 분석을 실패했어요 😹",
+                Text("미안해요 분석을 실패했어요 😹",
                     style: TextStyle(
                         color: kPrimaryWhiteColor,
                         fontWeight: FontWeight.w400,
-                        fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                        fontSize: defaultSize * 1.5),
+                    textAlign: TextAlign.start),
                 SizedBox(height: defaultSize),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: defaultSize),
-                    child: Text(
-                        "1. 인터넷 연결을 확인해주세요.",
+                    child: Text("1. 인터넷 연결을 확인해주세요.",
                         style: TextStyle(
                             color: kPrimaryWhiteColor,
                             fontWeight: FontWeight.w400,
-                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                            fontSize: defaultSize * 1.5),
+                        textAlign: TextAlign.start),
                   ),
                 ),
                 SizedBox(height: defaultSize * 0.25),
@@ -223,21 +224,23 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                         style: TextStyle(
                             color: kPrimaryWhiteColor,
                             fontWeight: FontWeight.w400,
-                            fontSize: defaultSize * 1.5), textAlign: TextAlign.start),
+                            fontSize: defaultSize * 1.5),
+                        textAlign: TextAlign.start),
                   ),
                 ),
                 SizedBox(height: defaultSize * 1.5),
                 GestureDetector(
                   onTap: () {
+                    //!event: 추천_뷰__AI추천받기
+                    Analytics_config().clickAIRecommendationEvent();
                     requestCFApi();
                   },
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(defaultSize * 1.5,
-                        defaultSize, defaultSize * 1.5, defaultSize),
+                    padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,
+                        defaultSize * 1.5, defaultSize),
                     decoration: BoxDecoration(
                         color: kMainColor,
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(30))),
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Text(
                       "AI분석 요청하기",
                       style: TextStyle(

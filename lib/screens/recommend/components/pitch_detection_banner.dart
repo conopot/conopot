@@ -87,6 +87,8 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                           SizedBox(height: defaultSize * 1.25),
                           GestureDetector(
                             onTap: () {
+                              //!event: 추천_뷰__AI추천_더보기
+                              Analytics_config().userloginEvent();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
