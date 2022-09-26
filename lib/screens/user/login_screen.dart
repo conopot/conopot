@@ -63,31 +63,21 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: defaultSize),
               Platform.isIOS
-                  ? Container(
-                      margin: EdgeInsets.only(right: defaultSize * 4),
-                      child: SignInWithAppleButton(
-                          text: "Apple 로그인",
-                          height: 45,
-                          style: SignInWithAppleButtonStyle.whiteOutlined,
-                          iconAlignment: IconAlignment.left,
-                          onPressed: () async {
-                            final credential =
-                                await SignInWithApple.getAppleIDCredential(
-                                    scopes: [
-                                  AppleIDAuthorizationScopes.email,
-                                  AppleIDAuthorizationScopes.fullName,
-                                ]);
-                            // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
-                            // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
-                            // print(
-                            //     "authorizationCode: ${credential.authorizationCode}");
-                            // print("identityToken: ${credential.identityToken}");
-                            // print("email: ${credential.email}");
-                            // print("firstName: ${credential.givenName}");
-                            // print("lastName: ${credential.familyName}");
-                            appleRegister(context, credential);
-                          }),
-                    )
+                  ? GestureDetector(
+                      onTap: () async {
+                        final credential =
+                            await SignInWithApple.getAppleIDCredential(scopes: [
+                          AppleIDAuthorizationScopes.email,
+                          AppleIDAuthorizationScopes.fullName,
+                        ]);
+                        // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
+                        // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
+                        appleRegister(context, credential);
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(right: defaultSize * 4),
+                          child:
+                              Image.asset("assets/images/sign_in_apple.png")))
                   : SizedBox.shrink(),
             ],
           ),
