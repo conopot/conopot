@@ -28,6 +28,12 @@
             </intent-filter>
         </activity>
         <activity
+        android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity"
+        android:exported="false" />
+        <activity
+            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
