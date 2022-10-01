@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:upgrader/upgrader.dart';
 import 'add_note_screen.dart';
 
 class NoteScreen extends StatefulWidget {
@@ -119,12 +120,22 @@ class _NoteScreenState extends State<NoteScreen> {
         body: Column(
           children: [
             CarouselSliderBanner(),
-            if (noteData.notes.isEmpty) ...[
-              EmptyNoteList()
-            ] else ...[
-              SizedBox(height: defaultSize),
-              NoteList()
-            ],
+            SizedBox(height: defaultSize),
+            Expanded(
+              child: Stack(children: [
+                if (noteData.notes.isEmpty) ...[
+                  Align(alignment: Alignment.center, child: EmptyNoteList(),),
+                ] else ...[
+                  SizedBox(height: defaultSize),
+                  NoteList()
+                ],
+                Container(
+                    margin: EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 0.0),
+                    child: UpgradeCard(
+                        upgrader:
+                            Upgrader(messages: UpgraderMessages(code: 'ko')))),
+              ]),
+            ),
           ],
         ),
       ),
