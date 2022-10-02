@@ -256,7 +256,7 @@ class _NoteScreenState extends State<NoteScreen> {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
         ),
         backgroundColor: kDialogColor,
         builder: (BuildContext context) {
@@ -298,6 +298,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   height: defaultSize * 3,
                 ),
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     Provider.of<NoteData>(context, listen: false)
                         .initEditNote();
@@ -322,6 +323,7 @@ class _NoteScreenState extends State<NoteScreen> {
                 ),
                 SizedBox(height: defaultSize * 1.8),
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
