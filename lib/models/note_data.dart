@@ -27,6 +27,8 @@ import 'note.dart';
 
 class NoteData extends ChangeNotifier {
   List<Note> notes = [];
+  List<bool> isChecked = []; // 노트 편집 체크여부 확인
+  Set<Note> deleteSet = {}; // 노트 여러개 삭제를 위한 set
   List<String> userMusics = [];
   bool emptyCheck = false;
   GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
@@ -294,7 +296,7 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  //local storage 에도 삭제 작업 필요
+  // 노트 삭제 함수
   Future<void> deleteNote(Note note) async {
     noteCount -= 1;
     notes.remove(note);
@@ -1151,5 +1153,119 @@ class NoteData extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  // 노트 편집시 전체 선택
+  checkAllSongs() {
+    isChecked = List<bool>.filled(isChecked.length, true);
+    for (int i = 0; i < isChecked.length; i++) {
+      deleteSet.add(notes[i]);
+    }
+    notifyListeners();
+  }
+
+  // 노트 편집시 전체 해제
+  unCheckAllSongs() {
+    isChecked = List<bool>.filled(isChecked.length, false);
+    deleteSet.clear();
+    notifyListeners();
+  }
+
+  // 노래 한곡 체크
+  checkSong(Note note) {
+    deleteSet.add(note);
+    notifyListeners();
+  }
+
+  // 노래 한곡 체크해제
+  unCheckSong(Note note) {
+    deleteSet.remove(note);
+    notifyListeners();
+  }
+
+  // 편집시 사용되는 리스트 초기화
+  initEditNote() {
+    deleteSet = {}; // deleteSet 초기화
+    isChecked = List<bool>.filled(notes.length, false);
+    notifyListeners();
+  }
+
+  // 노트 여러개 삭제 함수
+  Future<void> deleteMultipleNote() async {
+    noteCount -= deleteSet.length;
+    List<Note> temp_notes = [];
+    List<String> temp_userMusics = [];
+    for (int i = 0; i < notes.length; i++) {
+      if (deleteSet.contains(notes[i])) continue;
+      temp_notes.add(notes[i]);
+      temp_userMusics.add(notes[i].tj_songNumber);
+    }
+    notes = temp_notes;
+    userMusics = temp_userMusics;
+    await storage.write(key: 'notes', value: jsonEncode(notes));
+
+    Identify identify = Identify()
+      ..set('노트 개수', notes.length)
+      ..set('유저 노트 리스트', userMusics);
+
+    Analytics_config().userProps(identify);
+    notifyListeners();
+  }
+
+  //노트여러개 삭제여부 확인 팝업 함수
+  void showDeleteMultipleNoteDialog(context) {
+    Widget deleteButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () async {
+        await deleteMultipleNote();
+        if (isChecked.isNotEmpty) {
+          isChecked = List<bool>.filled(isChecked.length, false);
+        }
+        Navigator.pop(context);
+      },
+      child: Text("삭제",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+    );
+
+    Widget cancelButton = ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("취소",
+            style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor)));
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        "정말 총 ${deleteSet.length}개의 노래를 삭제하시겠습니까?",
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        deleteButton,
+      ],
+      backgroundColor: kDialogColor,
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 }

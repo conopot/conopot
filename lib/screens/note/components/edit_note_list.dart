@@ -1,57 +1,21 @@
-import 'dart:io';
-
-import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
-import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
-import 'package:conopot/models/pitch_item.dart';
-import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
-class NoteList extends StatefulWidget {
-  const NoteList({Key? key}) : super(key: key);
+class EditNoteList extends StatefulWidget {
+  EditNoteList({Key? key}) : super(key: key);
 
   @override
-  State<NoteList> createState() => _NoteListState();
+  State<EditNoteList> createState() => _EditNoteListState();
 }
 
 // 애창곡 노트뷰 노트 리스트
-class _NoteListState extends State<NoteList> {
+class _EditNoteListState extends State<EditNoteList> {
   double defaultSize = SizeConfig.defaultSize;
-
-  // 애창곡 노트 설정에 따라 달라지는 정보 (최고음 or TJ 노래번호)
-  Widget _userSettingInfo(int setNum, Note note, int userPitch) {
-    if (setNum == 0) {
-      return Center(
-        child: Text(
-          '${note.tj_songNumber}',
-          style: TextStyle(
-            color: kMainColor,
-            fontSize: defaultSize * 1.2,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
-    } else if (setNum == 1) {
-      if (note.pitchNum != 0) {
-        return Center(
-          child: Text(
-            pitchNumToString[note.pitchNum],
-            style: TextStyle(
-              color: kMainColor,
-              fontSize: defaultSize * 0.9,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
-      }
-    }
-    return Text('');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,56 +56,45 @@ class _NoteListState extends State<NoteList> {
                                 icon: Icons.delete_outlined,
                               ),
                             ]),
-                        child: GestureDetector(
-                          onTap: () {
-                            Analytics_config().viewNoteEvent(note);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NoteDetailScreen(
-                                  note: note,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: note.memo.isEmpty
-                                ? defaultSize * 7 * SizeConfig.textScaleFactor
-                                : defaultSize * 8,
-                            key: Key(
-                              '${noteData.notes.indexOf(note)}',
-                            ),
-                            margin:
-                                EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
-                            padding: EdgeInsets.only(right: defaultSize),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                              color: kPrimaryLightBlackColor,
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: defaultSize),
-                                  child: SizedBox(
-                                      width: defaultSize * 5,
-                                      child: Center(
-                                        child: _userSettingInfo(
-                                            Provider.of<MusicSearchItemLists>(
-                                                    context,
-                                                    listen: true)
-                                                .userNoteSetting,
-                                            note,
-                                            Provider.of<MusicSearchItemLists>(
-                                                    context,
-                                                    listen: true)
-                                                .userMaxPitch),
-                                      )),
-                                ),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Container(
+                          height: note.memo.isEmpty
+                              ? defaultSize * 7 * SizeConfig.textScaleFactor
+                              : defaultSize * 8,
+                          key: Key(
+                            '${noteData.notes.indexOf(note)}',
+                          ),
+                          margin:
+                              EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8)),
+                            color: kPrimaryLightBlackColor,
+                          ),
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                  checkColor: kMainColor,
+                                  activeColor: Colors.transparent,
+                                  side: BorderSide(color: kPrimaryLightGreyColor),
+                                  shape: CircleBorder(),
+                                  value: noteData.isChecked[
+                                      noteData.notes.indexOf(note)],
+                                  onChanged: (bool? val) {
+                                    // deleteSet에 삭제할 노래들을 관리
+                                    if (val == true) {
+                                      noteData.checkSong(note);
+                                    } else {
+                                      noteData.unCheckSong(note);
+                                    }
+                                    setState(() {
+                                      noteData.isChecked[noteData.notes
+                                          .indexOf(note)] = val!;
+                                    });
+                                  }),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
@@ -182,7 +135,8 @@ class _NoteListState extends State<NoteList> {
                                           child: Text(
                                             note.memo,
                                             style: TextStyle(
-                                                color: kPrimaryLightWhiteColor,
+                                                color:
+                                                    kPrimaryLightWhiteColor,
                                                 fontSize: defaultSize * 1.2,
                                                 fontWeight: FontWeight.w400),
                                           ),
@@ -190,9 +144,19 @@ class _NoteListState extends State<NoteList> {
                                       )
                                     ]
                                   ],
-                                )),
-                              ],
-                            ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize),
+                                child: ReorderableDragStartListener(
+                                    index: noteData.notes.indexOf(note),
+                                    child: Icon(
+                                      Icons.drag_handle,
+                                      color: kPrimaryLightGreyColor,
+                                    )),
+                              ),
+                            ],
                           ),
                         )),
                   );

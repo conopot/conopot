@@ -65,8 +65,7 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                 margin: EdgeInsets.fromLTRB(
                     defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                      defaultSize, defaultSize, 0, defaultSize),
+                  padding: EdgeInsets.fromLTRB(0, defaultSize, 0, defaultSize),
                   margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -74,48 +73,6 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '취중고백',
-                            style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 1.4,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '김민석',
-                            style: TextStyle(
-                              color: kPrimaryLightWhiteColor,
-                              fontSize: defaultSize * 1.2,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: defaultSize),
-                          Container(
-                            padding: EdgeInsets.all(defaultSize * 0.5),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: kPrimaryGreyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              '요즘 유명한 노래',
-                              style: TextStyle(
-                                  color: kPrimaryLightWhiteColor,
-                                  fontSize: defaultSize * 1.2,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          )
-                        ],
-                      )),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: defaultSize),
                         child: SizedBox(
@@ -130,6 +87,51 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                               ),
                             )),
                       ),
+                      Expanded(
+                          child: Padding(
+                        padding: EdgeInsets.only(right: defaultSize),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '취중고백',
+                              style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.4,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '김민석',
+                              style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.2,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: defaultSize),
+                            Container(
+                              padding: EdgeInsets.all(defaultSize * 0.5),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: kPrimaryGreyColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Text(
+                                '요즘 유명한 노래',
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontSize: defaultSize * 1.2,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
                     ],
                   ),
                 ),
@@ -162,12 +164,11 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                   ],
                 ),
               ),
-               Container(
+              Container(
                 margin: EdgeInsets.fromLTRB(
                     defaultSize, 0, defaultSize * 0.5, defaultSize * 0.5),
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                      defaultSize, defaultSize, 0, defaultSize),
+                  padding: EdgeInsets.fromLTRB(0, defaultSize, 0, defaultSize),
                   margin: EdgeInsets.fromLTRB(0, 0, defaultSize * 0.5, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -175,48 +176,6 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '취중고백',
-                            style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 1.4,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '김민석',
-                            style: TextStyle(
-                              color: kPrimaryLightWhiteColor,
-                              fontSize: defaultSize * 1.2,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: defaultSize),
-                          Container(
-                            padding: EdgeInsets.all(defaultSize * 0.5),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: kPrimaryGreyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              '요즘 유명한 노래',
-                              style: TextStyle(
-                                  color: kPrimaryLightWhiteColor,
-                                  fontSize: defaultSize * 1.2,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          )
-                        ],
-                      )),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: defaultSize),
                         child: SizedBox(
@@ -231,6 +190,51 @@ class _NoteSettingScreenState extends State<NoteSettingScreen> {
                               ),
                             )),
                       ),
+                      Expanded(
+                          child: Padding(
+                        padding: EdgeInsets.only(right: defaultSize),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '취중고백',
+                              style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.4,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '김민석',
+                              style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.2,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: defaultSize),
+                            Container(
+                              padding: EdgeInsets.all(defaultSize * 0.5),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: kPrimaryGreyColor,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Text(
+                                '요즘 유명한 노래',
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontSize: defaultSize * 1.2,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
                     ],
                   ),
                 ),
