@@ -79,7 +79,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("저장한 노트 수 : ${widget.notes.length}",
+                          Text("저장한 노래 수 : ${widget.notes.length}",
                               style: TextStyle(
                                   color: kPrimaryWhiteColor,
                                   fontSize: defaultSize * 1.5,
@@ -102,7 +102,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               child: Text(
-                                "노트 추가하러 가기",
+                                "노래 추가하기",
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 1.5,

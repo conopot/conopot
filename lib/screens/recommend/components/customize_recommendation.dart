@@ -132,12 +132,17 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
             decoration: BoxDecoration(
                 color: kPrimaryLightBlackColor,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Center(
-                child: Text("분석을 위해 노트를 최소 5개이상 추가해주세요 😸",
-                    style: TextStyle(
-                        color: kPrimaryWhiteColor,
-                        fontWeight: FontWeight.w400,
-                        fontSize: defaultSize * 1.5))),
+            child: Column(
+              children: [
+                Center(
+                    child: Text("분석을 위해 노래를 최소 5개이상 추가해주세요 😸",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: defaultSize * 1.5))),
+                
+              ],
+            ),
           )
         ] else if (widget.notes.length >= 5 &&
             widget.musicList.recommendRequest == false) ...[
