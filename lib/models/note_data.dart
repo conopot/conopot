@@ -30,7 +30,7 @@ class NoteData extends ChangeNotifier {
   List<String> userMusics = [];
   bool emptyCheck = false;
   GlobalKey globalKey = GlobalKey(); // 배너 클릭시 추천탭으로 이동시키기 위한 globalKey
-  TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
   late int noteCount;
   late bool _isSubmitted; // 리뷰 또는 채널톡 의견 제출 여부
   late final _currentTime; // 현재 시간
