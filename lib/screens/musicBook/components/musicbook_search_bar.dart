@@ -27,7 +27,7 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   void dispose() {
-    Provider.of<NoteData>(context, listen: false).controller.dispose();
+    //Provider.of<NoteData>(context, listen: false).controller.dispose();
     _debounce.dispose();
     super.dispose();
   }
