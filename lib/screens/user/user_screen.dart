@@ -8,6 +8,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/login_screen.dart';
+import 'package:conopot/screens/user/profile_modification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -60,7 +61,7 @@ class _UserScreenState extends State<UserScreen> {
                         onTap: () {
                           (loginState == false)
                               ? loginEnter()
-                              : SizedBox.shrink();
+                              : modifyProfile();
                         },
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,12 +92,10 @@ class _UserScreenState extends State<UserScreen> {
                                 ],
                               ),
                               Spacer(),
-                              (loginState == false)
-                                  ? Icon(
-                                      Icons.chevron_right,
-                                      color: kPrimaryWhiteColor,
-                                    )
-                                  : SizedBox.shrink(),
+                              Icon(
+                                Icons.chevron_right,
+                                color: kPrimaryWhiteColor,
+                              )
                             ]),
                       ),
                     ),
@@ -337,5 +336,10 @@ class _UserScreenState extends State<UserScreen> {
           textColor: kPrimaryWhiteColor,
           fontSize: defaultSize * 1.6);
     }
+  }
+
+  modifyProfile() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ProfileModificationScreen()));
   }
 }
