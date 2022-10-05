@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import 'package:http/http.dart' as http;
 
 class ProfileModificationScreen extends StatefulWidget {
   const ProfileModificationScreen({super.key});
@@ -18,6 +25,7 @@ class ProfileModificationScreen extends StatefulWidget {
 
 class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   late TextEditingController _controller;
+  final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -52,8 +60,8 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                       onTap: () {
                         EasyLoading.showInfo("서비스 준비중입니다 😿");
                       },
-                      child:
-                          Text("프로필 아이콘 변경", style: TextStyle(color: kMainColor)))
+                      child: Text("프로필 아이콘 변경",
+                          style: TextStyle(color: kMainColor)))
                 ],
               ),
             ],
@@ -91,7 +99,73 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
           ),
           SizedBox(height: defaultSize * 5),
           GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              //사전에 인터넷 연결 꼭 체크할것!!!
+
+              //닉네임 변경 로직
+              if (2 <= (_controller.text.trim()).length &&
+                  (_controller.text.trim()).length <= 10) {
+                //print("올바른 글자수");
+                //api 호출
+                String? serverURL = dotenv.env['USER_SERVER_URL'];
+                String url = '$serverURL/user/account/nickname';
+                String? jwtToken = await storage.read(key: 'jwt');
+                try {
+                  final response = await http.put(
+                    Uri.parse(url),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                      'Authorization': jwtToken!,
+                    },
+                    body: jsonEncode({
+                      "username": (_controller.text.trim()),
+                    }),
+                  );
+
+                  //print(response.statusCode);
+
+                  //이미 존재하는 닉네임이라면
+                  if (response.statusCode == 503) {
+                    Fluttertoast.showToast(
+                        msg: "이미 존재하는 닉네임입니다 😢",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Color(0xFFFF7878),
+                        textColor: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.6);
+                  }
+                  //응답이 제대로 왔다면
+                  else if (response.statusCode == 200) {
+                    //jwt 토큰 반환
+                    String? jwtToken = response.headers['authorization'];
+
+                    //로그인 성공 시 처리
+                    //로컬 스토리지에 jwt 토큰 저장
+                    Provider.of<NoteData>(context, listen: false)
+                        .writeJWT(jwtToken);
+
+                    Provider.of<NoteData>(context, listen: false)
+                        .initAccountInfo();
+                    //변경할 수 있다면
+                    Navigator.of(context).pop();
+                  }
+                } catch (err) {
+                  //print(err);
+                }
+              } else {
+                //print("잘못된 글자수");
+                //닉네임 글자 제한 처리
+                Fluttertoast.showToast(
+                    msg: "2글자 이상 10글자 이하로 설정해주세요 😢",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Color(0xFFFF7878),
+                    textColor: kPrimaryWhiteColor,
+                    fontSize: defaultSize * 1.6);
+              }
+            },
             child: Container(
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),

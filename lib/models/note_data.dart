@@ -480,7 +480,9 @@ class NoteData extends ChangeNotifier {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              Text("${songNumber}", style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.7)),
+              Text("${songNumber}",
+                  style: TextStyle(
+                      color: kMainColor, fontSize: defaultSize * 1.7)),
               Spacer(),
               GestureDetector(
                 onTap: () async {
@@ -492,7 +494,10 @@ class NoteData extends ChangeNotifier {
                 },
                 child: Column(children: [
                   SvgPicture.asset("assets/icons/youtube.svg"),
-                  Text("유튜브 검색", style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 0.9)),
+                  Text("유튜브 검색",
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 0.9)),
                 ]),
               ),
             ],
@@ -1228,7 +1233,11 @@ class NoteData extends ChangeNotifier {
 
     if (jwtToken != null) {
       Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
-      userNickname = payload["nickname"];
+      if (payload["username"] != null) {
+        userNickname = payload["username"];
+      } else {
+        userNickname = payload["nickname"];
+      }
     }
 
     String? storage_backupdate = await storage.read(key: 'backupdate');
