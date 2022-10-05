@@ -27,7 +27,7 @@ class _SearchListState extends State<SearchList> {
       ? {
           //release 모드일때 (실기기 사용자)
           'android': 'ca-app-pub-7139143792782560/3104068385',
-          'ios': 'ca-app-pub-7139143792782560/9111358943',
+          'ios': 'ca-app-pub-1461012385298546/4166176101',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/2247696110',
@@ -38,7 +38,7 @@ class _SearchListState extends State<SearchList> {
       ? {
           //release 모드일때 (실기기 사용자)
           'android': 'ca-app-pub-7139143792782560/3200544377',
-          'ios': 'ca-app-pub-7139143792782560~4000301361',
+          'ios': 'ca-app-pub-1461012385298546/4166176101',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/2247696110',
@@ -53,7 +53,10 @@ class _SearchListState extends State<SearchList> {
   // TODO: Add _getDestinationItemIndex()
   int _getDestinationItemIndex(int rawIndex) {
     // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
-    if (isLoaded1 == true && isLoaded2 == true) {
+    if (_ad_odd != null &&
+        _ad_even != null &&
+        isLoaded1 == true &&
+        isLoaded2 == true) {
       return rawIndex - 1 - (rawIndex ~/ _kAdIndex);
     }
     return rawIndex;
@@ -124,11 +127,15 @@ class _SearchListState extends State<SearchList> {
     return widget.musicList.foundItems.isNotEmpty
         ? ListView.builder(
             itemCount: widget.musicList.foundItems.length +
-                ((isLoaded1 && isLoaded2)
+                ((_ad_odd != null && _ad_even != null && isLoaded1 && isLoaded2)
                     ? (widget.musicList.foundItems.length ~/ _kAdIndex) + 1
                     : 0),
             itemBuilder: (context, index) {
-              if ((index % _kAdIndex == 0) && (isLoaded1 && isLoaded2)) {
+              if ((index % _kAdIndex == 0) &&
+                  (_ad_odd != null &&
+                      _ad_even != null &&
+                      isLoaded1 &&
+                      isLoaded2)) {
                 return Container(
                   height: 80.0,
                   margin: EdgeInsets.fromLTRB(

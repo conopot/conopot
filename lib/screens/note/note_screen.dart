@@ -31,7 +31,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   Map<String, String> Search_Native_UNIT_ID = {
     'android': 'ca-app-pub-1461012385298546/5670829461',
-    'ios': 'ca-app-pub-1461012385298546/4166176101',
+    'ios': 'ca-app-pub-1461012385298546/416617610',
   };
 
   bool isLoaded = false;
@@ -82,11 +82,11 @@ class _NoteScreenState extends State<NoteScreen> {
           actions: [
             // 저장한 노래가 있을 경우만 아이콘 표시
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
-                IconButton(
-                    onPressed: () {
-                      showNoteListOption(context);
-                    },
-                    icon: Icon(Icons.more_horiz_outlined)),
+              IconButton(
+                  onPressed: () {
+                    showNoteListOption(context);
+                  },
+                  icon: Icon(Icons.more_horiz_outlined)),
             ] else ...[
               if (_listSate == 1) ...[
                 TextButton(
@@ -96,7 +96,9 @@ class _NoteScreenState extends State<NoteScreen> {
                         _listSate = 0;
                       });
                     },
-                    child: Text("완료", style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.6)))
+                    child: Text("완료",
+                        style: TextStyle(
+                            color: kMainColor, fontSize: defaultSize * 1.6)))
               ]
             ]
           ],
@@ -155,7 +157,9 @@ class _NoteScreenState extends State<NoteScreen> {
                                     ),
                                     Text(
                                       "전체 선택",
-                                      style: TextStyle(color: kMainColor, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontWeight: FontWeight.w500),
                                     )
                                   ],
                                 ),
@@ -173,7 +177,9 @@ class _NoteScreenState extends State<NoteScreen> {
                                     ),
                                     Text(
                                       "전체 해제",
-                                      style: TextStyle(color: kMainColor, fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontWeight: FontWeight.w500),
                                     )
                                   ],
                                 ),
@@ -191,13 +197,13 @@ class _NoteScreenState extends State<NoteScreen> {
                                     Icon(
                                       Icons.delete_forever_outlined,
                                       color: noteData.deleteSet.isNotEmpty
-                                              ? kPrimaryRedColor
-                                              : kPrimaryLightGreyColor,
+                                          ? kPrimaryRedColor
+                                          : kPrimaryLightGreyColor,
                                     ),
                                     Text(
                                       "삭제",
                                       style: TextStyle(
-                                        fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w500,
                                           color: noteData.deleteSet.isNotEmpty
                                               ? kPrimaryRedColor
                                               : kPrimaryLightGreyColor),
@@ -221,7 +227,9 @@ class _NoteScreenState extends State<NoteScreen> {
                   child: Center(
                     child: Text(
                       "모든 노래가 삭제 되었습니다",
-                      style: TextStyle(color: kPrimaryLightWhiteColor, fontSize: defaultSize * 1.5),
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          fontSize: defaultSize * 1.5),
                     ),
                   ),
                 )
@@ -246,8 +254,8 @@ class _NoteScreenState extends State<NoteScreen> {
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))
-        ),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
         backgroundColor: kDialogColor,
         builder: (BuildContext context) {
           return Container(
@@ -271,7 +279,10 @@ class _NoteScreenState extends State<NoteScreen> {
                     Spacer(),
                     Text(
                       "목록 옵션",
-                      style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 1.5, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w500),
                     ),
                     Spacer(),
                     GestureDetector(
@@ -280,7 +291,8 @@ class _NoteScreenState extends State<NoteScreen> {
                         },
                         child: Text(
                           "취소",
-                          style: TextStyle(color: kMainColor, fontSize: defaultSize * 1.4),
+                          style: TextStyle(
+                              color: kMainColor, fontSize: defaultSize * 1.4),
                         ))
                   ],
                 ),
