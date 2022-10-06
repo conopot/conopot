@@ -595,7 +595,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 검색 필터링 기능(전체검색)
   void runCombinedFilter(String enteredKeyword) {
-    EasyDebounce.debounce('searching', Duration(milliseconds: 500), () {
       highestResults = [];
       //공백 제거 && 대문자 → 소문자 변경
       enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
@@ -627,7 +626,6 @@ class MusicSearchItemLists extends ChangeNotifier {
       Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
       notifyListeners();
-    });
   }
 
   // 검색 필터링 기능(인기검색)

@@ -1,5 +1,6 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/debounce.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +14,18 @@ class NoteSearchBar extends StatefulWidget {
 
 class _NoteSearchBarState extends State<NoteSearchBar> {
   final TextEditingController _controller = TextEditingController();
+  final Debounce _debounce = Debounce(delay: Duration(milliseconds: 500));
   double defaultSize = SizeConfig.defaultSize;
 
   void _clearTextField() {
     _controller.text = "";
     widget.musicList.runCombinedFilter(_controller.text);
+  }
+
+  @override
+  void dispose() {
+    _debounce.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,8 +39,11 @@ class _NoteSearchBarState extends State<NoteSearchBar> {
       child: TextField(
         style: TextStyle(color: kPrimaryWhiteColor),
         controller: _controller,
-        onChanged: (text) => {widget.musicList.runCombinedFilter(text)},
-        enableInteractiveSelection: false,
+        onChanged: (text) => {
+          _debounce.call(() {
+            widget.musicList.runCombinedFilter(text);
+          })
+        },
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,
         keyboardType: TextInputType.name,
