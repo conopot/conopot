@@ -20,7 +20,7 @@ class Firebase_Remote_Config {
 
       'noteAddIconChange' : 'A',
       'navigationOrderChange' : 'A',
-      'noteAddMentChange' : 'A'
+      'noteAddMentChange' : 'A',
       'recommandJPOP': 'A',
       'recommandAIMent': 'A',
     });
