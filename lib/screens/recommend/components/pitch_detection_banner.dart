@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
@@ -23,6 +24,8 @@ class PitchDetectionBanner extends StatefulWidget {
 class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
   double defaultSize = SizeConfig.defaultSize;
   int _current = 0;
+  var recommandAIMent =
+      Firebase_Remote_Config().remoteConfig.getString('recommandAIMent');
   final CarouselController _controller = CarouselController();
   List<String> bannerList = ["Item1", "Item2"];
 
@@ -42,36 +45,75 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "내 애창곡 노트를 바탕으로",
-                    style: TextStyle(
-                        color: kPrimaryWhiteColor,
-                        fontSize: defaultSize * 1.7,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: "AI",
-                            style: TextStyle(
-                                color: kMainColor,
-                                fontSize: defaultSize * 2.6,
-                                fontWeight: FontWeight.w600)),
-                        TextSpan(
-                            text: "가 분석한",
-                            style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 2.5,
-                                fontWeight: FontWeight.w600))
-                      ],
-                    ),
-                  ),
-                  Text("노래 추천 받아 보세요!",
-                      style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontSize: defaultSize * 2.5,
-                          fontWeight: FontWeight.w600)),
+                  (recommandAIMent == 'A')
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "내 애창곡 노트를 바탕으로",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 1.7,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: "AI",
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontSize: defaultSize * 2.6,
+                                          fontWeight: FontWeight.w600)),
+                                  TextSpan(
+                                      text: "가 분석한",
+                                      style: TextStyle(
+                                          color: kPrimaryWhiteColor,
+                                          fontSize: defaultSize * 2.5,
+                                          fontWeight: FontWeight.w600))
+                                ],
+                              ),
+                            ),
+                            Text("노래 추천 받아 보세요!",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 2.5,
+                                    fontWeight: FontWeight.w600)),
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "사용자 데이터를 바탕으로 분석한",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 1.7,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: defaultSize * 0.3,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: "취향저격",
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontSize: defaultSize * 2.0,
+                                          fontWeight: FontWeight.w600)),
+                                  TextSpan(
+                                      text: " 노래들 받아보기",
+                                      style: TextStyle(
+                                          color: kPrimaryWhiteColor,
+                                          fontSize: defaultSize * 2.0,
+                                          fontWeight: FontWeight.w600))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                   SizedBox(height: defaultSize * 2),
                   Row(
                     mainAxisSize: MainAxisSize.min,
