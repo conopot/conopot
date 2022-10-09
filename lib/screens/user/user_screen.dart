@@ -66,7 +66,7 @@ class _UserScreenState extends State<UserScreen> {
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SvgPicture.asset("assets/icons/profile.svg"),
+                              userProfile(),
                               SizedBox(width: defaultSize * 2),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,5 +341,24 @@ class _UserScreenState extends State<UserScreen> {
   modifyProfile() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => ProfileModificationScreen()));
+  }
+
+  userProfile() {
+    if (Provider.of<NoteData>(context, listen: true).userImage == "") {
+      // 기본 이미지
+      return SvgPicture.asset("assets/icons/profile.svg");
+    }
+    //인터넷 연결 확인
+    try {
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(90.0),
+          child: Image.network(
+            Provider.of<NoteData>(context, listen: true).userImage,
+            scale: defaultSize,
+          ));
+    } on SocketException {
+      // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지
+      return SvgPicture.asset("assets/icons/profile.svg");
+    }
   }
 }

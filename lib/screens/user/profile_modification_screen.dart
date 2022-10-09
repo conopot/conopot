@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -26,6 +27,7 @@ class ProfileModificationScreen extends StatefulWidget {
 class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   late TextEditingController _controller;
   final storage = new FlutterSecureStorage();
+  double defaultSize = SizeConfig.defaultSize;
 
   @override
   void initState() {
@@ -53,7 +55,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                       height: defaultSize * 10,
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       child: FittedBox(
-                        child: SvgPicture.asset("assets/icons/profile.svg"),
+                        child: userProfile(),
                       )),
                   SizedBox(height: defaultSize * 1.5),
                   GestureDetector(
@@ -189,5 +191,24 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
         ]),
       ),
     );
+  }
+
+  userProfile() {
+    if (Provider.of<NoteData>(context, listen: true).userImage == "") {
+      // 기본 이미지
+      return SvgPicture.asset("assets/icons/profile.svg");
+    }
+    //인터넷 연결 확인
+    try {
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(90.0),
+          child: Image.network(
+            Provider.of<NoteData>(context, listen: true).userImage,
+            scale: defaultSize,
+          ));
+    } on SocketException {
+      // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지
+      return SvgPicture.asset("assets/icons/profile.svg");
+    }
   }
 }

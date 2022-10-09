@@ -50,6 +50,7 @@ class NoteData extends ChangeNotifier {
   bool isLogined = false; //사용자 로그인 여부
   String userNickname = "사용자 ID";
   String backUpDate = "없음";
+  String userImage = "";
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -1218,6 +1219,7 @@ class NoteData extends ChangeNotifier {
     //jwt 토큰 삭제
     await storage.delete(key: 'jwt');
     isLogined = false;
+    userImage = "";
     notifyListeners();
   }
 
@@ -1237,6 +1239,11 @@ class NoteData extends ChangeNotifier {
         userNickname = payload["username"];
       } else {
         userNickname = payload["nickname"];
+      }
+      if (payload["userimage"] != null) {
+        userImage = payload["userimage"];
+      } else {
+        userImage = payload["userimage"];
       }
     }
 
