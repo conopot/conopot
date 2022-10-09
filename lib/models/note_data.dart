@@ -428,6 +428,8 @@ class NoteData extends ChangeNotifier {
     //!event: 일반_검색_뷰__노래_유튜브
     Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
+    var noteAddIconChange = Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
+    print("여기2: ${noteAddIconChange}");
 
     Widget okButton = ElevatedButton(
       onPressed: () {
@@ -462,10 +464,22 @@ class NoteData extends ChangeNotifier {
               fontSize: defaultSize * 1.6);
         }
       },
-      child: Text("애창곡 노트에 추가하기",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-          )),
+      child: IntrinsicWidth(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            (noteAddIconChange == 'A')
+                ? SizedBox.shrink()
+                : Icon(
+                    Icons.add,
+                  ),
+            Text("애창곡 노트에 추가하기",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                )),
+          ],
+        ),
+      ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(kMainColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

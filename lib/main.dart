@@ -7,6 +7,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,10 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  var token = await _firebaseMessaging.getToken();
+  print("여기2 ${token}");
 
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(
