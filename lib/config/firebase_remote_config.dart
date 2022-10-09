@@ -16,6 +16,7 @@ class Firebase_Remote_Config {
       'quitBannerSetting': false,
       'appopenadSetting': false,
       'pitchMeasureInterstitialSetting': false,
+      'aaTest': 'A',
     });
     RemoteConfigValue(null, ValueSource.valueStatic);
     await remoteConfig.fetchAndActivate();
