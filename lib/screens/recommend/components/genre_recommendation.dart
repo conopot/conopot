@@ -12,15 +12,24 @@ class GenreRecommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    List<String> titleList = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', '트로트'];
+    List<String> titleList = [
+      '발라드',
+      '일본 노래',
+      '힙합',
+      '알앤비',
+      '팝',
+      '만화 주제가',
+      '트로트'
+    ];
     List<List<MusicSearchItem>> songList = [
-    RecommendationItemList.balladeList,
-    RecommendationItemList.hiphopList,
-    RecommendationItemList.rnbList,
-    RecommendationItemList.popList,
-    RecommendationItemList.cartoonList,
-    RecommendationItemList.oldList,
-  ];
+      RecommendationItemList.balladeList,
+      RecommendationItemList.jpopList,
+      RecommendationItemList.hiphopList,
+      RecommendationItemList.rnbList,
+      RecommendationItemList.popList,
+      RecommendationItemList.cartoonList,
+      RecommendationItemList.oldList,
+    ];
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
@@ -40,29 +49,33 @@ class GenreRecommendation extends StatelessWidget {
               itemCount: titleList.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: (){
-                    switch(index) {
+                  onTap: () {
+                    switch (index) {
                       case 0:
                         //event!: 추천_뷰__발라드
                         Analytics_config().clickBalladRecommendationEvent();
                         break;
                       case 1:
+                        //event!: 추천_뷰__일본노래
+                        Analytics_config().clickJPOPRecommendationEvent();
+                        break;
+                      case 2:
                         //event!: 추천_뷰__힙합
                         Analytics_config().clickHipHopRecommendationEvent();
                         break;
-                      case 2:
+                      case 3:
                         //event!: 추천_뷰__알앤비
                         Analytics_config().clickRnbRecommendationEvent();
                         break;
-                      case 3:
+                      case 4:
                         //event!: 추천_뷰_팝
                         Analytics_config().clickPopRecommendationEvent();
                         break;
-                      case 4:
+                      case 5:
                         //event!: 추천_뷰__만화주제가
                         Analytics_config().clickCarttonRecommendationEvent();
                         break;
-                      case 5:
+                      case 6:
                         //event!: 추천_뷰__트로트
                         Analytics_config().clickOldrecommendationEvent();
                         break;
@@ -94,7 +107,10 @@ class GenreRecommendation extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(
                               titleList[index],
-                              style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w600, fontSize: defaultSize * 1.5),
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: defaultSize * 1.5),
                             )),
                       ],
                     ),

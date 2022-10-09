@@ -250,6 +250,11 @@ class Analytics_config {
     event('추천_뷰__발라드', {});
   }
 
+  // !event: 추천_뷰__일본노래
+  void clickJPOPRecommendationEvent() {
+    event('추천_뷰__JPOP', {});
+  }
+
   // !event: 추천_뷰__힙합
   void clickHipHopRecommendationEvent() {
     event('추천_뷰__힙합', {});

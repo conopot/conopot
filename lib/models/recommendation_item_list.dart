@@ -16,6 +16,7 @@ class RecommendationItemList {
   static List<MusicSearchItem> oldList = [];
   static List<MusicSearchItem> popList = [];
   static List<MusicSearchItem> rnbList = [];
+  static List<MusicSearchItem> jpopList = [];
   //popular
   static List<MusicSearchItem> allTimeLegendList = [];
   //season
@@ -41,6 +42,7 @@ class RecommendationItemList {
       'genre/ballade',
       'genre/cartoon',
       'genre/hiphop',
+      'genre/jpop',
       'genre/old',
       'genre/pop',
       'genre/rnb',
@@ -68,19 +70,20 @@ class RecommendationItemList {
     parseMusics(contextList[4], balladeList);
     parseMusics(contextList[5], cartoonList);
     parseMusics(contextList[6], hiphopList);
-    parseMusics(contextList[7], oldList);
-    parseMusics(contextList[8], popList);
-    parseMusics(contextList[9], rnbList);
-    parseMusics(contextList[10], allTimeLegendList);
-    parseMusics(contextList[11], springList);
-    parseMusics(contextList[12], summerList);
-    parseMusics(contextList[13], fallList);
-    parseMusics(contextList[14], winterList);
-    parseMusics(contextList[15], duetList);
-    parseMusics(contextList[16], excitedList);
-    parseMusics(contextList[17], loveList);
-    parseMusics(contextList[18], rainList);
-    parseMusics(contextList[19], tiredList);
+    parseMusics(contextList[7], jpopList);
+    parseMusics(contextList[8], oldList);
+    parseMusics(contextList[9], popList);
+    parseMusics(contextList[10], rnbList);
+    parseMusics(contextList[11], allTimeLegendList);
+    parseMusics(contextList[12], springList);
+    parseMusics(contextList[13], summerList);
+    parseMusics(contextList[14], fallList);
+    parseMusics(contextList[15], winterList);
+    parseMusics(contextList[16], duetList);
+    parseMusics(contextList[17], excitedList);
+    parseMusics(contextList[18], loveList);
+    parseMusics(contextList[19], rainList);
+    parseMusics(contextList[20], tiredList);
   }
 
   void parseMusics(List<String> contents, List<MusicSearchItem> musicList) {
