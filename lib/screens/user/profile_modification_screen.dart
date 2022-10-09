@@ -196,15 +196,23 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   userProfile() {
     if (Provider.of<NoteData>(context, listen: true).userImage == "") {
       // 기본 이미지
-      return SvgPicture.asset("assets/icons/profile.svg");
+      return SizedBox(
+          width: defaultSize * 10,
+          height: defaultSize * 10,
+          child: SvgPicture.asset("assets/icons/profile.svg"));
     }
     //인터넷 연결 확인
     try {
       return ClipRRect(
           borderRadius: BorderRadius.circular(90.0),
-          child: Image.network(
-            Provider.of<NoteData>(context, listen: true).userImage,
-            scale: defaultSize,
+          child: SizedBox(
+            width: defaultSize * 10,
+            height: defaultSize * 10,
+            child: Image.network(
+              Provider.of<NoteData>(context, listen: true).userImage,
+              scale: defaultSize,
+              fit: BoxFit.cover,
+            ),
           ));
     } on SocketException {
       // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지

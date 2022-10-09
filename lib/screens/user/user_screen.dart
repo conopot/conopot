@@ -351,10 +351,14 @@ class _UserScreenState extends State<UserScreen> {
     //인터넷 연결 확인
     try {
       return ClipRRect(
-          borderRadius: BorderRadius.circular(90.0),
-          child: Image.network(
-            Provider.of<NoteData>(context, listen: true).userImage,
-            scale: defaultSize,
+          borderRadius: BorderRadius.circular(100),
+          child: SizedBox(
+            width: defaultSize * 5,
+            height: defaultSize * 5,
+            child: Image.network(
+              Provider.of<NoteData>(context, listen: true).userImage,
+              fit: BoxFit.cover,
+            ),
           ));
     } on SocketException {
       // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지

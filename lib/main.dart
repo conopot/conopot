@@ -26,10 +26,6 @@ Future<void> main() async {
 
   KakaoSdk.init(nativeAppKey: 'c5f3c164cf6f6bc40f417898b5284a66');
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  var token = await _firebaseMessaging.getToken();
-  print("여기2 ${token}");
-
   /// firebase crashlytics init
   runZonedGuarded<Future<void>>(
     () async {

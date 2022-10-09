@@ -45,12 +45,12 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  (recommandAIMent == 'A')
+                  (recommandAIMent == 'B')
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "내 애창곡 노트를 바탕으로",
+                              "애창곡노트에 노래 5개 이상 추가하고",
                               style: TextStyle(
                                   color: kPrimaryWhiteColor,
                                   fontSize: defaultSize * 1.7,
@@ -85,14 +85,21 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "사용자 데이터를 바탕으로 분석한",
+                              "애창곡 노트에 노래 5개이상 저장하고",
                               style: TextStyle(
                                   color: kPrimaryWhiteColor,
                                   fontSize: defaultSize * 1.7,
                                   fontWeight: FontWeight.w500),
                             ),
-                            SizedBox(
-                              height: defaultSize * 0.3,
+                              SizedBox(
+                              height: defaultSize * 0.5,
+                            ),
+                            Text(
+                              "사용자 데이터를 바탕으로 분석한",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 2.0,
+                                  fontWeight: FontWeight.w500),
                             ),
                             RichText(
                               text: TextSpan(
@@ -104,13 +111,16 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                                           fontSize: defaultSize * 2.0,
                                           fontWeight: FontWeight.w600)),
                                   TextSpan(
-                                      text: " 노래들 받아보기",
+                                      text: " 추천 리스트 받아보기",
                                       style: TextStyle(
                                           color: kPrimaryWhiteColor,
                                           fontSize: defaultSize * 2.0,
                                           fontWeight: FontWeight.w600))
                                 ],
                               ),
+                            ),
+                            SizedBox(
+                              height: defaultSize * 0.8,
                             ),
                           ],
                         ),
