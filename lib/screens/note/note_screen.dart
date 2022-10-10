@@ -29,41 +29,11 @@ class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
 
-  Map<String, String> Search_Native_UNIT_ID = {
-    'android': 'ca-app-pub-7139143792782560/3104068385',
-    'ios': 'ca-app-pub-7139143792782560/9111358943',
-  };
-
   bool isLoaded = false;
-
-  // TODO: Add a native ad instance
-  NativeAd? _ad;
 
   @override
   void initState() {
     super.initState();
-
-    //TODO: Create a NativeAd instance
-    _ad = NativeAd(
-      adUnitId: Search_Native_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-      factoryId: 'listTile',
-      request: AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _ad = ad as NativeAd;
-            isLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          // Releases an ad resource when it fails to load
-          ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
-
-    if (_ad != null) _ad!.load();
   }
 
   @override
@@ -218,7 +188,7 @@ class _NoteScreenState extends State<NoteScreen> {
                   ),
         body: Column(
           children: [
-            CarouselSliderBanner(_ad, isLoaded),
+            CarouselSliderBanner(),
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
                 EmptyNoteList()

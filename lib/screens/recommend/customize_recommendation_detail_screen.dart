@@ -38,7 +38,7 @@ class _CustomizeRecommendationDetailScreenState
   final storage = new FlutterSecureStorage();
   double defaultSize = SizeConfig.defaultSize;
 
-  bool isLoaded1 = false, isLoaded2 = false;
+  bool isLoaded1 = false;
 
   Map<String, String> Search_Native_UNIT_ID_ODD = kReleaseMode
       ? {
@@ -51,27 +51,16 @@ class _CustomizeRecommendationDetailScreenState
           'ios': 'ca-app-pub-3940256099942544/3986624511',
         };
 
-  Map<String, String> Search_Native_UNIT_ID_EVEN = kReleaseMode
-      ? {
-          //release 모드일때 (실기기 사용자)
-          'android': 'ca-app-pub-7139143792782560/3200544377',
-          'ios': 'ca-app-pub-7139143792782560/9111358943',
-        }
-      : {
-          'android': 'ca-app-pub-3940256099942544/2247696110',
-          'ios': 'ca-app-pub-3940256099942544/3986624511',
-        };
-
   // Native 광고 위치
-  static final _kAdIndex = 15;
+  static final _kAdIndex = 0;
   // TODO: Add a native ad instance
-  NativeAd? _ad_odd, _ad_even;
+  NativeAd? _ad_odd;
 
   // TODO: Add _getDestinationItemIndex()
   int _getDestinationItemIndex(int rawIndex) {
     // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
-    if (isLoaded1 == true && isLoaded2 == true) {
-      return rawIndex - 1 - (rawIndex ~/ _kAdIndex);
+    if (isLoaded1 == true) {
+      return rawIndex - 1;
     }
     return rawIndex;
   }
@@ -182,7 +171,7 @@ class _CustomizeRecommendationDetailScreenState
           color: kPrimaryLightBlackColor,
           borderRadius: BorderRadius.all(Radius.circular(8))),
       child: AdWidget(
-        ad: (idx % 2 == 0) ? _ad_even! : _ad_odd!,
+        ad: _ad_odd!,
       ),
     );
   }
@@ -210,27 +199,7 @@ class _CustomizeRecommendationDetailScreenState
       ),
     );
 
-    _ad_even = NativeAd(
-      adUnitId: Search_Native_UNIT_ID_EVEN[Platform.isIOS ? 'ios' : 'android']!,
-      factoryId: 'listTile',
-      request: AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _ad_even = ad as NativeAd;
-            isLoaded2 = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          // Releases an ad resource when it fails to load
-          ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
-
     _ad_odd!.load();
-    _ad_even!.load();
   }
 
   @override
@@ -278,12 +247,9 @@ class _CustomizeRecommendationDetailScreenState
       body: SafeArea(
         child: ListView.builder(
           padding: EdgeInsets.only(bottom: screenHeight * 0.3),
-          itemCount: widget.songList.length +
-              ((isLoaded1 && isLoaded2)
-                  ? (widget.songList.length ~/ _kAdIndex) + 1
-                  : 0),
+          itemCount: widget.songList.length + ((isLoaded1) ? 1 : 0),
           itemBuilder: (context, index) {
-            if ((index % _kAdIndex == 0) && (isLoaded1 && isLoaded2)) {
+            if ((index == 0) && (isLoaded1)) {
               return Container(
                 height: 80.0,
                 margin: EdgeInsets.fromLTRB(
@@ -365,7 +331,6 @@ class _CustomizeRecommendationDetailScreenState
   void dispose() {
     // TODO: Dispose a NativeAd object
     _ad_odd?.dispose();
-    _ad_even?.dispose();
 
     super.dispose();
   }
