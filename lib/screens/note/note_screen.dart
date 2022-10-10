@@ -30,7 +30,7 @@ class _NoteScreenState extends State<NoteScreen> {
   int _listSate = 0;
 
   Map<String, String> Search_Native_UNIT_ID = {
-    'android': 'ca-app-pub-1461012385298546/5670829461',
+    'android': 'ca-app-pub-7139143792782560/3104068385',
     'ios': 'ca-app-pub-7139143792782560/9111358943',
   };
 

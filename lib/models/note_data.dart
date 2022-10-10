@@ -429,7 +429,8 @@ class NoteData extends ChangeNotifier {
     //!event: 일반_검색_뷰__노래_유튜브
     Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
-    var noteAddIconChange = Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
+    var noteAddIconChange =
+        Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
 
     Widget okButton = ElevatedButton(
       onPressed: () {
@@ -1254,8 +1255,6 @@ class NoteData extends ChangeNotifier {
         userNickname = payload["nickname"];
       }
       if (payload["userimage"] != null) {
-        userImage = payload["userimage"];
-      } else {
         userImage = payload["userimage"];
       }
     }
