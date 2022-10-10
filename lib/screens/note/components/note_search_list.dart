@@ -28,7 +28,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
       ? {
           //release 모드일때 (실기기 사용자)
           'android': 'ca-app-pub-7139143792782560/3104068385',
-          'ios': 'ca-app-pub-1461012385298546/416617610',
+          'ios': 'ca-app-pub-7139143792782560/5971824166',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/2247696110',
@@ -39,7 +39,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
       ? {
           //release 모드일때 (실기기 사용자)
           'android': 'ca-app-pub-7139143792782560/3200544377',
-          'ios': 'ca-app-pub-1461012385298546/416617610',
+          'ios': 'ca-app-pub-7139143792782560/9111358943',
         }
       : {
           'android': 'ca-app-pub-3940256099942544/2247696110',
