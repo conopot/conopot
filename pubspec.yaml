@@ -70,7 +70,7 @@ dependencies:
   archive: ^3.3.1
   shared_preferences: ^2.0.15
 
-  google_mobile_ads: ^2.0.1
+  google_mobile_ads: 2.0.1
   firebase_remote_config: ^2.0.14
   in_app_review: ^2.0.4
   onesignal_flutter: ^3.0.0
