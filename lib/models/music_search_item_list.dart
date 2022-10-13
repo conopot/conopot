@@ -13,6 +13,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
@@ -295,7 +297,8 @@ class MusicSearchItemLists extends ChangeNotifier {
     if (allValues != null) {
       var FitchMusicList = jsonDecode(allValues) as List;
       List<FitchMusic> recommendList =
-          FitchMusicList.map((noteIter) => FitchMusic.fromJson(noteIter)).toList();
+          FitchMusicList.map((noteIter) => FitchMusic.fromJson(noteIter))
+              .toList();
       aiRecommendationList = recommendList;
     }
 
@@ -514,56 +517,142 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   // 검색 필터링 기능(일반검색)
-  void runFilter(String enteredKeyword, int _tabIndex, String _dropdwonValue) {
-      results = [];
-      //공백 제거 && 대문자 → 소문자 변경
-      enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
-      if (_tabIndex == 1) {
-        //TJ
-        if (enteredKeyword.isEmpty) {
-          results = tjSongList;
-        } else {
-          if (_dropdwonValue == '제목') {
-            // 제목 검색
-            results = tjSongList.where((string) => (string.title.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword)).toList();
-          } else if (_dropdwonValue == '가수') {
-            // 가수 검색
-            results = tjSongList.where((string) => (string.singer.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword)).toList();
-          } else if (_dropdwonValue == '번호') {
-            // 번호 검색
-            results = tjSongList.where((string) => (string.songNumber.replaceAll(' ', '').toLowerCase())
-                      == (enteredKeyword)).toList();
-          }
-        }
+  Future<void> runFilter(
+      String enteredKeyword, int _tabIndex, String _dropdwonValue) async {
+    results = [];
+    var enteredLyricKeyword = enteredKeyword;
+    //공백 제거 && 대문자 → 소문자 변경
+    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    if (_tabIndex == 1) {
+      //TJ
+      if (enteredKeyword.isEmpty) {
+        results = tjSongList;
       } else {
-        //KY
-        if (enteredKeyword.isEmpty) {
-          results = kySongList;
-        } else {
-          if (_dropdwonValue == '제목') {
-            // 제목 검색
-            results = kySongList.where((string) => (string.title.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword)).toList();
-          } else if (_dropdwonValue == '가수') {
-            // 가수 검색
-            results = kySongList.where((string) => (string.singer.replaceAll(' ', '').toLowerCase())
-                      .contains(enteredKeyword)).toList();
-          } else if (_dropdwonValue == '번호') {
-            // 번호 검색
-            results = kySongList.where((string) => (string.songNumber.replaceAll(' ', '').toLowerCase())
-                      == (enteredKeyword)).toList();
+        if (_dropdwonValue == '제목') {
+          // 제목 검색
+          results = tjSongList
+              .where((string) =>
+                  (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '가수') {
+          // 가수 검색
+          results = tjSongList
+              .where((string) =>
+                  (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '번호') {
+          // 번호 검색
+          results = tjSongList
+              .where((string) =>
+                  (string.songNumber.replaceAll(' ', '').toLowerCase()) ==
+                  (enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '가사') {
+          if (enteredLyricKeyword.length < 3) {
+            EasyLoading.showInfo("가사 검색은 3글자 이상 입력해야합니다 😿");
+          } else {
+            //가사 검색 이벤트
+            Analytics_config().musicSearchLyricEvent();
+
+            print(enteredLyricKeyword);
+            print(jsonEncode({
+              'lyric': enteredLyricKeyword,
+            }));
+
+            //가사 검색 api 로직 필요
+            String? serverURL = dotenv.env['LYRIC_SERVER_URL'];
+
+            String url = '$serverURL/search';
+
+            try {
+              final response = await http.post(Uri.parse(url),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode({
+                    'lyric': enteredLyricKeyword,
+                  }));
+
+              List<String> songNumberList = [];
+
+              String tmp = "";
+              for (int i = 0; i < response.body.length; i++) {
+                if (response.body[i].compareTo("0") >= 0 &&
+                    (response.body[i].compareTo('9') == 0 ||
+                        response.body[i].compareTo('9') == -1)) {
+                  tmp += response.body[i];
+                } else {
+                  if (tmp.isNotEmpty) {
+                    songNumberList.add(tmp);
+                    tmp = "";
+                  }
+                }
+              }
+
+              //print(songNumberList);
+
+              //map
+              Map songNumberList_map = {};
+              for (var song in songNumberList) {
+                songNumberList_map[song] = 1;
+              }
+
+              List<MusicSearchItem> searchSongList = [];
+
+              for (MusicSearchItem song in tjSongList) {
+                if (songNumberList_map[song.songNumber] == 1) {
+                  searchSongList.add(song);
+                }
+              }
+
+              results = searchSongList;
+            } on SocketException {
+              EasyLoading.showInfo("가사 검색은 인터넷 접속 환경이어야 합니다! 😿");
+            }
           }
         }
       }
-      foundItems = results;
+    } else {
+      //KY
+      if (enteredKeyword.isEmpty) {
+        results = kySongList;
+      } else {
+        if (_dropdwonValue == '제목') {
+          // 제목 검색
+          results = kySongList
+              .where((string) =>
+                  (string.title.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '가수') {
+          // 가수 검색
+          results = kySongList
+              .where((string) =>
+                  (string.singer.replaceAll(' ', '').toLowerCase())
+                      .contains(enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '번호') {
+          // 번호 검색
+          results = kySongList
+              .where((string) =>
+                  (string.songNumber.replaceAll(' ', '').toLowerCase()) ==
+                  (enteredKeyword))
+              .toList();
+        } else if (_dropdwonValue == '가사') {
+          EasyLoading.showInfo(
+              "금영 노래 검색은 현재 제공 중이지 않습니다 😿 \n TJ 노래 검색을 이용해주세요!");
+        }
+      }
+    }
+    foundItems = results;
 
-      //!event : 일반_검색_뷰__검색_키워드
-      Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
-      Analytics_config().musicSearchKeywordEvent(enteredKeyword);
+    //!event : 일반_검색_뷰__검색_키워드
+    Analytics_config().event('일반_검색_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+    Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
-      notifyListeners();
+    notifyListeners();
   }
 
   // 검색 필터링 기능(금영 곡 추가 시 검색)
@@ -595,37 +684,37 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 검색 필터링 기능(전체검색)
   void runCombinedFilter(String enteredKeyword) {
-      highestResults = [];
-      //공백 제거 && 대문자 → 소문자 변경
-      enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
+    highestResults = [];
+    //공백 제거 && 대문자 → 소문자 변경
+    enteredKeyword = enteredKeyword.replaceAll(' ', '').toLowerCase();
 
-      if (enteredKeyword.isEmpty) {
-        highestResults = combinedSongList;
-      } else {
-        highestResults = combinedSongList
-            .where((string) =>
-                (string.tj_title.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword) ||
-                (string.tj_singer.replaceAll(' ', '').toLowerCase())
-                    .contains(enteredKeyword) ||
-                (string.search_keyword_singer_title
-                        .replaceAll(' ', '')
-                        .toLowerCase())
-                    .contains(enteredKeyword) ||
-                (string.search_keyword_title_singer
-                        .replaceAll(' ', '')
-                        .toLowerCase())
-                    .contains(enteredKeyword))
-            .toList();
-      }
+    if (enteredKeyword.isEmpty) {
+      highestResults = combinedSongList;
+    } else {
+      highestResults = combinedSongList
+          .where((string) =>
+              (string.tj_title.replaceAll(' ', '').toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.tj_singer.replaceAll(' ', '').toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.search_keyword_singer_title
+                      .replaceAll(' ', '')
+                      .toLowerCase())
+                  .contains(enteredKeyword) ||
+              (string.search_keyword_title_singer
+                      .replaceAll(' ', '')
+                      .toLowerCase())
+                  .contains(enteredKeyword))
+          .toList();
+    }
 
-      combinedFoundItems = highestResults;
+    combinedFoundItems = highestResults;
 
-      //!event : 곡 추가 뷰 - 검색 키워드
-      Analytics_config().event('노트_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
-      Analytics_config().musicSearchKeywordEvent(enteredKeyword);
+    //!event : 곡 추가 뷰 - 검색 키워드
+    Analytics_config().event('노트_추가_뷰__검색_키워드', {'검색_키워드': enteredKeyword});
+    Analytics_config().musicSearchKeywordEvent(enteredKeyword);
 
-      notifyListeners();
+    notifyListeners();
   }
 
   // 검색 필터링 기능(인기검색)
@@ -720,7 +809,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   }
 
   // AI추천 곡 저장
-  void saveAiRecommendationList(String response) async{
+  void saveAiRecommendationList(String response) async {
     aiRecommendationList = [];
     String tmp = "";
     for (int i = 0; i < response.length; i++) {
@@ -740,7 +829,8 @@ class MusicSearchItemLists extends ChangeNotifier {
         }
       }
     }
-    await storage.write(key: 'aiRecommendationList', value: jsonEncode(aiRecommendationList));
+    await storage.write(
+        key: 'aiRecommendationList', value: jsonEncode(aiRecommendationList));
     notifyListeners();
   }
 }

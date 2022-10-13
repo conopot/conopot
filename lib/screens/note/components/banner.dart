@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -47,7 +49,12 @@ class CarouselSliderBanner extends StatelessWidget {
           Analytics_config().noteViewBannerRecommandEvent();
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
-              .onTap!(2);
+              .onTap!(Firebase_Remote_Config()
+                      .remoteConfig
+                      .getString('navigationOrderChange') ==
+                  'A'
+              ? 2
+              : 1);
         } else {
           if (itemIndex == 1) {
             Analytics_config().noteViewBannerMeasureEvent();

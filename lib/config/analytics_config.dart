@@ -90,6 +90,11 @@ class Analytics_config {
     event('노래검색__검색키워드', {'검색_키워드': keyword});
   }
 
+  //!event : 노래검색__가사검색
+  musicSearchLyricEvent() {
+    event('노래검색__가사검색', {});
+  }
+
   //!event : 노래리스트__노트추가
   musicAddEvent(String songTitle) {
     event('노래리스트__노트추가', {'곡명': songTitle});

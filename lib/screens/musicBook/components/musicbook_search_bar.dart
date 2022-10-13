@@ -54,10 +54,11 @@ class _SearchBarState extends State<SearchBar> {
         children: [
           SizedBox(width: defaultSize * 1.5),
           DropdownButton(
-            items: const [
+            items: [
               DropdownMenuItem(child: Text("제목"), value: "제목"),
               DropdownMenuItem(child: Text("가수"), value: "가수"),
               DropdownMenuItem(child: Text("번호"), value: "번호"),
+              DropdownMenuItem(child: Text("가사"), value: "가사"),
             ],
             value: _dropdwonValue,
             iconEnabledColor: kMainColor,
