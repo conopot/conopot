@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amplitude_flutter/identify.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:conopot/app_open_ad_manager.dart';
 import 'package:conopot/applifecycle_reactor.dart';
@@ -36,8 +37,38 @@ class _SplashScreenState extends State<SplashScreen> {
       final result = await InternetAddress.lookup('example.com');
       //("인터넷 연결 성공");
 
+      int sessionCnt = Provider.of<MusicSearchItemLists>(context, listen: false)
+          .sessionCount;
+
       //firebase remote config 초기화
-      await Firebase_Remote_Config().init();
+      await Firebase_Remote_Config().init(sessionCnt);
+
+      String defaultNodeAddSetting = Firebase_Remote_Config()
+          .remoteConfig
+          .getString('defaultNodeAddSetting');
+      print("defaultNodeAddSetting value : ${defaultNodeAddSetting}");
+
+      //첫 세션일 경우, A/B 테스트하는 곳
+      if (Provider.of<MusicSearchItemLists>(context, listen: false)
+              .sessionCount ==
+          0) {
+        String defaultNodeAddSetting = Firebase_Remote_Config()
+            .remoteConfig
+            .getString('defaultNodeAddSetting');
+        print("defaultNodeAddSetting value : ${defaultNodeAddSetting}");
+        if (defaultNodeAddSetting == 'B') {
+          //Default 노트 하나 추가하기
+          Provider.of<NoteData>(context, listen: false).firstSessionNote();
+        } else if (defaultNodeAddSetting == 'A') {
+          Provider.of<NoteData>(context, listen: false).firstSessionNote();
+          //그렇지 않다면, 유저 프로퍼티만 세팅한다.
+          final Identify identify = Identify()
+            ..set('10/18 A/B TEST - Default 노래추가 여부', "no");
+
+          Analytics_config().userProps(identify);
+        }
+      }
+
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
       bool musicUpdateSetting = false;
       musicUpdateSetting =

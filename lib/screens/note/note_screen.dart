@@ -10,10 +10,8 @@ import 'package:conopot/screens/note/components/edit_note_list.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
-import 'package:conopot/screens/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'add_note_screen.dart';
 
@@ -189,6 +187,7 @@ class _NoteScreenState extends State<NoteScreen> {
         body: Column(
           children: [
             CarouselSliderBanner(),
+            // 노트에 저장된 노래가 없을 때
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
                 EmptyNoteList()

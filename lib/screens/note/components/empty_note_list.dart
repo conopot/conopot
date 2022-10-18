@@ -8,119 +8,68 @@ import 'package:provider/provider.dart';
 
 class EmptyNoteList extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
-  String noteAddMentChange =
-      Firebase_Remote_Config().remoteConfig.getString('noteAddMentChange');
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        (noteAddMentChange == 'A')
-            ? Column(
+        Column(
+          children: [
+            RichText(
+              text: TextSpan(
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "나만의 첫 ",
-                          style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 2,
-                          ),
-                        ),
-                        TextSpan(
-                            text: '애창곡',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: kMainColor,
-                              fontSize: defaultSize * 2,
-                            )),
-                        TextSpan(
-                          text: "을",
-                          style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 2,
-                          ),
-                        ),
-                      ],
+                  TextSpan(
+                    text: "나만의 첫 ",
+                    style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: defaultSize * 2,
                     ),
                   ),
-                  SizedBox(
-                    height: SizeConfig.defaultSize * 0.5,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "애창곡 노트",
-                          style: TextStyle(
-                            color: kMainColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 2,
-                          ),
-                        ),
-                        TextSpan(
-                            text: '에 저장해 보세요',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 2,
-                            )),
-                      ],
+                  TextSpan(
+                      text: '애창곡',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: kMainColor,
+                        fontSize: defaultSize * 2,
+                      )),
+                  TextSpan(
+                    text: "을",
+                    style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: defaultSize * 2,
                     ),
                   ),
-                ],
-              )
-            : Column(
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "아래 버튼을 눌러 ",
-                          style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 2,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "노래방에서",
-                          style: TextStyle(
-                            color: kMainColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: defaultSize * 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "부를 노래를 ",
-                        style: TextStyle(
-                          color: kMainColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: defaultSize * 2,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "저장해 보세요",
-                        style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: defaultSize * 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: SizeConfig.defaultSize * 0.5,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "애창곡 노트",
+                    style: TextStyle(
+                      color: kMainColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: defaultSize * 2,
+                    ),
+                  ),
+                  TextSpan(
+                      text: '에 저장해 보세요',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 2,
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ),
         SizedBox(
           height: defaultSize * 2.5,
         ),
@@ -143,8 +92,7 @@ class EmptyNoteList extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(18))),
             child: Center(
               child: Text(
-                (noteAddMentChange == 'A') ?
-                "애창곡 추가하기" : "저장하러가기",
+                "애창곡 추가하기",
                 style: TextStyle(
                     color: kPrimaryWhiteColor,
                     fontSize: defaultSize * 1.5,

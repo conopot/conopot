@@ -117,7 +117,9 @@ class _NoteListState extends State<NoteList> {
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
-                              color: kPrimaryLightBlackColor,
+                              color: (note.tj_singer == "IU")
+                                  ? Color(0xFFFFB6C1)
+                                  : kPrimaryLightBlackColor,
                             ),
                             child: Row(
                               children: [

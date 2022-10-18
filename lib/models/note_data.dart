@@ -195,6 +195,36 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> firstSessionNote() async {
+    Note note = Note(
+      "밤편지",
+      "IU",
+      "48879",
+      '밤 편지',
+      "아이유(IU)",
+      "49492",
+      "F",
+      27,
+      "오른쪽 아래 버튼을 눌러 노래를 추가해보세요 😄",
+      0,
+    );
+    notes.add(note);
+    userMusics.add(note.tj_songNumber);
+    noteCount += 1;
+
+    await storage.write(key: 'notes', value: jsonEncode(notes));
+
+    final Identify identify = Identify()
+      ..set('노트 개수', notes.length)
+      ..set('유저 노트 리스트', userMusics)
+      ..set('10/18 A/B TEST - Default 노래추가 여부', "yes");
+
+    Analytics_config().userProps(identify);
+
+    await FirebaseAnalytics.instance
+        .setUserProperty(name: 'noteCnt', value: notes.length.toString());
+  }
+
   Future<void> addNoteBySongNumber(BuildContext context, String songNumber,
       List<FitchMusic> musicList) async {
     noteCount += 1;
