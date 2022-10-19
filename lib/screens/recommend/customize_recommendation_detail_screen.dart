@@ -38,88 +38,6 @@ class _CustomizeRecommendationDetailScreenState
   final storage = new FlutterSecureStorage();
   double defaultSize = SizeConfig.defaultSize;
 
-  // bool isLoaded1 = false;
-
-  // Map<String, String> Search_Native_UNIT_ID_ODD = kReleaseMode
-  //     ? {
-  //         //release 모드일때 (실기기 사용자)
-  //         'android': 'ca-app-pub-7139143792782560/3104068385',
-  //         'ios': 'ca-app-pub-7139143792782560/5971824166',
-  //       }
-  //     : {
-  //         'android': 'ca-app-pub-3940256099942544/2247696110',
-  //         'ios': 'ca-app-pub-3940256099942544/3986624511',
-  //       };
-
-  // // Native 광고 위치
-  // static final _kAdIndex = 0;
-  // // TODO: Add a native ad instance
-  // NativeAd? _ad_odd;
-
-  // // TODO: Add _getDestinationItemIndex()
-  // int _getDestinationItemIndex(int rawIndex) {
-  //   // native 광고 index가 포함되어 있기 때문에, 그 이후 인덱스는 -1씩 줄여줘야 한다.
-  //   if (isLoaded1 == true) {
-  //     return rawIndex - 1;
-  //   }
-  //   return rawIndex;
-  // }
-
-  Map<String, String> AI_Recommand_Interstitial_UNIT_ID = kReleaseMode
-      ? {
-          'android': 'ca-app-pub-7139143792782560/8456175834',
-          'ios': 'ca-app-pub-7139143792782560/1894351507',
-        }
-      : {
-          'android': 'ca-app-pub-3940256099942544/1033173712',
-          'ios': 'ca-app-pub-3940256099942544/4411468910',
-        };
-
-  int maxFailedLoadAttempts = 3;
-  InterstitialAd? _interstitialAd;
-  int _numInterstitialLoadAttempts = 0;
-
-  createInterstitialAd() {
-    InterstitialAd.load(
-        adUnitId: AI_Recommand_Interstitial_UNIT_ID[
-            Platform.isIOS ? 'ios' : 'android']!,
-        request: AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            _interstitialAd = ad;
-            _numInterstitialLoadAttempts = 0;
-            _interstitialAd!.setImmersiveMode(true);
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            _numInterstitialLoadAttempts += 1;
-            _interstitialAd = null;
-            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
-              createInterstitialAd();
-            }
-          },
-        ));
-  }
-
-  void _showInterstitialAd() {
-    if (_interstitialAd == null) {
-      return;
-    }
-    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (InterstitialAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
-      onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        ad.dispose();
-        createInterstitialAd();
-      },
-      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        ad.dispose();
-        createInterstitialAd();
-      },
-    );
-    _interstitialAd!.show();
-    _interstitialAd = null;
-  }
-
   void requestCFApi() async {
     widget.musicList.recommendRequest = true;
     storage.write(key: "recommendRequest", value: 'true');
@@ -164,7 +82,6 @@ class _CustomizeRecommendationDetailScreenState
 
   @override
   void initState() {
-    _interstitialAd = createInterstitialAd();
     super.initState();
   }
 
@@ -190,11 +107,8 @@ class _CustomizeRecommendationDetailScreenState
               } else {
                 requestCFApi();
                 //전면 광고
-                bool pitchMeasureInterstitialSetting = Firebase_Remote_Config()
-                    .remoteConfig
-                    .getBool('pitchMeasureInterstitialSetting');
-                if (pitchMeasureInterstitialSetting == true &&
-                    _interstitialAd != null) _showInterstitialAd();
+                Provider.of<NoteData>(context, listen: false)
+                    .aiInterstitialAd();
               }
             },
             child: Center(

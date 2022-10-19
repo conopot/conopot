@@ -36,8 +36,15 @@ class _SplashScreenState extends State<SplashScreen> {
       final result = await InternetAddress.lookup('example.com');
       //("인터넷 연결 성공");
 
+      int sessionCnt = Provider.of<MusicSearchItemLists>(context, listen: false)
+          .sessionCount;
+
+      if (sessionCnt == 0) {
+        Analytics_config().firstSessionEvent();
+      }
+
       //firebase remote config 초기화
-      await Firebase_Remote_Config().init();
+      await Firebase_Remote_Config().init(sessionCnt);
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
       bool musicUpdateSetting = false;
       musicUpdateSetting =
@@ -55,17 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await Provider.of<NoteData>(context, listen: false).initNotes();
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
-
-      //첫 세션일때 광고 띄우지 않기
-      if (Provider.of<MusicSearchItemLists>(context, listen: false)
-              .sessionCount >
-          0) {
-        // 앱 실행 광고
-        await appOpenAds(context);
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
-      }
+      await appOpenAds(context);
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {
@@ -105,7 +102,8 @@ class _SplashScreenState extends State<SplashScreen> {
     await Provider.of<MusicSearchItemLists>(context, listen: false)
         .checkSessionCount();
     //Admob 전면광고 캐싱
-    await Provider.of<NoteData>(context, listen: false).createInterstitialAd();
+    await Provider.of<NoteData>(context, listen: false)
+        .createInterstitialAd("noteAdd");
 
     // 첫 설치 사용자라면, 로컬 스토리지를 비운다.
     final prefs = await SharedPreferences.getInstance();
@@ -135,12 +133,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   appOpenAds(BuildContext context) async {
-    if (Firebase_Remote_Config().remoteConfig.getBool('appopenadSetting') ==
-        true) {
-      AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
-      WidgetsBinding.instance.addObserver(AppLifecycleReactor(
-          appOpenAdManager: appOpenAdManager, context: context));
-    }
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd(context);
+    WidgetsBinding.instance.addObserver(AppLifecycleReactor(
+        appOpenAdManager: appOpenAdManager, context: context));
   }
 
   @override

@@ -424,4 +424,59 @@ class Analytics_config {
   userunregisterEvent() {
     event('내정보_뷰__탈퇴하기', {});
   }
+
+  //!event: 광고__앱오픈_성공
+  adAppOpenSuccess() {
+    event('광고__앱오픈_성공', {});
+  }
+
+  //!event: 광고__앱오픈_실패
+  adAppOpenFail() {
+    event('광고__앱오픈_실패', {});
+  }
+
+  //!event: 광고__종료_배너_성공
+  adQuitBannerSuccess() {
+    event('광고__종료_배너_성공', {});
+  }
+
+  //!event: 광고__종료_배너_실패
+  adQuitBannerFail() {
+    event('광고__종료_배너_실패', {});
+  }
+
+  //!event: 광고__노트추가_전면광고_성공
+  adNoteAddInterstitialSuccess() {
+    event('광고__노트추가_전면광고_성공', {});
+  }
+
+  //!event: 광고__노트추가_전면광고_실패
+  adNoteAddInterstitialFail() {
+    event('광고__노트추가_전면광고_실패', {});
+  }
+
+  //!event: 광고__음역대측정_전면광고_성공
+  adPitchInterstitialSuccess() {
+    event('광고__음역대측정_전면광고_성공', {});
+  }
+
+  //!event: 광고__음역대측정_전면광고_실패
+  adPitchInterstitialFail() {
+    event('광고__음역대측정_전면광고_실패', {});
+  }
+
+  //!event: 광고__AI추천_전면광고_성공
+  adAiInterstitialSuccess() {
+    event('광고__AI추천_전면광고_성공', {});
+  }
+
+  //!event: 광고__AI추천_전면광고_실패
+  adAiInterstitialFail() {
+    event('광고__AI추천_전면광고_실패', {});
+  }
+
+  //!event: 첫세션
+  firstSessionEvent() {
+    event('첫세션', {});
+  }
 }

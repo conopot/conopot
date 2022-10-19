@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +39,7 @@ class AppOpenAdManager {
           showAdIfAvailable(context);
         },
         onAdFailedToLoad: (error) {
+          Analytics_config().adAppOpenFail();
           Provider.of<NoteData>(context, listen: false)
               .appOpenAdUnloaded(context);
         },
@@ -49,6 +51,7 @@ class AppOpenAdManager {
     if (!canShowOpenAd) return;
     if (!isAdAvailable) {
       loadAd(context);
+      Analytics_config().adAppOpenSuccess();
       return;
     }
     if (_isShowingAd) {

@@ -28,9 +28,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
-  // bottom navigationbar a/b테스트
-  String navigationOrderChange =
-      Firebase_Remote_Config().remoteConfig.getString('navigationOrderChange');
   //AdMob
   Map<String, String> App_Quit_Banner_UNIT_ID = kReleaseMode
       ? {
@@ -57,19 +54,12 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-    _widgetOptions = (navigationOrderChange == 'A')
-        ? <Widget>[
-            NoteScreen(),
-            MusicBookScreen(),
-            RecommendScreen(),
-            UserScreen(),
-          ]
-        : <Widget>[
-            NoteScreen(),
-            RecommendScreen(),
-            MusicBookScreen(),
-            UserScreen(),
-          ];
+    _widgetOptions = <Widget>[
+      NoteScreen(),
+      MusicBookScreen(),
+      RecommendScreen(),
+      UserScreen(),
+    ];
 
     // TODO: Load a banner ad
     BannerAd(
@@ -80,9 +70,11 @@ class _MainScreenState extends State<MainScreen>
         onAdLoaded: (ad) {
           setState(() {
             _bannerAd = ad as BannerAd;
+            Analytics_config().adQuitBannerSuccess();
           });
         },
         onAdFailedToLoad: (ad, err) {
+          Analytics_config().adQuitBannerFail();
           ad.dispose();
         },
       ),
@@ -201,132 +193,66 @@ class _MainScreenState extends State<MainScreen>
             currentIndex: _selectedIndex,
             selectedItemColor: kMainColor,
             unselectedItemColor: kPrimaryWhiteColor,
-            items: (navigationOrderChange == 'A')
-                ? [
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.home,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "홈",
-                      activeIcon: Icon(
-                        Icons.home,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.book,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "노래방 책",
-                      activeIcon: Icon(
-                        Icons.book,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset("assets/icons/recommend.svg",
-                              height: 17, width: 17)),
-                      label: "추천",
-                      activeIcon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset(
-                              "assets/icons/recommend_click.svg",
-                              height: 17,
-                              width: 17)),
-                    ),
-                    BottomNavigationBarItem(
-                      icon:
-                          Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
-                      label: "내 정보",
-                      activeIcon: Icon(
-                        Icons.perm_identity,
-                        color: kMainColor,
-                      ),
-                    ),
-                  ]
-                : [
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.home,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "홈",
-                      activeIcon: Icon(
-                        Icons.home,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset("assets/icons/recommend.svg",
-                              height: 17, width: 17)),
-                      label: "추천",
-                      activeIcon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset(
-                              "assets/icons/recommend_click.svg",
-                              height: 17,
-                              width: 17)),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.book,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "노래방 책",
-                      activeIcon: Icon(
-                        Icons.book,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon:
-                          Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
-                      label: "내 정보",
-                      activeIcon: Icon(
-                        Icons.perm_identity,
-                        color: kMainColor,
-                      ),
-                    ),
-                  ],
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: kPrimaryWhiteColor,
+                ),
+                label: "홈",
+                activeIcon: Icon(
+                  Icons.home,
+                  color: kMainColor,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.book,
+                  color: kPrimaryWhiteColor,
+                ),
+                label: "노래방 책",
+                activeIcon: Icon(
+                  Icons.book,
+                  color: kMainColor,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: SvgPicture.asset("assets/icons/recommend.svg",
+                        height: 17, width: 17)),
+                label: "추천",
+                activeIcon: Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: SvgPicture.asset("assets/icons/recommend_click.svg",
+                        height: 17, width: 17)),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
+                label: "내 정보",
+                activeIcon: Icon(
+                  Icons.perm_identity,
+                  color: kMainColor,
+                ),
+              ),
+            ],
             onTap: (index) {
               // TJ탭
-              if (navigationOrderChange == 'A' && index == 1) {
-                Provider.of<MusicSearchItemLists>(context, listen: false)
-                    .changeTabIndex(index: 1);
-              } else if (navigationOrderChange == 'B' && index == 2) {
+              if (index == 1) {
                 Provider.of<MusicSearchItemLists>(context, listen: false)
                     .changeTabIndex(index: 1);
               }
               setState(() {
                 _selectedIndex = index;
-                if (navigationOrderChange == 'A') {
-                  if (index == 1) {
-                    //!event: 네비게이션__검색탭
-                    Analytics_config().clicksearchTapEvent();
-                  } else if (index == 2) {
-                    //!event: 네비게이션__추천탭
-                    Analytics_config().clickRecommendationTapEvent();
-                  } else if (index == 3) {
-                    //!event: 네비게이션__내정보
-                    Analytics_config().clickMyTapEvent();
-                  }
-                } else if (navigationOrderChange == 'B') {
-                  if (index == 1) {
-                    //!event: 네비게이션__추천탭
-                    Analytics_config().clickRecommendationTapEvent();
-                  } else if (index == 2) {
-                    //!event: 네비게이션__검색탭
-                    Analytics_config().clicksearchTapEvent();
-                  } else if (index == 3) {
-                    //!event: 네비게이션__내정보
-                    Analytics_config().clickMyTapEvent();
-                  }
+                if (index == 1) {
+                  //!event: 네비게이션__검색탭
+                  Analytics_config().clicksearchTapEvent();
+                } else if (index == 2) {
+                  //!event: 네비게이션__추천탭
+                  Analytics_config().clickRecommendationTapEvent();
+                } else if (index == 3) {
+                  //!event: 네비게이션__내정보
+                  Analytics_config().clickMyTapEvent();
                 }
               });
             },

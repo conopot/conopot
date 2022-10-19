@@ -24,8 +24,6 @@ class PitchDetectionBanner extends StatefulWidget {
 class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
   double defaultSize = SizeConfig.defaultSize;
   int _current = 0;
-  var recommandAIMent =
-      Firebase_Remote_Config().remoteConfig.getString('recommandAIMent');
   final CarouselController _controller = CarouselController();
   List<String> bannerList = ["Item1", "Item2"];
 
@@ -45,85 +43,41 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  (recommandAIMent == 'B')
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "애창곡노트에 노래 5개 이상 추가하고",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize * 1.7,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      RichText(
+                        text: TextSpan(
                           children: [
-                            Text(
-                              "애창곡노트에 노래 5개 이상 추가하고",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.7,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: "AI",
-                                      style: TextStyle(
-                                          color: kMainColor,
-                                          fontSize: defaultSize * 2.6,
-                                          fontWeight: FontWeight.w600)),
-                                  TextSpan(
-                                      text: "가 분석한",
-                                      style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                          fontSize: defaultSize * 2.5,
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                            ),
-                            Text("노래 추천 받아 보세요!",
+                            TextSpan(
+                                text: "AI",
+                                style: TextStyle(
+                                    color: kMainColor,
+                                    fontSize: defaultSize * 2.6,
+                                    fontWeight: FontWeight.w600)),
+                            TextSpan(
+                                text: "가 분석한",
                                 style: TextStyle(
                                     color: kPrimaryWhiteColor,
                                     fontSize: defaultSize * 2.5,
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "애창곡 노트에 노래 5개이상 저장하고",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.7,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                              SizedBox(
-                              height: defaultSize * 0.5,
-                            ),
-                            Text(
-                              "사용자 데이터를 바탕으로 분석한",
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 2.0,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: "취향저격",
-                                      style: TextStyle(
-                                          color: kMainColor,
-                                          fontSize: defaultSize * 2.0,
-                                          fontWeight: FontWeight.w600)),
-                                  TextSpan(
-                                      text: " 추천 리스트 받아보기",
-                                      style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                          fontSize: defaultSize * 2.0,
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: defaultSize * 0.8,
-                            ),
+                                    fontWeight: FontWeight.w600))
                           ],
                         ),
+                      ),
+                      Text("노래 추천 받아 보세요!",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 2.5,
+                              fontWeight: FontWeight.w600)),
+                    ],
+                  ),
                   SizedBox(height: defaultSize * 2),
                   Row(
                     mainAxisSize: MainAxisSize.min,

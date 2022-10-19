@@ -64,6 +64,16 @@ class NoteData extends ChangeNotifier {
           'ios': 'ca-app-pub-3940256099942544/4411468910',
         };
 
+  Map<String, String> AI_Recommand_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/8456175834',
+          'ios': 'ca-app-pub-7139143792782560/1894351507',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
   int maxFailedLoadAttempts = 3;
   InterstitialAd? _interstitialAd;
   int _numInterstitialLoadAttempts = 0;
@@ -77,28 +87,34 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
-  createInterstitialAd() {
+  createInterstitialAd(String command) {
     InterstitialAd.load(
-        adUnitId:
-            Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        adUnitId: (command == "noteAdd")
+            ? Note_Add_Interstitial_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!
+            : AI_Recommand_Interstitial_UNIT_ID[
+                Platform.isIOS ? 'ios' : 'android']!,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
+            print("onAdLoaded!");
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
+            Analytics_config().adNoteAddInterstitialSuccess();
           },
           onAdFailedToLoad: (LoadAdError error) {
+            print("onAdFaildToLoaded! : ${error}");
             _numInterstitialLoadAttempts += 1;
             _interstitialAd = null;
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
-              createInterstitialAd();
+              createInterstitialAd(command);
             }
+            Analytics_config().adNoteAddInterstitialFail();
           },
         ));
   }
 
-  void _showInterstitialAd() {
+  void _showInterstitialAd(String command) {
     if (_interstitialAd == null) {
       return;
     }
@@ -106,14 +122,14 @@ class NoteData extends ChangeNotifier {
       onAdShowedFullScreenContent: (InterstitialAd ad) =>
           print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        //print('$ad onAdDismissedFullScreenContent.');
+        // print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
-        createInterstitialAd();
+        createInterstitialAd(command);
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        //print('$ad onAdFailedToShowFullScreenContent: $error');
+        // print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
-        createInterstitialAd();
+        createInterstitialAd(command);
       },
     );
     _interstitialAd!.show();
@@ -195,6 +211,12 @@ class NoteData extends ChangeNotifier {
     notifyListeners();
   }
 
+  aiInterstitialAd() {
+    if (_interstitialAd != null) {
+      _showInterstitialAd("AI");
+    }
+  }
+
   Future<void> addNoteBySongNumber(BuildContext context, String songNumber,
       List<FitchMusic> musicList) async {
     noteCount += 1;
@@ -262,7 +284,7 @@ class NoteData extends ChangeNotifier {
     if (noteAddCount % 5 == 0 &&
         noteAddInterstitialSetting &&
         _interstitialAd != null) {
-      _showInterstitialAd();
+      _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
     if (isOverlapping == false &&
@@ -429,8 +451,6 @@ class NoteData extends ChangeNotifier {
     //!event: 일반_검색_뷰__노래_유튜브
     Analytics_config().clickYoutubeButtonOnSearchView();
     double defaultSize = SizeConfig.defaultSize;
-    var noteAddIconChange =
-        Firebase_Remote_Config().remoteConfig.getString('noteAddIconChange');
 
     Widget okButton = ElevatedButton(
       onPressed: () {
@@ -469,11 +489,6 @@ class NoteData extends ChangeNotifier {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            (noteAddIconChange == 'A')
-                ? SizedBox.shrink()
-                : Icon(
-                    Icons.add,
-                  ),
             Text("애창곡 노트에 추가하기",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,

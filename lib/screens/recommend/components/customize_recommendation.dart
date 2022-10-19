@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -72,6 +75,11 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -140,7 +148,6 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                             color: kPrimaryWhiteColor,
                             fontWeight: FontWeight.w400,
                             fontSize: defaultSize * 1.5))),
-                
               ],
             ),
           )
@@ -168,6 +175,9 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     //!event: 추천_뷰__AI추천받기
                     Analytics_config().clickAIRecommendationEvent();
                     requestCFApi();
+                    //전면 광고
+                    Provider.of<NoteData>(context, listen: false)
+                        .aiInterstitialAd();
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,

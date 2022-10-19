@@ -13,27 +13,26 @@ class GenreRecommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    var recommandJPOP =
-        Firebase_Remote_Config().remoteConfig.getString('recommandJPOP');
 
-    List<String> titleList = ['발라드', '힙합', '알앤비', '팝', '만화 주제가', '트로트'];
-
-    if (recommandJPOP == 'B') {
-      titleList.insert(1, '일본 노래');
-    }
+    List<String> titleList = [
+      '발라드',
+      '일본 노래',
+      '힙합',
+      '알앤비',
+      '팝',
+      '만화 주제가',
+      '트로트'
+    ];
 
     List<List<MusicSearchItem>> songList = [
       RecommendationItemList.balladeList,
+      RecommendationItemList.jpopList,
       RecommendationItemList.hiphopList,
       RecommendationItemList.rnbList,
       RecommendationItemList.popList,
       RecommendationItemList.cartoonList,
       RecommendationItemList.oldList,
     ];
-
-    if (recommandJPOP == 'B') {
-      songList.insert(1, RecommendationItemList.jpopList);
-    }
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
@@ -54,65 +53,37 @@ class GenreRecommendation extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    if (recommandJPOP == 'B') {
-                      switch (index) {
-                        case 0:
-                          //event!: 추천_뷰__발라드
-                          Analytics_config().clickBalladRecommendationEvent();
-                          break;
-                        case 1:
-                          //event!: 추천_뷰__일본노래
-                          Analytics_config().clickJPOPRecommendationEvent();
-                          break;
-                        case 2:
-                          //event!: 추천_뷰__힙합
-                          Analytics_config().clickHipHopRecommendationEvent();
-                          break;
-                        case 3:
-                          //event!: 추천_뷰__알앤비
-                          Analytics_config().clickRnbRecommendationEvent();
-                          break;
-                        case 4:
-                          //event!: 추천_뷰_팝
-                          Analytics_config().clickPopRecommendationEvent();
-                          break;
-                        case 5:
-                          //event!: 추천_뷰__만화주제가
-                          Analytics_config().clickCarttonRecommendationEvent();
-                          break;
-                        case 6:
-                          //event!: 추천_뷰__트로트
-                          Analytics_config().clickOldrecommendationEvent();
-                          break;
-                      }
-                    } else {
-                      switch (index) {
-                        case 0:
-                          //event!: 추천_뷰__발라드
-                          Analytics_config().clickBalladRecommendationEvent();
-                          break;
-                        case 1:
-                          //event!: 추천_뷰__힙합
-                          Analytics_config().clickHipHopRecommendationEvent();
-                          break;
-                        case 2:
-                          //event!: 추천_뷰__알앤비
-                          Analytics_config().clickRnbRecommendationEvent();
-                          break;
-                        case 3:
-                          //event!: 추천_뷰_팝
-                          Analytics_config().clickPopRecommendationEvent();
-                          break;
-                        case 4:
-                          //event!: 추천_뷰__만화주제가
-                          Analytics_config().clickCarttonRecommendationEvent();
-                          break;
-                        case 5:
-                          //event!: 추천_뷰__트로트
-                          Analytics_config().clickOldrecommendationEvent();
-                          break;
-                      }
+                    switch (index) {
+                      case 0:
+                        //event!: 추천_뷰__발라드
+                        Analytics_config().clickBalladRecommendationEvent();
+                        break;
+                      case 1:
+                        //event!: 추천_뷰__일본노래
+                        Analytics_config().clickJPOPRecommendationEvent();
+                        break;
+                      case 2:
+                        //event!: 추천_뷰__힙합
+                        Analytics_config().clickHipHopRecommendationEvent();
+                        break;
+                      case 3:
+                        //event!: 추천_뷰__알앤비
+                        Analytics_config().clickRnbRecommendationEvent();
+                        break;
+                      case 4:
+                        //event!: 추천_뷰_팝
+                        Analytics_config().clickPopRecommendationEvent();
+                        break;
+                      case 5:
+                        //event!: 추천_뷰__만화주제가
+                        Analytics_config().clickCarttonRecommendationEvent();
+                        break;
+                      case 6:
+                        //event!: 추천_뷰__트로트
+                        Analytics_config().clickOldrecommendationEvent();
+                        break;
                     }
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

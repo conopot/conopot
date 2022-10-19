@@ -78,6 +78,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
+            Analytics_config().adPitchInterstitialSuccess();
           },
           onAdFailedToLoad: (LoadAdError error) {
             _numInterstitialLoadAttempts += 1;
@@ -85,6 +86,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
               createInterstitialAd();
             }
+            Analytics_config().adPitchInterstitialFail();
           },
         ));
   }

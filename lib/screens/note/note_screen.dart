@@ -1,12 +1,15 @@
 import 'dart:io';
 
+import 'package:amplitude_flutter/identify.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
+import 'package:conopot/screens/note/components/empty_icon_note.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -28,11 +31,24 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
+  String emptyNoteIcon = "";
 
   bool isLoaded = false;
 
   @override
   void initState() {
+    //노트가 없는 사용자만 대상으로 한다.
+    if (Provider.of<NoteData>(context, listen: false).notes.length == 0) {
+      emptyNoteIcon =
+          Firebase_Remote_Config().remoteConfig.getString('emptyNoteIcon');
+      //유저 프로퍼티 설정하기
+      if (emptyNoteIcon != "") {
+        Identify identify = Identify()
+          ..set('10/19 더하기 버튼 아이콘으로 CTA 대체하기', emptyNoteIcon);
+
+        Analytics_config().userProps(identify);
+      }
+    }
     super.initState();
   }
 
@@ -191,7 +207,7 @@ class _NoteScreenState extends State<NoteScreen> {
             CarouselSliderBanner(),
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
-                EmptyNoteList()
+                (emptyNoteIcon == 'B') ? EmptyIconNote() : EmptyNoteList(),
               ] else if (_listSate == 1) ...[
                 Expanded(
                   child: Center(
