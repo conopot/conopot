@@ -220,403 +220,398 @@ class _UserScreenState extends State<UserScreen> {
                       )),
                     ),
                     SizedBox(height: defaultSize * 1.5),
-                    if (loginState == true)
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: defaultSize * 1.5),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: defaultSize * 1.5),
-                                InkWell(
-                        child: Column(children: [
-                          SizedBox(height: defaultSize * 2),
-                          InkWell(
-                            onTap: () async {
-                              await rewardCheck();
-                              await rewardRemainTimeCheck();
-                              (rewardFlag == true)
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          backgroundColor: kDialogColor,
-                                          shape: const RoundedRectangleBorder(
-                                              side: BorderSide(width: 0.0),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8))),
-                                          title: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: "광고 제거 효과",
-                                                  style: TextStyle(
-                                                    color: kMainColor,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: defaultSize * 1.7,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: defaultSize * 1.5),
+                              InkWell(
+                                child: InkWell(
+                                  onTap: () async {
+                                    await rewardCheck();
+                                    await rewardRemainTimeCheck();
+                                    (rewardFlag == true)
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                backgroundColor: kDialogColor,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            width: 0.0),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    8))),
+                                                title: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: "광고 제거 효과",
+                                                        style: TextStyle(
+                                                          color: kMainColor,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize:
+                                                              defaultSize * 1.7,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                          text: '가 적용 중입니다',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                kPrimaryWhiteColor,
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    1.7,
+                                                          )),
+                                                    ],
                                                   ),
                                                 ),
-                                                TextSpan(
-                                                    text: '가 적용 중입니다',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: kPrimaryWhiteColor,
-                                                      fontSize:
-                                                          defaultSize * 1.7,
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          content: Text(
-                                            '현재 남은 시간 : ${rewardRemainTime}',
-                                            style: TextStyle(
-                                                fontSize: defaultSize * 1.5,
-                                                fontWeight: FontWeight.w300,
-                                                color: kPrimaryWhiteColor),
-                                          ),
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          kPrimaryGreyColor),
-                                                  shape: MaterialStateProperty
-                                                      .all<RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                    side: const BorderSide(
-                                                        width: 0.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ))),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "취소",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: kMainColor),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    )
-                                  : showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          backgroundColor: kDialogColor,
-                                          shape: const RoundedRectangleBorder(
-                                              side: BorderSide(width: 0.0),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8))),
-                                          title: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                    text: '광고 제거 버전',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: kMainColor,
-                                                      fontSize:
-                                                          defaultSize * 1.7,
-                                                    )),
-                                                TextSpan(
-                                                    text: ' 체험해보기',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: kPrimaryWhiteColor,
-                                                      fontSize:
-                                                          defaultSize * 1.7,
-                                                    )),
-                                              ],
-                                            ),
-                                          ),
-                                          content: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: "30초 광고 보고\n",
+                                                content: Text(
+                                                  '현재 남은 시간 : ${rewardRemainTime}',
                                                   style: TextStyle(
-                                                    color: kPrimaryWhiteColor,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: defaultSize * 1.5,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                    text: '30분 동안 모든 광고',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: kMainColor,
                                                       fontSize:
                                                           defaultSize * 1.5,
-                                                    )),
-                                                TextSpan(
-                                                  text:
-                                                      '가 제거된\n클린한 애창곡 노트를 사용해보세요 🐱\n',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    color: kPrimaryWhiteColor,
-                                                    fontSize: defaultSize * 1.5,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color:
+                                                          kPrimaryWhiteColor),
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                                    kPrimaryGreyColor),
+                                                        shape: MaterialStateProperty
+                                                            .all<RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 0.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ))),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(
+                                                      "취소",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: kMainColor),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          )
+                                        : showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                backgroundColor: kDialogColor,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            width: 0.0),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    8))),
+                                                title: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                          text: '광고 제거 버전',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: kMainColor,
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    1.7,
+                                                          )),
+                                                      TextSpan(
+                                                          text: ' 체험해보기',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                kPrimaryWhiteColor,
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    1.7,
+                                                          )),
+                                                    ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: [
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          kPrimaryGreyColor),
-                                                  shape: MaterialStateProperty
-                                                      .all<RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                    side: const BorderSide(
-                                                        width: 0.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ))),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "취소",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: kMainColor),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(
-                                                          kMainColor),
-                                                  shape: MaterialStateProperty
-                                                      .all<RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                    side: const BorderSide(
-                                                        width: 0.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ))),
-                                              onPressed: () async {
-                                                if (_rewardedAd != null) {
-                                                  Navigator.pop(context);
-                                                  _rewardedAd?.show(
-                                                    onUserEarnedReward:
-                                                        (_, reward) async {
-                                                      //리워드 광고 재생 및 로컬 스토리지 세팅
-                                                      //30분 간 광고가 나오지 않게 한다.
-                                                      int rewardTime = DateTime
-                                                              .now()
-                                                          .millisecondsSinceEpoch;
-                                                      print(
-                                                          "광고 보고 리워드 획득 상태 : ${rewardTime}");
-
-                                                      //30분 추가
-                                                      rewardTime =
-                                                          rewardTime + 1800000;
-                                                      print(
-                                                          "광고 보고 리워드 획득 상태 30분 증가 : ${rewardTime}");
-                                                      await storage.write(
-                                                          key: 'rewardTime',
-                                                          value: rewardTime
-                                                              .toString());
+                                                content: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: "30초 광고 보고\n",
+                                                        style: TextStyle(
+                                                          color:
+                                                              kPrimaryWhiteColor,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize:
+                                                              defaultSize * 1.5,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                          text: '30분 동안 모든 광고',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: kMainColor,
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    1.5,
+                                                          )),
+                                                      TextSpan(
+                                                        text:
+                                                            '가 제거된\n클린한 애창곡 노트를 사용해보세요 🐱\n',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color:
+                                                              kPrimaryWhiteColor,
+                                                          fontSize:
+                                                              defaultSize * 1.5,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                                    kPrimaryGreyColor),
+                                                        shape: MaterialStateProperty
+                                                            .all<RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 0.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ))),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
                                                     },
-                                                  );
-                                                } else {
-                                                  Navigator.pop(context);
-                                                  int rewardTime = DateTime
-                                                          .now()
-                                                      .millisecondsSinceEpoch;
-                                                  print(
-                                                      "광고 보고 리워드 획득 상태 : ${rewardTime}");
+                                                    child: Text(
+                                                      "취소",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: kMainColor),
+                                                    ),
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(
+                                                                    kMainColor),
+                                                        shape: MaterialStateProperty.all<
+                                                                RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                          side:
+                                                              const BorderSide(
+                                                                  width: 0.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ))),
+                                                    onPressed: () async {
+                                                      if (_rewardedAd != null) {
+                                                        Navigator.pop(context);
+                                                        _rewardedAd?.show(
+                                                          onUserEarnedReward:
+                                                              (_, reward) async {
+                                                            //리워드 광고 재생 및 로컬 스토리지 세팅
+                                                            //30분 간 광고가 나오지 않게 한다.
+                                                            int rewardTime =
+                                                                DateTime.now()
+                                                                    .millisecondsSinceEpoch;
+                                                            print(
+                                                                "광고 보고 리워드 획득 상태 : ${rewardTime}");
 
-                                                  //30분 추가
-                                                  rewardTime =
-                                                      rewardTime + 300000;
-                                                  print(
-                                                      "광고 보고 리워드 획득 상태 5분 증가 : ${rewardTime}");
-                                                  await storage.write(
-                                                      key: 'rewardTime',
-                                                      value: rewardTime
-                                                          .toString());
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          "볼 수 있는 광고가 없네요 😅\n5분간 무료로 광고 제거 효과를 적용해드릴게요",
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          Color(0xFFFF7878),
-                                                      textColor:
-                                                          kPrimaryWhiteColor,
-                                                      fontSize:
-                                                          defaultSize * 1.6);
-                                                }
-                                              },
-                                              child: Text(
-                                                "광고 보기",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: kPrimaryWhiteColor),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                            },
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: defaultSize * 1.5),
-                              child: Row(children: [
-                                Text("광고 제거",
-                                    style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                                Spacer(),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: kPrimaryWhiteColor,
-                                ),
-                              ]),
-                            ),
-                          ),
-                          SizedBox(height: defaultSize * 1.5),
-                          InkWell(
-                            onTap: () {
-                              Analytics_config().settingNotice();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NoticeScreen()));
-                            },
-                            splashColor: Colors.transparent,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: defaultSize * 1.5),
-                              child: Row(children: [
-                                Text("공지사항",
-                                    style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 1.5,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                                Spacer(),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: kPrimaryWhiteColor,
-                                ),
-                              ]),
-                            ),
-                          ),
-                          SizedBox(height: defaultSize * 1.5),
-                          SwitchListTile(
-                              activeColor: kMainColor,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: defaultSize * 1.5),
-                              title: Text(
-                                "알림 설정",
-                                style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontSize: defaultSize * 1.5,
-                                  fontWeight: FontWeight.w500,
+                                                            //30분 추가
+                                                            rewardTime =
+                                                                rewardTime +
+                                                                    1800000;
+                                                            print(
+                                                                "광고 보고 리워드 획득 상태 30분 증가 : ${rewardTime}");
+                                                            await storage.write(
+                                                                key:
+                                                                    'rewardTime',
+                                                                value: rewardTime
+                                                                    .toString());
+                                                          },
+                                                        );
+                                                      } else {
+                                                        Navigator.pop(context);
+                                                        int rewardTime = DateTime
+                                                                .now()
+                                                            .millisecondsSinceEpoch;
+                                                        print(
+                                                            "광고 보고 리워드 획득 상태 : ${rewardTime}");
+
+                                                        //30분 추가
+                                                        rewardTime =
+                                                            rewardTime + 300000;
+                                                        print(
+                                                            "광고 보고 리워드 획득 상태 5분 증가 : ${rewardTime}");
+                                                        await storage.write(
+                                                            key: 'rewardTime',
+                                                            value: rewardTime
+                                                                .toString());
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "볼 수 있는 광고가 없네요 😅\n5분간 무료로 광고 제거 효과를 적용해드릴게요",
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                1,
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xFFFF7878),
+                                                            textColor:
+                                                                kPrimaryWhiteColor,
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    1.6);
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      "광고 보기",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color:
+                                                              kPrimaryWhiteColor),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                  },
+                                  splashColor: Colors.transparent,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize * 1.5),
+                                    child: Row(children: [
+                                      Text("광고 제거",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.chevron_right,
+                                        color: kPrimaryWhiteColor,
+                                      ),
+                                    ]),
+                                  ),
                                 ),
                               ),
-                              value:
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .isSubscribed,
-                              onChanged: (bool value) async {
-                                await OneSignal.shared.disablePush(!value);
-                                if (value == true) {
-                                  await storage.write(
-                                      key: 'isSubscribed', value: 'yes');
-                                } else {
-                                  await storage.write(
-                                      key: 'isSubscribed', value: 'no');
-                                }
-                                setState(() {
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .isSubscribed = value;
-                                });
-                              }),
+                              SizedBox(height: defaultSize * 1.5)
+                            ]),
+                      ),
+                    ),
+                    if (loginState == true) SizedBox(height: defaultSize * 1.5),
+                    Container(
+                        decoration:
+                            BoxDecoration(color: kPrimaryLightBlackColor),
+                        child: Column(children: [
                           (loginState == true)
                               ? SizedBox(height: defaultSize * 1.5)
                               : SizedBox.shrink(),
-                          //로그아웃 버튼
                           (loginState == true)
-                              ? InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                UserSharePlaylistScreen()));
-                                  },
-                                  splashColor: Colors.transparent,
-                                  child: Container(
-                                    child: Row(children: [
-                                      Text("내가 공유한 플레이리스트",
-                                          style: TextStyle(
-                                            color: kPrimaryWhiteColor,
-                                            fontSize: defaultSize * 1.5,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      Spacer(),
-                                      Icon(Icons.chevron_right,
-                                          color: kPrimaryWhiteColor)
-                                    ]),
+                              ? Padding(
+                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+                                child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserSharePlaylistScreen()));
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Container(
+                                      child: Row(children: [
+                                        Text("내가 공유한 플레이리스트",
+                                            style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              fontSize: defaultSize * 1.5,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        Spacer(),
+                                        Icon(Icons.chevron_right,
+                                            color: kPrimaryWhiteColor)
+                                      ]),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: defaultSize * 2),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                UserLikedPlaylistScreen()));
-                                  },
-                                  splashColor: Colors.transparent,
-                                  child: Container(
-                                    child: Row(children: [
-                                      Text("내가 좋아요한 플레이리스트",
-                                          style: TextStyle(
-                                            color: kPrimaryWhiteColor,
-                                            fontSize: defaultSize * 1.5,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      Spacer(),
-                                      Icon(Icons.chevron_right,
-                                          color: kPrimaryWhiteColor)
-                                    ]),
+                              )
+                              : SizedBox.shrink(),
+                          (loginState == true)
+                              ? SizedBox(height: defaultSize * 2)
+                              : SizedBox.shrink(),
+                          (loginState == true)
+                              ? Padding(
+                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+                                child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserLikedPlaylistScreen()));
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Container(
+                                      child: Row(children: [
+                                        Text("내가 좋아요한 플레이리스트",
+                                            style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              fontSize: defaultSize * 1.5,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        Spacer(),
+                                        Icon(Icons.chevron_right,
+                                            color: kPrimaryWhiteColor)
+                                      ]),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: defaultSize * 1.5),
-                              ]),
-                        ),
-                      ),
-                    ),
-                    if (loginState == true)
-                    SizedBox(height: defaultSize * 1.5),
+                              )
+                              : SizedBox.shrink(),
+                              SizedBox(height: defaultSize * 1.5),
+                        ])),
+                    if(loginState) SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
@@ -652,15 +647,6 @@ class _UserScreenState extends State<UserScreen> {
                                         .isSubscribed = value;
                                   });
                                 }),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: kPrimaryLightBlackColor,
-                      child: IntrinsicHeight(
-                        child: Column(
-                          children: [
                             SizedBox(height: defaultSize * 1.5),
                             InkWell(
                               onTap: () {
