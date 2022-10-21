@@ -7,6 +7,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -267,8 +268,9 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
       _posts = [];
     }
     try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL =
-          'http://10.0.2.2:3000/post/search?postId=${_lastPostId}&userId=${userId}&keyword=${_searchKeyword}';
+          '${serverURL}/post/search?postId=${_lastPostId}&userId=${userId}&keyword=${_searchKeyword}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{

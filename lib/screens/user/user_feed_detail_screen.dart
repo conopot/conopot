@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:conopot/screens/user/user_feed_edit_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
@@ -85,8 +86,9 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
   // 사용자가 좋아요여부 대한 정보를 받아오는 함수
   getLikeInfo() async {
     try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL =
-          'http://10.0.2.2:3000/playlist/heart?userId=${_userId}&postId=${widget.post.postId}';
+          '${serverURL}/playlist/heart?userId=${_userId}&postId=${widget.post.postId}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{
@@ -265,14 +267,15 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
           padding: EdgeInsets.symmetric(horizontal: defaultSize),
           child: GestureDetector(
             onTap: () async {
+              String? serverURL = dotenv.env['USER_SERVER_URL'];
               String URL = "";
               setState(() {
                 if (_like == false) {
                   _like = true;
-                  URL = 'http://10.0.2.2:3000/playlist/heart';
+                  URL = '${serverURL}/playlist/heart';
                 } else {
                   _like = false;
-                  URL = 'http://10.0.2.2:3000/playlist/hate';
+                  URL = '${serverURL}/playlist/hate';
                 }
               });
               try {
@@ -447,7 +450,8 @@ class _UserFeedDetailScreenState extends State<UserFeedDetailScreen> {
             ))),
         onPressed: () async {
           try {
-            String URL = 'http://10.0.2.2:3000/playlist/delete';
+            String? serverURL = dotenv.env['USER_SERVER_URL'];
+            String URL = '${serverURL}/playlist/delete';
             final response = await http.delete(
               Uri.parse(URL),
               headers: <String, String>{

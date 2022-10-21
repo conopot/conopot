@@ -9,6 +9,7 @@ import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -72,7 +73,8 @@ class _UserFeedEditScreenState extends State<UserFeedEditScreen> {
                           .map((e) => e.tj_songNumber)
                           .toList();
                   try {
-                    String URL = "http://10.0.2.2:3000/playlist/update";
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    String URL = "${serverURL}/playlist/update";
                     final response = await http.post(
                       Uri.parse(URL),
                       headers: <String, String>{

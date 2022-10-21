@@ -6,6 +6,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/post.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -66,7 +67,8 @@ class _FeedReportScreenState extends State<FeedReportScreen> {
               Spacer(),
               GestureDetector(
                 onTap: () async {
-                  String URL = 'http://10.0.2.2:3000/playlist/report';
+                  String? serverURL = dotenv.env['USER_SERVER_URL'];
+                  String URL = '${serverURL}/playlist/report';
                   try {
                     final response = await http.post(
                       Uri.parse(URL),

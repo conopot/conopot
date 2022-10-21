@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:conopot/screens/user/user_feed_detail_screen.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/constants.dart';
@@ -274,7 +275,8 @@ ListView.builder(
       _isLoading = true;
     });
     try {
-      String URL = 'http://10.0.2.2:3000/playlist/mylist?userId=${userId}';
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
+      String URL = '${serverURL}/playlist/mylist?userId=${userId}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{

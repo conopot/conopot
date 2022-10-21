@@ -8,6 +8,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,8 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                           .map((e) => e.tj_songNumber)
                           .toList();
                   try {
-                    String URL = "http://10.0.2.2:3000/playlist/create";
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    String URL = "${serverURL}/playlist/create";
                     final response = await http.post(
                       Uri.parse(URL),
                       headers: <String, String>{

@@ -8,6 +8,7 @@ import 'package:conopot/models/post.dart';
 import 'package:conopot/screens/feed/feed_detail_screen.dart';
 import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -341,10 +342,11 @@ class _PostListViewState extends State<PostListView> {
       _isFirstLoadRunning = true;
     });
     try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
       // option = 1 인기순, option = 2 최신순
       String URL = (option == 1)
-          ? 'http://10.0.2.2:3000/post/sort/famous?postId=${_lastPostId}&userId=${userId}'
-          : 'http://10.0.2.2:3000/post/sort/latest?postId=${_lastPostId}&userId=${userId}';
+          ? '${serverURL}/post/sort/famous?postId=${_lastPostId}&userId=${userId}'
+          : '${serverURL}/post/sort/latest?postId=${_lastPostId}&userId=${userId}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{
@@ -372,9 +374,10 @@ class _PostListViewState extends State<PostListView> {
       _isLoadMoreRunning = true;
     });
     try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL = (_option == 1)
-          ? 'http://10.0.2.2:3000/post/sort/famous?postId=${_lastPostId}&userId=${userId}'
-          : 'http://10.0.2.2:3000/post/sort/latest?postId=${_lastPostId}&userId=${userId}';
+          ? '${serverURL}/post/sort/famous?postId=${_lastPostId}&userId=${userId}'
+          : '${serverURL}/post/sort/latest?postId=${_lastPostId}&userId=${userId}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{

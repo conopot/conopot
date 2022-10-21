@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
@@ -86,8 +87,9 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   // 사용자가 좋아요여부 대한 정보를 받아오는 함수
   getLikeInfo() async {
     try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL =
-          'http://10.0.2.2:3000/playlist/heart?userId=${_userId}&postId=${widget.post.postId}';
+          '${serverURL}/playlist/heart?userId=${_userId}&postId=${widget.post.postId}';
       final response = await http.get(
         Uri.parse(URL),
         headers: <String, String>{
@@ -280,7 +282,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                   if (_like == false) {
                     _like = true;
                     _state = 1;
-                    URL = 'http://10.0.2.2:3000/playlist/heart';
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    URL = '${serverURL}/playlist/heart';
                     body = jsonEncode({
                       "postId": widget.post.postId,
                       "userId":
@@ -293,7 +296,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                   } else {
                     _like = false;
                     _state = -1;
-                    URL = 'http://10.0.2.2:3000/playlist/hate';
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    URL = '${serverURL}/playlist/hate';
                     body = jsonEncode({
                       "postId": widget.post.postId,
                       "userId":
@@ -474,7 +478,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
             ))),
         onPressed: () async {
           try {
-            String URL = 'http://10.0.2.2:3000/playlist/block';
+            String? serverURL = dotenv.env['USER_SERVER_URL'];
+            String URL = '${serverURL}/playlist/block';
             final response = await http.post(
               Uri.parse(URL),
               headers: <String, String>{
