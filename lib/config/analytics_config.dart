@@ -110,6 +110,51 @@ class Analytics_config {
     event('노트_추가_뷰__페이지뷰', {});
   }
 
+  //!event : 피드_뷰__페이지뷰
+  feedPageView() {
+    event('피드_뷰__페이지뷰', {});
+  }
+
+  //!event : 피드_뷰__인기순
+  feedFamousSort() {
+    event('피드_뷰__인기순', {});
+  }
+
+  //!event : 피드_뷰__최신순
+  feedLatestSort() {
+    event('피드_뷰__최신순', {});
+  }
+
+  //!event : 피드_뷰__플레이리스트뷰
+  feedPlaylistView() {
+    event('피드_뷰__플레이리스트뷰', {});
+  }
+
+  //!event : 피드_뷰__좋아요
+  feedlike() {
+    event('피드_뷰__좋아요', {});
+  }
+
+  //!event : 피드_뷰__신고
+  feedban() {
+    event('피드_뷰__신고', {});
+  }
+
+  //!event : 피드_뷰__유저차단
+  feedblock() {
+    event('피드_뷰__유저차단', {});
+  }
+
+  //!event : 피드_뷰__애창곡리스트추가
+  feedAddPlaylist() {
+    event('피드_뷰__애창곡리스트추가', {});
+  }
+
+  //!event : 광고제거__리워드광고
+  adremoveReward() {
+    event('광고제거__리워드광고', {});
+  }
+
   //!event: 노트_추가_뷰__노래선택
   addViewSongClickEvent(String title) {
     event('노트_추가_뷰__노래선택', {'곡명': title});
@@ -188,6 +233,11 @@ class Analytics_config {
   // !event: 네비게이션__내정보탭
   void clickMyTapEvent() {
     event('네비게이션__내정보탭', {});
+  }
+
+  // !event: 네비게이션__피드탭
+  void clickFeedTapEvent() {
+    event('네비게이션__피드탭', {});
   }
 
   // !event: 일반_검색_뷰__노래_유튜브

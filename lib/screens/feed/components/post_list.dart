@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -337,6 +338,11 @@ class _PostListViewState extends State<PostListView> {
 
   // 최초로 인기 게시물을 불러오는 함수
   void _firstLoad(int option) async {
+    if (option == 1) {
+      Analytics_config().feedFamousSort();
+    } else if (option == 2) {
+      Analytics_config().feedLatestSort();
+    }
     setState(() {
       _isFirstLoadRunning = true;
     });

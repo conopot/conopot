@@ -446,6 +446,8 @@ class _UserScreenState extends State<UserScreen> {
                                                         _rewardedAd?.show(
                                                           onUserEarnedReward:
                                                               (_, reward) async {
+                                                            Analytics_config()
+                                                                .adremoveReward();
                                                             //리워드 광고 재생 및 로컬 스토리지 세팅
                                                             //30분 간 광고가 나오지 않게 한다.
                                                             int rewardTime =
@@ -552,8 +554,9 @@ class _UserScreenState extends State<UserScreen> {
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? Padding(
-                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
-                                child: InkWell(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 1.5),
+                                  child: InkWell(
                                     onTap: () {
                                       Navigator.push(
                                           context,
@@ -576,15 +579,16 @@ class _UserScreenState extends State<UserScreen> {
                                       ]),
                                     ),
                                   ),
-                              )
+                                )
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? SizedBox(height: defaultSize * 2)
                               : SizedBox.shrink(),
                           (loginState == true)
                               ? Padding(
-                                padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
-                                child: InkWell(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: defaultSize * 1.5),
+                                  child: InkWell(
                                     onTap: () {
                                       Navigator.push(
                                           context,
@@ -607,11 +611,11 @@ class _UserScreenState extends State<UserScreen> {
                                       ]),
                                     ),
                                   ),
-                              )
+                                )
                               : SizedBox.shrink(),
-                              SizedBox(height: defaultSize * 1.5),
+                          SizedBox(height: defaultSize * 1.5),
                         ])),
-                    if(loginState) SizedBox(height: defaultSize * 1.5),
+                    if (loginState) SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(

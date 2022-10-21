@@ -63,13 +63,13 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     rewardCheck();
-   _widgetOptions = <Widget>[
-            NoteScreen(),
-            MusicBookScreen(),
-            RecommendScreen(),
-            FeedScreen(),
-            UserScreen(),
-          ];
+    _widgetOptions = <Widget>[
+      NoteScreen(),
+      MusicBookScreen(),
+      RecommendScreen(),
+      FeedScreen(),
+      UserScreen(),
+    ];
 
     // TODO: Load a banner ad
     BannerAd(
@@ -203,66 +203,60 @@ class _MainScreenState extends State<MainScreen>
             currentIndex: _selectedIndex,
             selectedItemColor: kMainColor,
             unselectedItemColor: kPrimaryWhiteColor,
-
             items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.home,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "홈",
-                      activeIcon: Icon(
-                        Icons.home,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.book,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "노래방 책",
-                      activeIcon: Icon(
-                        Icons.book,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset("assets/icons/recommend.svg",
-                              height: 17, width: 17)),
-                      label: "추천",
-                      activeIcon: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SvgPicture.asset(
-                              "assets/icons/recommend_click.svg",
-                              height: 17,
-                              width: 17)),
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.forum,
-                        color: kPrimaryWhiteColor,
-                      ),
-                      label: "싱스타그램",
-                      activeIcon: Icon(
-                        Icons.forum,
-                        color: kMainColor,
-                      ),
-                    ),
-                    BottomNavigationBarItem(
-                      icon:
-                          Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
-                      label: "내 정보",
-                      activeIcon: Icon(
-                        Icons.perm_identity,
-                        color: kMainColor,
-                      ),
-                    ),
-                  ],
-                
-
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: kPrimaryWhiteColor,
+                ),
+                label: "홈",
+                activeIcon: Icon(
+                  Icons.home,
+                  color: kMainColor,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.book,
+                  color: kPrimaryWhiteColor,
+                ),
+                label: "노래방 책",
+                activeIcon: Icon(
+                  Icons.book,
+                  color: kMainColor,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: SvgPicture.asset("assets/icons/recommend.svg",
+                        height: 17, width: 17)),
+                label: "추천",
+                activeIcon: Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: SvgPicture.asset("assets/icons/recommend_click.svg",
+                        height: 17, width: 17)),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.forum,
+                  color: kPrimaryWhiteColor,
+                ),
+                label: "싱스타그램",
+                activeIcon: Icon(
+                  Icons.forum,
+                  color: kMainColor,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
+                label: "내 정보",
+                activeIcon: Icon(
+                  Icons.perm_identity,
+                  color: kMainColor,
+                ),
+              ),
+            ],
             onTap: (index) {
               // TJ탭
               if (index == 1) {
@@ -278,7 +272,9 @@ class _MainScreenState extends State<MainScreen>
                   //!event: 네비게이션__추천탭
                   Analytics_config().clickRecommendationTapEvent();
                 } else if (index == 3) {
-                  //!event: 네비게이션__내정보
+                  //!event: 네비게이션__피드탭
+                  Analytics_config().clickFeedTapEvent();
+                } else if (index == 4) {
                   Analytics_config().clickMyTapEvent();
                 }
               });

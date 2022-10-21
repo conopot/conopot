@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -101,6 +102,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
+    Analytics_config().feedPageView();
     return Scaffold(
       appBar: AppBar(
         title: Text("싱스타그램"),
@@ -117,7 +119,8 @@ class _FeedScreenState extends State<FeedScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: GestureDetector(
         onTap: () {
-          if (Provider.of<NoteData>(context, listen: false).isLogined == false) {
+          if (Provider.of<NoteData>(context, listen: false).isLogined ==
+              false) {
             EasyLoading.showToast("로그인 이후 이용가능합니다.");
           } else {
             Provider.of<NoteData>(context, listen: false).lists = [];

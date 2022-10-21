@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
@@ -347,6 +348,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                           )
                         : GestureDetector(
                             onTap: () {
+                              //리스트에 추가한 것으로 판단
+                              Analytics_config().feedAddPlaylist();
                               setState(() {
                                 _isEditting = false;
                               });

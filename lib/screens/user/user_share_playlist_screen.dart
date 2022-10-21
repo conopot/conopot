@@ -116,154 +116,148 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(8))),
           ),
           SizedBox(height: defaultSize),
-ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _posts.length,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () async {
-                    final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => UserFeedDetailScreen(
-                                  post: _posts[index],
-                                ))).then((value) {
-                                  _posts = [];
-                                  _firstLoad();
-                                  setState(() {});
-                                });
-                  },
-                  child: IntrinsicHeight(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: defaultSize * 1.2),
-                          child: Row(children: [
-                            (_posts[index].userImage == null)
-                                ? Container(
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _posts.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () async {
+                final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => UserFeedDetailScreen(
+                              post: _posts[index],
+                            ))).then((value) {
+                  _posts = [];
+                  _firstLoad();
+                  setState(() {});
+                });
+              },
+              child: IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 1.2),
+                      child: Row(children: [
+                        (_posts[index].userImage == null)
+                            ? Container(
+                                width: defaultSize * 3.5,
+                                height: defaultSize * 3.5,
+                                child: Image.asset("assets/images/profile.png"),
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: SizedBox(
                                     width: defaultSize * 3.5,
                                     height: defaultSize * 3.5,
-                                    child: Image.asset(
-                                        "assets/images/profile.png"),
-                                  )
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: SizedBox(
-                                        width: defaultSize * 3.5,
-                                        height: defaultSize * 3.5,
-                                        child: Image.network(
-                                            _posts[index].userImage!,
-                                            fit: BoxFit.cover))),
-                            SizedBox(width: defaultSize * 0.5),
-                            Expanded(
-                              child: RichText(
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(children: [
-                                    TextSpan(
-                                        text: "${_posts[index].userName}",
-                                        style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                        )),
-                                    TextSpan(
-                                        text: "님의 노래방 플레이리스트",
-                                        style: TextStyle(
-                                          color: kPrimaryLightGreyColor,
-                                        )),
-                                  ])),
-                            ),
-                            Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
-                          ]),
+                                    child: Image.network(
+                                        _posts[index].userImage!,
+                                        fit: BoxFit.cover))),
+                        SizedBox(width: defaultSize * 0.5),
+                        Expanded(
+                          child: RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(children: [
+                                TextSpan(
+                                    text: "${_posts[index].userName}",
+                                    style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                    )),
+                                TextSpan(
+                                    text: "님의 노래방 플레이리스트",
+                                    style: TextStyle(
+                                      color: kPrimaryLightGreyColor,
+                                    )),
+                              ])),
                         ),
-                        SizedBox(height: defaultSize),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                              defaultSize, 0, defaultSize, defaultSize),
-                          padding: EdgeInsets.all(defaultSize * 1.5),
-                          decoration: BoxDecoration(
-                              color: kPrimaryLightBlackColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
-                          child: IntrinsicHeight(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
+                      ]),
+                    ),
+                    SizedBox(height: defaultSize),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(
+                          defaultSize, 0, defaultSize, defaultSize),
+                      padding: EdgeInsets.all(defaultSize * 1.5),
+                      decoration: BoxDecoration(
+                          color: kPrimaryLightBlackColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: IntrinsicHeight(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: defaultSize),
+                              Row(
                                 children: [
-                                  SizedBox(height: defaultSize),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${_emotionList[_posts[index].postIconId]}",
-                                          style: TextStyle(
-                                              fontSize: defaultSize * 3)),
-                                      SizedBox(width: defaultSize),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(_posts[index].postTitle,
-                                                style: TextStyle(
-                                                    color: kPrimaryWhiteColor,
-                                                    fontSize: defaultSize * 1.4,
-                                                    overflow:
-                                                        TextOverflow.ellipsis)),
-                                            SizedBox(
-                                                height: defaultSize * 0.25),
-                                            Text(
-                                              _posts[index].postSubscription ==
-                                                      null
-                                                  ? ""
-                                                  : _posts[index]
-                                                      .postSubscription!
-                                                      .trim()
-                                                      .replaceAll("\n", " "),
-                                              style: TextStyle(
-                                                  color:
-                                                      kPrimaryLightWhiteColor,
-                                                  fontSize: defaultSize * 1.2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: defaultSize),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: defaultSize * 0.5),
-                                    child: Row(
+                                  Text(
+                                      "${_emotionList[_posts[index].postIconId]}",
+                                      style:
+                                          TextStyle(fontSize: defaultSize * 3)),
+                                  SizedBox(width: defaultSize),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(Icons.favorite,
-                                            color: kMainColor,
-                                            size: defaultSize * 1.8),
-                                        SizedBox(width: defaultSize * 0.5),
-                                        Text(
-                                          "${_posts[index].postLikeCount}",
-                                          style: TextStyle(
-                                              color: kMainColor,
-                                              fontSize: defaultSize * 1.3),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                            "${_posts[index].postMusicList.length}개의 노래",
+                                        Text(_posts[index].postTitle,
                                             style: TextStyle(
-                                                fontSize: defaultSize * 1.3,
-                                                color: kPrimaryLightGreyColor))
+                                                color: kPrimaryWhiteColor,
+                                                fontSize: defaultSize * 1.4,
+                                                overflow:
+                                                    TextOverflow.ellipsis)),
+                                        SizedBox(height: defaultSize * 0.25),
+                                        Text(
+                                          _posts[index].postSubscription == null
+                                              ? ""
+                                              : _posts[index]
+                                                  .postSubscription!
+                                                  .trim()
+                                                  .replaceAll("\n", " "),
+                                          style: TextStyle(
+                                              color: kPrimaryLightWhiteColor,
+                                              fontSize: defaultSize * 1.2,
+                                              overflow: TextOverflow.ellipsis),
+                                        )
                                       ],
                                     ),
                                   )
-                                ]),
-                          ),
-                        ),
-                        SizedBox(height: defaultSize * 0.5)
-                      ],
+                                ],
+                              ),
+                              SizedBox(height: defaultSize),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(left: defaultSize * 0.5),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.favorite,
+                                        color: kMainColor,
+                                        size: defaultSize * 1.8),
+                                    SizedBox(width: defaultSize * 0.5),
+                                    Text(
+                                      "${_posts[index].postLikeCount}",
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontSize: defaultSize * 1.3),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                        "${_posts[index].postMusicList.length}개의 노래",
+                                        style: TextStyle(
+                                            fontSize: defaultSize * 1.3,
+                                            color: kPrimaryLightGreyColor))
+                                  ],
+                                ),
+                              )
+                            ]),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: defaultSize * 0.5)
+                  ],
                 ),
               ),
+            ),
+          ),
         ],
       ),
     );

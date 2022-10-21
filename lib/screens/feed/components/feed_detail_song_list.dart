@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note.dart';
@@ -17,6 +18,7 @@ class FeedDetailSongList extends StatefulWidget {
 class _FeedDetailSongListState extends State<FeedDetailSongList> {
   @override
   Widget build(BuildContext context) {
+    Analytics_config().feedPlaylistView();
     double defaultSize = SizeConfig.defaultSize;
     return Expanded(
       child: ListView.builder(

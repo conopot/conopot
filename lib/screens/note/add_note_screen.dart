@@ -1,3 +1,4 @@
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/screens/note/components/note_search_list.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,11 @@ class AddNoteScreen extends StatefulWidget {
 class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
+    Analytics_config().addNotePageView();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
+        title:
+            const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
         centerTitle: true,
       ),
       body: Consumer<MusicSearchItemLists>(
