@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 class FeedScrrenController {
   late int lastPostId;
-  late void Function(int lastPostId) loadMore;
+  late void Function() loadMore;
 }
 
 class FeedScreen extends StatefulWidget {
@@ -51,7 +51,7 @@ class _FeedScreenState extends State<FeedScreen> {
       ..addListener(() {
         if (_controller.position.maxScrollExtent ==
             _controller.position.pixels) {
-          feedScrrenController.loadMore(feedScrrenController.lastPostId);
+          feedScrrenController.loadMore();
         }
       });
     super.initState();

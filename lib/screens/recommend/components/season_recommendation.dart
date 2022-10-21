@@ -16,6 +16,13 @@ class SeasonRecommendation extends StatelessWidget {
     RecommendationItemList.winterList,
   ];
 
+    List<String> _images = [
+    'assets/images/5-1.png',
+    'assets/images/5-2.png',
+    'assets/images/5-3.png',
+    'assets/images/5-4.png',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,20 +80,11 @@ class SeasonRecommendation extends StatelessWidget {
                           child: FittedBox(
                               fit: BoxFit.fill,
                               child: Image.asset(
-                                "assets/images/recommend1.png",
+                                _images[index],
                                 width: defaultSize * 11,
                                 height: defaultSize * 11,
                               )),
                         ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              titleList[index],
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: defaultSize * 1.5),
-                            )),
                       ],
                     ),
                   ),

@@ -16,6 +16,13 @@ class GenderRecommendation extends StatelessWidget {
     RecommendationItemList.femaleLowList,
   ];
 
+  List<String> _images = [
+    'assets/images/4-1.png',
+    'assets/images/4-2.png',
+    'assets/images/4-3.png',
+    'assets/images/4-4.png',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,28 +74,15 @@ class GenderRecommendation extends StatelessWidget {
                     margin: EdgeInsets.only(right: defaultSize * 2),
                     width: defaultSize * 11,
                     decoration: BoxDecoration(color: Colors.transparent),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: Image.asset(
-                                "assets/images/recommend1.png",
-                                width: defaultSize * 11,
-                                height: defaultSize * 11,
-                              )),
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              titleList[index],
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: defaultSize * 1.5),
-                            )),
-                      ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.asset(
+                            _images[index],
+                            width: defaultSize * 11,
+                            height: defaultSize * 11,
+                          )),
                     ),
                   ),
                 );

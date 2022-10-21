@@ -49,7 +49,7 @@ class _PostListViewState extends State<PostListView> {
             _isLoadMoreRunning == false &&
             _controller.position.maxScrollExtent ==
                 _controller.position.pixels) {
-          _loadMore(_option);
+          _loadMore();
         }
       });
   }
@@ -323,7 +323,7 @@ class _PostListViewState extends State<PostListView> {
           ),
         if (_hasNextPage == false)
           Container(
-            color: Colors.amber,
+            color: kPrimaryLightBlackColor,
             child: const Center(
               child: Text(
                 "더 이상 게시물이 없습니다",
@@ -366,13 +366,13 @@ class _PostListViewState extends State<PostListView> {
   }
 
   // 추가적인 게시물을 불러오는 함수
-  void _loadMore(int option) async {
+  void _loadMore() async {
     setState(() {
       // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
       _isLoadMoreRunning = true;
     });
     try {
-      String URL = (option == 1)
+      String URL = (_option == 1)
           ? 'http://10.0.2.2:3000/post/sort/famous?postId=${_lastPostId}&userId=${userId}'
           : 'http://10.0.2.2:3000/post/sort/latest?postId=${_lastPostId}&userId=${userId}';
       final response = await http.get(
@@ -384,6 +384,7 @@ class _PostListViewState extends State<PostListView> {
       var data = json.decode(response.body);
       // 새로 받아온 게시물
       final List fetchedPosts = data['posts'];
+      print(data['posts']);
       if (fetchedPosts.isNotEmpty) {
         setState(() {
           _lastPostId = data['lastPostId'];

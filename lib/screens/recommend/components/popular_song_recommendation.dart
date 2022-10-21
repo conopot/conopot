@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 class PopularSongRecommendation extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
   List<String> _list = ['TJ 인기차트', '금영 인기차트', '올타임 레전드'];
+  List<String> _images = ['assets/images/1-1_tj.png','assets/images/1-2_ky.png', 'assets/images/1-3_all.png'];
 
   @override
   Widget build(BuildContext context) {
@@ -80,28 +81,15 @@ class PopularSongRecommendation extends StatelessWidget {
                     margin: EdgeInsets.only(right: defaultSize * 2),
                     width: defaultSize * 11,
                     decoration: BoxDecoration(color: Colors.transparent),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: Image.asset(
-                                "assets/images/recommend1.png",
-                                width: defaultSize * 11,
-                                height: defaultSize * 11,
-                              )),
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              _list[index],
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: defaultSize * 1.5),
-                            )),
-                      ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.asset(
+                            _images[index],
+                            width: defaultSize * 11,
+                            height: defaultSize * 11,
+                          )),
                     ),
                   ),
                 );

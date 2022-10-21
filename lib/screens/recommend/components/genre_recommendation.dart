@@ -34,6 +34,15 @@ class GenreRecommendation extends StatelessWidget {
       RecommendationItemList.oldList,
     ];
 
+    List<String> _images = [
+    'assets/images/3-1.png',
+    'assets/images/3-2.png',
+    'assets/images/3-3.png',
+    'assets/images/3-4.png',
+    'assets/images/3-5.png',
+    'assets/images/3-6.png',
+  ];
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
       child: Column(
@@ -95,28 +104,15 @@ class GenreRecommendation extends StatelessWidget {
                     margin: EdgeInsets.only(right: defaultSize * 2),
                     width: defaultSize * 11,
                     decoration: BoxDecoration(color: Colors.transparent),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: Image.asset(
-                                "assets/images/recommend1.png",
-                                width: defaultSize * 11,
-                                height: defaultSize * 11,
-                              )),
-                        ),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              titleList[index],
-                              style: TextStyle(
-                                  color: kPrimaryWhiteColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: defaultSize * 1.5),
-                            )),
-                      ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.asset(
+                            _images[index],
+                            width: defaultSize * 11,
+                            height: defaultSize * 11,
+                          )),
                     ),
                   ),
                 );
