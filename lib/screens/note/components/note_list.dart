@@ -190,7 +190,17 @@ class _NoteListState extends State<NoteList> {
                                       )
                                     ]
                                   ],
-                                )),
+                                )),Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.chevron_right,
+                                        color: kPrimaryWhiteColor),
+                                    Text("상세정보",
+                                        style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize))
+                                  ],
+                                )
                               ],
                             ),
                           ),

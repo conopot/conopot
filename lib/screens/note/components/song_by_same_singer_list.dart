@@ -6,6 +6,7 @@ import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -44,7 +45,10 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
         children: [
           Text(
             '${widget.note.tj_singer}이(가) 부른 다른 노래',
-            style: TextStyle(color: kPrimaryWhiteColor, fontWeight: FontWeight.w500, fontSize: defaultSize * 1.5),
+            style: TextStyle(
+                color: kPrimaryWhiteColor,
+                fontWeight: FontWeight.w500,
+                fontSize: defaultSize * 1.5),
           ),
           SizedBox(height: defaultSize),
           ListView.builder(
@@ -60,8 +64,23 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                   margin: EdgeInsets.only(bottom: defaultSize * 0.5),
                   child: GestureDetector(
                     onTap: () {
-                      Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialog(context, songNumber, title);
+                      Set<Note> entireNote = Provider.of<MusicSearchItemLists>(
+                              context,
+                              listen: false)
+                          .entireNote;
+                      Note? note;
+                      for (Note e in entireNote) {
+                        if (e.tj_songNumber == songNumber) {
+                          note = e;
+                        }
+                      }
+                      if (note != null) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note!)));
+                      }
                     },
                     child: Container(
                       width: defaultSize * 35.5,
@@ -156,12 +175,25 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                               ],
                             ),
                           ),
-                          SizedBox(width: defaultSize * 1.5),
-                          SizedBox(
-                              width: defaultSize * 2.1,
-                              height: defaultSize * 1.9,
-                              child: SvgPicture.asset(
-                                  "assets/icons/listButton.svg")),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Provider.of<NoteData>(context, listen: false)
+                                  .showAddNoteDialog(
+                                      context, songNumber, title);
+                            },
+                            child: Row(
+                              children: [
+                                SizedBox(width: defaultSize),
+                                SizedBox(
+                                    width: defaultSize * 2.1,
+                                    height: defaultSize * 1.9,
+                                    child: SvgPicture.asset(
+                                        "assets/icons/listButton.svg")),
+                                SizedBox(width: defaultSize),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

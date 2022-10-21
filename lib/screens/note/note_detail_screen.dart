@@ -183,6 +183,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     getLyrics(widget.note.tj_songNumber);
     Analytics_config().noteDetailPageView();
     _tabController = new TabController(length: 2, vsync: this);
+    print("여기 : ${widget.note}");
   }
 
   @override
@@ -206,24 +207,38 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "애창곡 노트",
+            "${widget.note.tj_title}",
             style: TextStyle(
-                fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5),
+                fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5, overflow: TextOverflow.ellipsis),
           ),
           centerTitle: true,
           actions: [
-            TextButton(
-                onPressed: () {
-                  Provider.of<NoteData>(context, listen: false)
-                      .showDeleteDialog(context, widget.note);
-                },
-                child: Text(
-                  "삭제",
-                  style: TextStyle(
-                      color: kMainColor,
-                      fontWeight: FontWeight.w300,
-                      fontSize: defaultSize * 1.5),
-                ))
+            (Provider.of<NoteData>(context, listen: false)
+                    .notes
+                    .contains(widget.note))
+                ? TextButton(
+                    onPressed: () {
+                      Provider.of<NoteData>(context, listen: false)
+                          .showDeleteDialog(context, widget.note);
+                    },
+                    child: Text(
+                      "삭제",
+                      style: TextStyle(
+                          color: kMainColor,
+                          fontWeight: FontWeight.w300,
+                          fontSize: defaultSize * 1.5),
+                    ))
+                : TextButton(
+                    onPressed: () {
+                      Provider.of<NoteData>(context, listen: false).showAddNoteDialog(context, widget.note.tj_songNumber, widget.note.tj_title);
+                    },
+                    child: Text(
+                      "추가",
+                      style: TextStyle(
+                          color: kMainColor,
+                          fontWeight: FontWeight.w300,
+                          fontSize: defaultSize * 1.5),
+                    ))
           ],
         ),
         body: (videoId == null)
@@ -601,6 +616,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                     children: [
                       // 정보 탭
                       ListView(
+                        padding: EdgeInsets.only(
+                            bottom: SizeConfig.screenHeight * 0.3),
                         children: [
                           Container(
                             padding: EdgeInsets.all(defaultSize * 1.5),

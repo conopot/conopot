@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -102,12 +104,23 @@ class _SearchListState extends State<SearchList> {
               return GestureDetector(
                 onTap: () {
                   if (widget.musicList.tabIndex == 1) {
-                    Provider.of<NoteData>(context, listen: false)
-                        .showAddNoteDialogWithInfo(context,
-                            isTj: true,
-                            songNumber: songNumber,
-                            title: title,
-                            singer: singer);
+                    Set<Note> entireNote = Provider.of<MusicSearchItemLists>(
+                              context,
+                              listen: false)
+                          .entireNote;
+                      Note? note;
+                      for (Note e in entireNote) {
+                        if (e.tj_songNumber == songNumber) {
+                          note = e;
+                        }
+                      }
+                      if (note != null) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note!)));
+                      }
                   } else {
                     Provider.of<NoteData>(context, listen: false)
                         .showAddNoteDialogWithInfo(context,
@@ -158,6 +171,17 @@ class _SearchListState extends State<SearchList> {
                           )
                         ],
                       ),
+                    ),
+                    if (widget.musicList.tabIndex == 1)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor),
+                        Text("상세정보",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize))
+                      ],
                     )
                   ]),
                 ),
