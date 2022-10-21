@@ -317,12 +317,16 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
             child: Row(
               children: [
                 ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: SizedBox(
-                        width: defaultSize * 4,
-                        height: defaultSize * 4,
-                        child: Image.network(widget.post.userImage!,
-                            fit: BoxFit.cover))),
+                  borderRadius: BorderRadius.circular(100),
+                  child: SizedBox(
+                    width: defaultSize * 4,
+                    height: defaultSize * 4,
+                    child: (widget.post.userImage == null)
+                        ? Image.asset("assets/images/profile.png")
+                        : Image.network(widget.post.userImage!,
+                            fit: BoxFit.cover),
+                  ),
+                ),
                 SizedBox(width: defaultSize),
                 Text("${widget.post.userName}",
                     style: TextStyle(

@@ -131,10 +131,10 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
                         builder: (_) => FeedDetailScreen(
                               post: _posts[index],
                             ))).then((value) {
-                              _posts = [];
-                              _firstLoad();
-                              setState(() {});
-                            });
+                  _posts = [];
+                  _firstLoad();
+                  setState(() {});
+                });
               },
               child: IntrinsicHeight(
                 child: Column(
@@ -214,7 +214,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
                                           _posts[index].postSubscription == null
                                               ? ""
                                               : _posts[index]
-                                                  .postSubscription!
+                                                  .postSubscription
                                                   .trim()
                                                   .replaceAll("\n", " "),
                                           style: TextStyle(

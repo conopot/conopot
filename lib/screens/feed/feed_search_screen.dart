@@ -55,115 +55,129 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: feedSearchBar()),
-      body: (_posts.isEmpty) ? Center(child:Text("검색 결과가 없습니다.", style: TextStyle(color: kPrimaryWhiteColor, fontSize: defaultSize * 2),),) :ListView.builder(
-        controller: _controller,
-        itemCount: _posts.length,
-        itemBuilder: (context, index) => GestureDetector(
-          onTap: () async {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => FeedDetailScreen(
-                          post: _posts[index],
-                        )));
-          },
-          child: IntrinsicHeight(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IntrinsicWidth(
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: defaultSize * 1.2),
-                    child: Row(children: [
-                      (_posts[index].userImage == null)
-                          ? Container(
-                              width: defaultSize * 2.8,
-                              height: defaultSize * 2.8,
-                              child:
-                                  SvgPicture.asset("assets/icons/profile.svg"),
-                            )
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: SizedBox(
-                                  width: defaultSize * 2.8,
-                                  height: defaultSize * 2.8,
-                                  child: Image.network(_posts[index].userImage!,
-                                      fit: BoxFit.cover))),
-                      SizedBox(width: defaultSize * 0.5),
-                      Text(
-                        "${_posts[index].userName}",
-                        style: TextStyle(color: kPrimaryWhiteColor),
-                      ),
-                      Text("님의 노래방")
-                    ]),
-                  ),
-                ),
-                SizedBox(height: defaultSize),
-                Container(
-                  margin: EdgeInsets.fromLTRB(
-                      defaultSize, 0, defaultSize, defaultSize),
-                  padding: EdgeInsets.all(defaultSize * 1.5),
-                  decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: IntrinsicHeight(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: defaultSize),
-                          Row(
-                            children: [
-                              Text("${_emotionList[_posts[index].postIconId]}",
-                                  style: TextStyle(fontSize: defaultSize * 3)),
-                              SizedBox(width: defaultSize),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_posts[index].postTitle,
-                                      style: TextStyle(
-                                          color: kPrimaryWhiteColor,
-                                          overflow: TextOverflow.ellipsis)),
-                                  SizedBox(height: defaultSize * 0.25),
-                                  Text(
-                                    _posts[index].postSubscription == null
-                                        ? ""
-                                        : _posts[index].postSubscription!,
-                                    style: TextStyle(
-                                        color: kPrimaryWhiteColor,
-                                        overflow: TextOverflow.ellipsis),
+      body: (_posts.isEmpty)
+          ? Center(
+              child: Text(
+                "검색 결과가 없습니다.",
+                style: TextStyle(
+                    color: kPrimaryWhiteColor, fontSize: defaultSize * 2),
+              ),
+            )
+          : ListView.builder(
+              controller: _controller,
+              itemCount: _posts.length,
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => FeedDetailScreen(
+                                post: _posts[index],
+                              )));
+                },
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IntrinsicWidth(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: defaultSize * 1.2),
+                          child: Row(children: [
+                            (_posts[index].userImage == null)
+                                ? Container(
+                                    width: defaultSize * 2.8,
+                                    height: defaultSize * 2.8,
+                                    child: SvgPicture.asset(
+                                        "assets/icons/profile.svg"),
                                   )
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: defaultSize),
-                          Container(
-                            margin: EdgeInsets.only(left: defaultSize * 0.5),
-                            child: Row(
-                              children: [
-                                Icon(Icons.favorite, color: kMainColor),
-                                SizedBox(width: defaultSize * 0.5),
-                                Text(
-                                  "${_posts[index].postLikeCount}",
-                                  style: TextStyle(color: kMainColor),
-                                ),
-                                Spacer(),
-                                Text(
-                                    "${_posts[index].postMusicList.length}개의 노래",
-                                    style: TextStyle(
-                                        color: kPrimaryLightGreyColor))
-                              ],
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: SizedBox(
+                                        width: defaultSize * 2.8,
+                                        height: defaultSize * 2.8,
+                                        child: Image.network(
+                                            _posts[index].userImage!,
+                                            fit: BoxFit.cover))),
+                            SizedBox(width: defaultSize * 0.5),
+                            Text(
+                              "${_posts[index].userName}",
+                              style: TextStyle(color: kPrimaryWhiteColor),
                             ),
-                          )
-                        ]),
+                            Text("님의 노래방")
+                          ]),
+                        ),
+                      ),
+                      SizedBox(height: defaultSize),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            defaultSize, 0, defaultSize, defaultSize),
+                        padding: EdgeInsets.all(defaultSize * 1.5),
+                        decoration: BoxDecoration(
+                            color: kPrimaryLightBlackColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        child: IntrinsicHeight(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: defaultSize),
+                                Row(
+                                  children: [
+                                    Text(
+                                        "${_emotionList[_posts[index].postIconId]}",
+                                        style: TextStyle(
+                                            fontSize: defaultSize * 3)),
+                                    SizedBox(width: defaultSize),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(_posts[index].postTitle,
+                                            style: TextStyle(
+                                                color: kPrimaryWhiteColor,
+                                                overflow:
+                                                    TextOverflow.ellipsis)),
+                                        SizedBox(height: defaultSize * 0.25),
+                                        Text(
+                                          _posts[index].postSubscription == null
+                                              ? ""
+                                              : _posts[index].postSubscription,
+                                          style: TextStyle(
+                                              color: kPrimaryWhiteColor,
+                                              overflow: TextOverflow.ellipsis),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: defaultSize),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: defaultSize * 0.5),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.favorite, color: kMainColor),
+                                      SizedBox(width: defaultSize * 0.5),
+                                      Text(
+                                        "${_posts[index].postLikeCount}",
+                                        style: TextStyle(color: kMainColor),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                          "${_posts[index].postMusicList.length}개의 노래",
+                                          style: TextStyle(
+                                              color: kPrimaryLightGreyColor))
+                                    ],
+                                  ),
+                                )
+                              ]),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 

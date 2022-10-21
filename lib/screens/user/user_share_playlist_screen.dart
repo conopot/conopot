@@ -211,7 +211,7 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
                                           _posts[index].postSubscription == null
                                               ? ""
                                               : _posts[index]
-                                                  .postSubscription!
+                                                  .postSubscription
                                                   .trim()
                                                   .replaceAll("\n", " "),
                                           style: TextStyle(
