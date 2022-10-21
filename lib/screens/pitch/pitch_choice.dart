@@ -101,12 +101,6 @@ class _PitchChoiceState extends State<PitchChoice> {
                     ? null
                     : FloatingActionButton.extended(
                         onPressed: () => {
-                          // !event : 간접 음역대 측정뷰 - 선택완료
-                          Analytics_config().event('간접_음역대_측정뷰__선택완료', {
-                            '선택한_노래_리스트': musicList.checkedMusics
-                                .map((e) => e.tj_title)
-                                .toList()
-                          }),
                           musicList.getMaxPitch(),
                           if (musicList.userMaxPitch == -1)
                             {

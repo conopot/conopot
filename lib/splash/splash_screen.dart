@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
 
       //firebase remote config 초기화
-      await Firebase_Remote_Config().init(sessionCnt);
+      await Firebase_Remote_Config().init();
       //이때 remote config - musicUpdateSetting 이 false 라면, 하지 않기
       bool musicUpdateSetting = false;
       musicUpdateSetting =
@@ -62,7 +62,18 @@ class _SplashScreenState extends State<SplashScreen> {
       await Provider.of<NoteData>(context, listen: false).initNotes();
       await SizeConfig().init(context);
       await RecommendationItemList().initRecommendationList();
-      await appOpenAds(context);
+
+      //앱 오픈 광고
+      //리워드가 존재하는지 체크
+      bool rewardFlag =
+          await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+      //존재한다면 광고 없이 넘어가기
+      if (rewardFlag) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      } else {
+        await appOpenAds(context);
+      }
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {

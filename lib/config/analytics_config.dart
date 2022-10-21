@@ -479,4 +479,9 @@ class Analytics_config {
   firstSessionEvent() {
     event('첫세션', {});
   }
+
+  //!event: 노트가 없는 사용자
+  emptyNoteUserEvent() {
+    event('노트없는사용자', {});
+  }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class Firebase_Remote_Config {
   final remoteConfig = FirebaseRemoteConfig.instance;
 
-  Future<void> init(int sessionCnt) async {
+  Future<void> init() async {
     final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(RemoteConfigSettings(
       fetchTimeout: const Duration(minutes: 10),

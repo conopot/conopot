@@ -54,6 +54,8 @@ class NoteData extends ChangeNotifier {
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
+  int detailDisposeCount = 0; //광고를 위해, 노트 상세정보에서 나간 횟수를 기록
+
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
       ? {
           'android': 'ca-app-pub-7139143792782560/4800293433',
@@ -114,8 +116,9 @@ class NoteData extends ChangeNotifier {
         ));
   }
 
-  void _showInterstitialAd(String command) {
-    if (_interstitialAd == null) {
+  void _showInterstitialAd(String command) async {
+    bool rewardFlag = await isUserRewarded();
+    if (_interstitialAd == null || rewardFlag) {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
@@ -617,7 +620,7 @@ class NoteData extends ChangeNotifier {
   }
 
   // 리뷰 요청 다이어로그
-  Future<bool> showReviewDialog(context) async {
+  showReviewDialog(context) async {
     // !event: 리뷰요청_뷰__페이지뷰
     Analytics_config().reviewRequestPageVeiwEvent();
     double defaultSize = SizeConfig.defaultSize;
@@ -1396,5 +1399,42 @@ class NoteData extends ChangeNotifier {
         builder: (BuildContext context) {
           return Container(child: alert);
         });
+  }
+
+  //해당 사용자가 현재 리워드 보상(광고 제거)이 유지되어있는지 검사하는 함수
+  Future<bool> isUserRewarded() async {
+    String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
+    print('rewardHoldTimeString : ${rewardHoldTimeString}');
+    if (rewardHoldTimeString == null) return false;
+    int rewardHoldTime = int.parse(rewardHoldTimeString);
+    int nowTime = DateTime.now().millisecondsSinceEpoch;
+
+    //현재 시각이 리워드 시각 이후라면
+    if (nowTime > rewardHoldTime) {
+      print('리워드 미적용');
+      return false;
+    } else {
+      print('리워드 적용');
+      return true;
+    }
+  }
+
+  Future<String> userRewardedTime() async {
+    String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
+    print('rewardHoldTimeString : ${rewardHoldTimeString}');
+    if (rewardHoldTimeString == null) return "0초";
+    int rewardHoldTime = int.parse(rewardHoldTimeString);
+    int nowTime = DateTime.now().millisecondsSinceEpoch;
+
+    int distTime = rewardHoldTime - nowTime;
+
+    int minute = (distTime) ~/ 60000;
+    int second = (distTime - (minute * 60000)) ~/ 1000;
+
+    if (minute >= 1) {
+      return "${minute} 분 ${second} 초";
+    } else {
+      return "${second} 초";
+    }
   }
 }

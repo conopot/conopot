@@ -51,9 +51,17 @@ class _MainScreenState extends State<MainScreen>
 
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
 
   @override
   void initState() {
+    rewardCheck();
     _widgetOptions = <Widget>[
       NoteScreen(),
       MusicBookScreen(),
@@ -101,7 +109,7 @@ class _MainScreenState extends State<MainScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TODO: Display a banner when ready
-                if (_bannerAd != null)
+                if (_bannerAd != null && rewardFlag == false)
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(

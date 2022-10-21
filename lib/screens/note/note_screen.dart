@@ -14,6 +14,7 @@ import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -31,23 +32,145 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
-  String emptyNoteIcon = "";
+  String abtest1021_modal = "";
 
   bool isLoaded = false;
 
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Container(
+            height: defaultSize * 18,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Column(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "나만의 첫 ",
+                          style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 2,
+                          ),
+                        ),
+                        TextSpan(
+                            text: '애창곡',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: kMainColor,
+                              fontSize: defaultSize * 2,
+                            )),
+                        TextSpan(
+                          text: "을",
+                          style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.defaultSize * 0.5,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "애창곡 노트",
+                          style: TextStyle(
+                            color: kMainColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 2,
+                          ),
+                        ),
+                        TextSpan(
+                            text: '에 저장해 보세요',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 2,
+                            )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: defaultSize * 2.5,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .initCombinedBook();
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddNoteScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: defaultSize * 22.8,
+                  height: defaultSize * 4,
+                  decoration: BoxDecoration(
+                      color: kMainColor,
+                      borderRadius: BorderRadius.all(Radius.circular(18))),
+                  child: Center(
+                    child: Text(
+                      "애창곡 추가하기",
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              )
+            ]),
+          ),
+          backgroundColor: kDialogColor,
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
-    //노트가 없는 사용자만 대상으로 한다.
-    if (Provider.of<NoteData>(context, listen: false).notes.length == 0) {
-      emptyNoteIcon =
-          Firebase_Remote_Config().remoteConfig.getString('emptyNoteIcon');
+    //첫 세션인 사용자를 대상으로 한다.
+    if (Provider.of<MusicSearchItemLists>(context, listen: false)
+            .sessionCount ==
+        0) {
+      Analytics_config().emptyNoteUserEvent();
+      //remote config 변수 가져오기
+      abtest1021_modal =
+          Firebase_Remote_Config().remoteConfig.getString('abtest1021_modal');
       //유저 프로퍼티 설정하기
-      if (emptyNoteIcon != "") {
+      if (abtest1021_modal != "") {
         Identify identify = Identify()
-          ..set('10/19 더하기 버튼 아이콘으로 CTA 대체하기', emptyNoteIcon);
+          ..set('10/21 CTA 강조 및 이외 다른 버튼 모두 비활성화', abtest1021_modal);
 
         Analytics_config().userProps(identify);
       }
+
+      //화면 빌드 후, 바로 모달 창 띄우는 부분
+      if (abtest1021_modal != 'B') {
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) => _dialogBuilder(context));
+      }
+      Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount +=
+          1;
     }
     super.initState();
   }
@@ -207,7 +330,7 @@ class _NoteScreenState extends State<NoteScreen> {
             CarouselSliderBanner(),
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
-                (emptyNoteIcon == 'B') ? EmptyIconNote() : EmptyNoteList(),
+                EmptyNoteList(),
               ] else if (_listSate == 1) ...[
                 Expanded(
                   child: Center(
