@@ -169,7 +169,7 @@ class _FeedScreenState extends State<FeedScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (_anchoredAdaptiveAd != null && _isLoaded)
+                  if (_anchoredAdaptiveAd != null && _isLoaded && !rewardFlag)
                     Container(
                       color: Colors.transparent,
                       width: _anchoredAdaptiveAd!.size.width.toDouble(),
