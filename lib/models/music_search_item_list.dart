@@ -555,12 +555,6 @@ class MusicSearchItemLists extends ChangeNotifier {
           } else {
             //가사 검색 이벤트
             Analytics_config().musicSearchLyricEvent();
-
-            print(enteredLyricKeyword);
-            print(jsonEncode({
-              'lyric': enteredLyricKeyword,
-            }));
-
             //가사 검색 api 로직 필요
             String? serverURL = dotenv.env['LYRIC_SERVER_URL'];
 

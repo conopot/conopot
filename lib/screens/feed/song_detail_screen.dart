@@ -14,8 +14,10 @@ import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +37,14 @@ class _SongDetailScreenState extends State<SongDetailScreen>
   var scrollController = ScrollController();
   String lyric = "";
   bool internetCheck = true;
+
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag = await Provider.of<NoteData>(this.context, listen: false)
+        .isUserRewarded();
+  }
 
   void getLyrics(String songNum) async {
     String url =
@@ -89,16 +99,101 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     return textPainter.didExceedMaxLines;
   }
 
+  //admob 광고 관련
+  late dynamic provider;
+
+  Map<String, String> Detail_View_Exit_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/6177272482',
+          'ios': 'ca-app-pub-7139143792782560/6804754603',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  Map<String, String> Pitch_Measure_Interstitial_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/2745223157',
+          'ios': 'ca-app-pub-7139143792782560/1182566336',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/1033173712',
+          'ios': 'ca-app-pub-3940256099942544/4411468910',
+        };
+
+  int maxFailedLoadAttempts = 3;
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+  createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: Pitch_Measure_Interstitial_UNIT_ID[
+            Platform.isIOS ? 'ios' : 'android']!,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print("onAdLoaded!");
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+            Analytics_config().adNoteAddInterstitialSuccess();
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print("onAdFaildToLoaded! : ${error}");
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              createInterstitialAd();
+            }
+            Analytics_config().adNoteAddInterstitialFail();
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        // print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        // print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
   @override
   void initState() {
-    super.initState();
-    getLyrics(widget.note.tj_songNumber);
-    Analytics_config().noteDetailPageView();
+    rewardCheck();
+    _interstitialAd = createInterstitialAd();
     _tabController = new TabController(length: 2, vsync: this);
+    _tabController
+      ..addListener(
+        () {
+          if (_tabController.index == 1) getLyrics(widget.note.tj_songNumber);
+        },
+      );
+    Analytics_config().noteDetailPageView();
+    super.initState();
   }
 
   @override
   void dispose() {
+    provider.detailDisposeCount += 1;
+    //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
+    if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
+      _showInterstitialAd();
+    }
     super.dispose();
     _tabController.dispose();
   }
@@ -109,19 +204,23 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     double screenWidth = SizeConfig.screenWidth;
     String? videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
         .youtubeURL[widget.note.tj_songNumber];
+    provider = Provider.of<NoteData>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: Text(
             "${widget.note.tj_title}",
             style: TextStyle(
-                fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5),
+                fontWeight: FontWeight.w700,
+                fontSize: defaultSize * 1.5,
+                overflow: TextOverflow.ellipsis),
           ),
           centerTitle: true,
           actions: [
             TextButton(
                 onPressed: () {
-                  // 애창곡 노트에 추가
-                  Provider.of<NoteData>(context, listen: false).showAddNoteDialog(context, widget.note.tj_songNumber, widget.note.tj_title);
+                  Provider.of<NoteData>(context, listen: false)
+                      .showAddNoteDialog(context, widget.note.tj_songNumber,
+                          widget.note.tj_title);
                 },
                 child: Text(
                   "추가",
@@ -497,7 +596,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                     children: [
                       // 정보 탭
                       ListView(
-                        padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.3),
+                        padding: EdgeInsets.only(
+                            bottom: SizeConfig.screenHeight * 0.3),
                         children: [
                           Container(
                             padding: EdgeInsets.all(defaultSize * 1.5),
@@ -667,33 +767,11 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                           ),
                                           SizedBox(width: defaultSize * 1.5),
                                           widget.note.ky_songNumber == '?'
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    showKySearchDialog(context);
-                                                  },
-                                                  child: Container(
-                                                      width: defaultSize * 4.7,
-                                                      height: defaultSize * 2.3,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    8)),
-                                                        color: kMainColor,
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        "검색",
-                                                        style: TextStyle(
-                                                            color:
-                                                                kPrimaryWhiteColor,
-                                                            fontSize:
-                                                                defaultSize *
-                                                                    1.2,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ))),
+                                              ? Text(
+                                                  "-",
+                                                  style: TextStyle(
+                                                      color:
+                                                          kPrimaryWhiteColor),
                                                 )
                                               : Text(
                                                   widget.note.ky_songNumber,

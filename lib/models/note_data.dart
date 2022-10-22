@@ -103,14 +103,12 @@ class NoteData extends ChangeNotifier {
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
-            print("onAdLoaded!");
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
             Analytics_config().adNoteAddInterstitialSuccess();
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print("onAdFaildToLoaded! : ${error}");
             _numInterstitialLoadAttempts += 1;
             _interstitialAd = null;
             if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {

@@ -5,6 +5,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +120,7 @@ class _SearchListState extends State<SearchList> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NoteDetailScreen(note: note!)));
+                                    SongDetailScreen(note: note!)));
                       }
                   } else {
                     Provider.of<NoteData>(context, listen: false)

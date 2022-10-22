@@ -102,7 +102,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   }
 
   //admob 광고 관련
-
   late dynamic provider;
 
   Map<String, String> Detail_View_Exit_Interstitial_UNIT_ID = kReleaseMode
@@ -179,11 +178,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   void initState() {
     rewardCheck();
     _interstitialAd = createInterstitialAd();
-    super.initState();
-    getLyrics(widget.note.tj_songNumber);
-    Analytics_config().noteDetailPageView();
     _tabController = new TabController(length: 2, vsync: this);
-    print("여기 : ${widget.note}");
+    _tabController..addListener(() {
+      if (_tabController.index == 1) getLyrics(widget.note.tj_songNumber);
+    },);
+    Analytics_config().noteDetailPageView();
+    super.initState();
   }
 
   @override
@@ -215,27 +215,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
           ),
           centerTitle: true,
           actions: [
-            (isNoteContain(context, widget.note))
-                ? TextButton(
+                TextButton(
                     onPressed: () {
                       Provider.of<NoteData>(context, listen: false)
                           .showDeleteDialog(context, widget.note);
                     },
                     child: Text(
                       "삭제",
-                      style: TextStyle(
-                          color: kMainColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: defaultSize * 1.5),
-                    ))
-                : TextButton(
-                    onPressed: () {
-                      Provider.of<NoteData>(context, listen: false)
-                          .showAddNoteDialog(context, widget.note.tj_songNumber,
-                              widget.note.tj_title);
-                    },
-                    child: Text(
-                      "추가",
                       style: TextStyle(
                           color: kMainColor,
                           fontWeight: FontWeight.w300,
@@ -528,7 +514,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                         ],
                       ),
                     ),
-                    if (isNoteContain(context, widget.note)) ...[
                       SizedBox(height: defaultSize),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: defaultSize),
@@ -539,7 +524,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                         padding: EdgeInsets.all(defaultSize * 1.5),
                         child: EditableTextField(note: widget.note),
                       ),
-                    ],
                     SizedBox(height: defaultSize),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: defaultSize),
@@ -902,7 +886,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                               ],
                             ),
                           ),
-                          if (isNoteContain(context, widget.note))...[
                           SizedBox(height: defaultSize),
                           Container(
                             margin:
@@ -914,7 +897,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                     BorderRadius.all(Radius.circular(8))),
                             padding: EdgeInsets.all(defaultSize * 1.5),
                             child: EditableTextField(note: widget.note),
-                          ),],
+                          ),
                           SizedBox(height: defaultSize),
                           SongBySameSingerList(note: widget.note)
                         ],
@@ -1065,15 +1048,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
       },
     );
   }
-}
-
-bool isNoteContain(BuildContext context, Note note) {
-  for (Note e in Provider.of<NoteData>(context, listen: false).notes) {
-    if (e.tj_songNumber == note.tj_songNumber) {
-      return true;
-    }
-  }
-  return false;
 }
 
 void play(String fitch) async {
