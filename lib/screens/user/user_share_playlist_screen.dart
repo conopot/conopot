@@ -40,8 +40,17 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   BannerAd? _anchoredAdaptiveAd;
   bool _isLoaded = false;
 
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
+
   @override
   void initState() {
+    rewardCheck();
     userId = Provider.of<NoteData>(context, listen: false).userId;
     _firstLoad();
     super.initState();
@@ -65,7 +74,7 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _loadAd();
+    if (!rewardFlag) _loadAd();
   }
 
   @override

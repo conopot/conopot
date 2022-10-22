@@ -55,10 +55,18 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
 
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _loadAd();
+    if (!rewardFlag) _loadAd();
   }
 
   @override
@@ -98,6 +106,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
 
   @override
   void initState() {
+    rewardCheck();
     userId = Provider.of<NoteData>(context, listen: false).userId;
     _firstLoad();
     super.initState();

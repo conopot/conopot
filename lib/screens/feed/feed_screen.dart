@@ -45,8 +45,17 @@ class _FeedScreenState extends State<FeedScreen> {
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
 
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
+
   @override
   void initState() {
+    rewardCheck();
     _controller = ScrollController()
       ..addListener(() {
         if (_controller.position.maxScrollExtent ==
@@ -60,7 +69,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _loadAd();
+    if (!rewardFlag) _loadAd();
   }
 
   @override
