@@ -209,13 +209,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
           title: Text(
             "${widget.note.tj_title}",
             style: TextStyle(
-                fontWeight: FontWeight.w700, fontSize: defaultSize * 1.5, overflow: TextOverflow.ellipsis),
+                fontWeight: FontWeight.w700,
+                fontSize: defaultSize * 1.5,
+                overflow: TextOverflow.ellipsis),
           ),
           centerTitle: true,
           actions: [
-            (Provider.of<NoteData>(context, listen: false)
-                    .notes
-                    .contains(widget.note))
+            (isNoteContain(context, widget.note))
                 ? TextButton(
                     onPressed: () {
                       Provider.of<NoteData>(context, listen: false)
@@ -230,7 +230,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                     ))
                 : TextButton(
                     onPressed: () {
-                      Provider.of<NoteData>(context, listen: false).showAddNoteDialog(context, widget.note.tj_songNumber, widget.note.tj_title);
+                      Provider.of<NoteData>(context, listen: false)
+                          .showAddNoteDialog(context, widget.note.tj_songNumber,
+                              widget.note.tj_title);
                     },
                     child: Text(
                       "추가",
@@ -526,16 +528,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                         ],
                       ),
                     ),
-                    SizedBox(height: defaultSize),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: kPrimaryLightBlackColor,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      padding: EdgeInsets.all(defaultSize * 1.5),
-                      child: EditableTextField(note: widget.note),
-                    ),
+                    if (isNoteContain(context, widget.note)) ...[
+                      SizedBox(height: defaultSize),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: kPrimaryLightBlackColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8))),
+                        padding: EdgeInsets.all(defaultSize * 1.5),
+                        child: EditableTextField(note: widget.note),
+                      ),
+                    ],
                     SizedBox(height: defaultSize),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: defaultSize),
@@ -787,7 +791,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                           ),
                                           SizedBox(width: defaultSize * 1.5),
                                           widget.note.ky_songNumber == '?'
-                                              ? Text("-", style: TextStyle(color: kPrimaryWhiteColor),)
+                                              ? Text(
+                                                  "-",
+                                                  style: TextStyle(
+                                                      color:
+                                                          kPrimaryWhiteColor),
+                                                )
                                               : Text(
                                                   widget.note.ky_songNumber,
                                                   style: TextStyle(
@@ -893,6 +902,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                               ],
                             ),
                           ),
+                          if (isNoteContain(context, widget.note))...[
                           SizedBox(height: defaultSize),
                           Container(
                             margin:
@@ -904,7 +914,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                     BorderRadius.all(Radius.circular(8))),
                             padding: EdgeInsets.all(defaultSize * 1.5),
                             child: EditableTextField(note: widget.note),
-                          ),
+                          ),],
                           SizedBox(height: defaultSize),
                           SongBySameSingerList(note: widget.note)
                         ],
@@ -1055,6 +1065,15 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
       },
     );
   }
+}
+
+bool isNoteContain(BuildContext context, Note note) {
+  for (Note e in Provider.of<NoteData>(context, listen: false).notes) {
+    if (e.tj_songNumber == note.tj_songNumber) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void play(String fitch) async {

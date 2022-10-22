@@ -379,12 +379,14 @@ class NoteData extends ChangeNotifier {
         Navigator.of(context).pop();
         Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          tt.Toast.show("이미 리스트에 추가된 노래입니다.",backgroundColor: kDialogColor.withOpacity(0.8));
+          tt.Toast.show("이미 리스트에 추가된 노래입니다.",
+              backgroundColor: kDialogColor.withOpacity(0.8));
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          tt.Toast.show("리스트에 노래가 추가 되었습니다.",backgroundColor: kDialogColor.withOpacity(0.8));
+          tt.Toast.show("리스트에 노래가 추가 되었습니다.",
+              backgroundColor: kDialogColor.withOpacity(0.8));
         }
       },
       child: Text("추가",
@@ -1495,12 +1497,17 @@ class NoteData extends ChangeNotifier {
   // 피드에 올라온 노래 내 애창곡 리스트에 여러개 추가 함수
   Future<void> addMultipleFeedSongs() async {
     double defaultSize = SizeConfig.defaultSize;
-    double screenWidth = SizeConfig.screenWidth;
     int overlap = 0;
     for (Note note in addSet) {
-      if (notes.contains(note)) {
-        overlap++;
-      } else {
+      bool flag = false;
+      for (Note e in notes) {
+        if (e.tj_songNumber == note.tj_songNumber) {
+          overlap++;
+          flag = true;
+          break;
+        }
+      }
+      if (!flag) {
         notes.add(note);
         userMusics.add(note.tj_songNumber);
         noteCount += 1;

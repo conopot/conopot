@@ -168,6 +168,7 @@ class _NoteListState extends State<NoteList> {
                                     if (note.memo.isNotEmpty) ...[
                                       SizedBox(height: defaultSize * 0.3),
                                       Container(
+                                        margin: EdgeInsets.only(right: defaultSize),
                                         padding:
                                             EdgeInsets.all(defaultSize * 0.5),
                                         width: double.infinity,
@@ -187,7 +188,7 @@ class _NoteListState extends State<NoteList> {
                                                 fontWeight: FontWeight.w400),
                                           ),
                                         ),
-                                      )
+                                      ),
                                     ]
                                   ],
                                 )),Column(
