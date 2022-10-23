@@ -248,10 +248,9 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
           });
         }),
         controller: _textController,
-        enableInteractiveSelection: false,
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.text,
         cursorColor: kMainColor,
         decoration: InputDecoration(
           hintText: '검색어 입력 후 확인 버튼을 눌러주세요',

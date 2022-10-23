@@ -45,10 +45,9 @@ class _MusicSearchBarState extends State<MusicSearchBar> {
           })
         },
         autofocus: false,
-        enableInteractiveSelection: false,
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,
-        keyboardType: TextInputType.name,
+        keyboardType: TextInputType.text,
         cursorColor: kMainColor,
         decoration: InputDecoration(
           hintText: '노래, 가수 검색',
