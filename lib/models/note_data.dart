@@ -1588,24 +1588,20 @@ class NoteData extends ChangeNotifier {
   //해당 사용자가 현재 리워드 보상(광고 제거)이 유지되어있는지 검사하는 함수
   Future<bool> isUserRewarded() async {
     String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
-    print('rewardHoldTimeString : ${rewardHoldTimeString}');
     if (rewardHoldTimeString == null) return false;
     int rewardHoldTime = int.parse(rewardHoldTimeString);
     int nowTime = DateTime.now().millisecondsSinceEpoch;
 
     //현재 시각이 리워드 시각 이후라면
     if (nowTime > rewardHoldTime) {
-      print('리워드 미적용');
-      return false;
+      return false; //리워드 미적용
     } else {
-      print('리워드 적용');
-      return true;
+      return true; //리워드 적용
     }
   }
 
   Future<String> userRewardedTime() async {
     String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
-    print('rewardHoldTimeString : ${rewardHoldTimeString}');
     if (rewardHoldTimeString == null) return "0초";
     int rewardHoldTime = int.parse(rewardHoldTimeString);
     int nowTime = DateTime.now().millisecondsSinceEpoch;
