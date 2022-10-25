@@ -97,8 +97,15 @@ class _SearchBarState extends State<SearchBar> {
               keyboardType: TextInputType.name,
               cursorColor: kMainColor,
               decoration: InputDecoration(
-                hintText:
-                    (_dropdwonValue == '가사') ? '가사 입력 후 확인을 눌러 주세요' : '노래 검색',
+                hintText: (_dropdwonValue == '제목')
+                    ? '제목 검색'
+                    : (_dropdwonValue == '가수')
+                        ? '가수 검색'
+                        : (_dropdwonValue == '번호')
+                            ? '번호 검색'
+                            : (_dropdwonValue == '가사')
+                                ? '가사 검색'
+                                : '',
                 hintStyle: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: defaultSize * 1.5,

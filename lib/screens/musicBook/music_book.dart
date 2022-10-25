@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
@@ -53,7 +55,20 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.help_outline, color: Colors.transparent),
+                    IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          Text("가사검색",
+                              style: TextStyle(
+                                  color: Colors.transparent,
+                                  fontSize: defaultSize * 1.2)),
+                          Text("유의사항",
+                              style: TextStyle(
+                                  color: Colors.transparent,
+                                  fontSize: defaultSize * 1.2))
+                        ],
+                      ),
+                    ),
                     Spacer(),
                     TabBar(
                       onTap: (index) {
@@ -90,55 +105,96 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                     ),
                     Spacer(),
                     GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext cxt) {
-                              return Align(
-                                alignment: Alignment(1, -0.9),
-                                child: Padding(
-                                  padding: EdgeInsets.all(defaultSize),
-                                  child: Material(
-                                    color: kDialogColor.withOpacity(0.9),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(16),
-                                      child: IntrinsicWidth(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                InkWell(
-                                                    onTap: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: Icon(Icons.line_style)),
-                                                SizedBox(width: 16),
-                                                Expanded(
-                                                  child: Text(
-                                                    "test",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.all(defaultSize),
+                                child: Material(
+                                  color: kDialogColor.withOpacity(0.9),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: IntrinsicWidth(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.close,
+                                                  color: Colors.transparent),
+                                              Spacer(),
+                                              Text("가사 검색 주의사항",
+                                                  style: TextStyle(
+                                                      color: kPrimaryWhiteColor,
+                                                      fontSize:
+                                                          defaultSize * 1.5)),
+                                              Spacer(),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Icon(Icons.close,
+                                                    color: kPrimaryWhiteColor),
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
+                                          SizedBox(height: defaultSize * 2),
+                                          Text(
+                                              "1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
+                                              style: TextStyle(
+                                                  color: kPrimaryWhiteColor,
+                                                  fontSize: defaultSize * 1.3)),
+                                          Text(
+                                              "ex) '또모르지내마음이' (x) -> '또 모르지 내 마음이' (o)",
+                                              style: TextStyle(
+                                                  color: kPrimaryWhiteColor)),
+                                          SizedBox(height: defaultSize),
+                                          Text(
+                                              "2. 입력창에 가사를 입력한 후 키보드의 확인 버튼 또는 완료 버튼을 눌러주세요.",
+                                              style: TextStyle(
+                                                  color: kPrimaryWhiteColor,
+                                                  fontSize: defaultSize * 1.3))
+                                        ],
                                       ),
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                        child: Icon(Icons.help_outline, color: kMainColor))
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: IntrinsicHeight(
+                        child: Container(
+                          padding: EdgeInsets.all(defaultSize * 0.45),
+                          decoration: BoxDecoration(
+                              color: kMainColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
+                          child: Column(
+                            children: [
+                              Text("가사검색",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize)),
+                              Text("주의사항",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
