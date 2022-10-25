@@ -191,9 +191,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
-      _showInterstitialAd();
-    }
+    // if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
+    //   _showInterstitialAd();
+    // }
     super.dispose();
     _tabController.dispose();
   }

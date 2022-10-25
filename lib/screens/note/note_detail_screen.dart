@@ -179,9 +179,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     rewardCheck();
     _interstitialAd = createInterstitialAd();
     _tabController = new TabController(length: 2, vsync: this);
-    _tabController..addListener(() {
-      if (_tabController.index == 1) getLyrics(widget.note.tj_songNumber);
-    },);
+    _tabController
+      ..addListener(
+        () {
+          if (_tabController.index == 1) getLyrics(widget.note.tj_songNumber);
+        },
+      );
     Analytics_config().noteDetailPageView();
     super.initState();
   }
@@ -190,9 +193,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
-      _showInterstitialAd();
-    }
+    // if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
+    //   _showInterstitialAd();
+    // }
     super.dispose();
     _tabController.dispose();
   }
@@ -215,18 +218,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
           ),
           centerTitle: true,
           actions: [
-                TextButton(
-                    onPressed: () {
-                      Provider.of<NoteData>(context, listen: false)
-                          .showDeleteDialog(context, widget.note);
-                    },
-                    child: Text(
-                      "삭제",
-                      style: TextStyle(
-                          color: kMainColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: defaultSize * 1.5),
-                    ))
+            TextButton(
+                onPressed: () {
+                  Provider.of<NoteData>(context, listen: false)
+                      .showDeleteDialog(context, widget.note);
+                },
+                child: Text(
+                  "삭제",
+                  style: TextStyle(
+                      color: kMainColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: defaultSize * 1.5),
+                ))
           ],
         ),
         body: (videoId == null)
@@ -514,16 +517,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                         ],
                       ),
                     ),
-                      SizedBox(height: defaultSize),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: kPrimaryLightBlackColor,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        padding: EdgeInsets.all(defaultSize * 1.5),
-                        child: EditableTextField(note: widget.note),
-                      ),
+                    SizedBox(height: defaultSize),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: kPrimaryLightBlackColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      padding: EdgeInsets.all(defaultSize * 1.5),
+                      child: EditableTextField(note: widget.note),
+                    ),
                     SizedBox(height: defaultSize),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: defaultSize),
