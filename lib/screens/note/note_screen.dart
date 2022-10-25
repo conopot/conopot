@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:amplitude_flutter/identify.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
@@ -9,14 +11,14 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
-import 'package:conopot/screens/note/components/empty_icon_note.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
-import 'package:conopot/screens/user/user_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'add_note_screen.dart';
@@ -33,8 +35,36 @@ class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
   String abtest1021_modal = "";
-
   bool isLoaded = false;
+  final storage = new FlutterSecureStorage();
+
+  List<Color> colorizeColors = [
+    kPrimaryLightPurpleColor,
+    kPrimaryLightBlueColor,
+    kPrimaryLightYellowColor,
+    kPrimaryLightRedColor,
+  ];
+
+  final colorizeTextStyle = TextStyle(
+    fontSize: 15,
+    fontFamily: 'Horizon',
+  );
+
+  late StreamController<String> _events;
+
+  //리워드가 존재하는지 체크
+  bool rewardFlag = false;
+  String rewardRemainTime = "";
+
+  rewardCheck() async {
+    rewardFlag =
+        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
+  }
+
+  rewardRemainTimeCheck() async {
+    rewardRemainTime =
+        await Provider.of<NoteData>(context, listen: false).userRewardedTime();
+  }
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
@@ -148,6 +178,8 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
+    Analytics_config().noteViewPageViewEvent();
+    _loadRewardedAd();
     //첫 세션인 사용자를 대상으로 한다.
     if (Provider.of<MusicSearchItemLists>(context, listen: false)
             .sessionCount ==
@@ -172,12 +204,67 @@ class _NoteScreenState extends State<NoteScreen> {
       Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount +=
           1;
     }
+    _events.add(rewardRemainTime);
+    _events = StreamController<String>.broadcast();
     super.initState();
+  }
+
+  late Timer _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      await rewardRemainTimeCheck();
+      _events.add(rewardRemainTime);
+    });
+  }
+
+  Map<String, String> Reward_UNIT_ID = kReleaseMode
+      ? {
+          'android': 'ca-app-pub-7139143792782560/7541506805',
+          'ios': 'ca-app-pub-7139143792782560/5591745282',
+        }
+      : {
+          'android': 'ca-app-pub-3940256099942544/5224354917',
+          'ios': 'ca-app-pub-3940256099942544/5224354917',
+        };
+  RewardedAd? _rewardedAd;
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: Reward_UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+      request: AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              setState(() {
+                ad.dispose();
+                _rewardedAd = null;
+              });
+              _loadRewardedAd();
+            },
+          );
+
+          setState(() {
+            _rewardedAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load a rewarded ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _rewardedAd?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Analytics_config().noteViewPageViewEvent();
+    rewardRemainTimeCheck();
     return Consumer<NoteData>(
       builder: (context, noteData, child) => Scaffold(
         appBar: AppBar(
@@ -189,6 +276,39 @@ class _NoteScreenState extends State<NoteScreen> {
             ),
           ),
           actions: [
+            IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: AnimatedTextKit(
+                      totalRepeatCount: 100,
+                      animatedTexts: [
+                        ColorizeAnimatedText(
+                          '광고제거',
+                          textStyle: colorizeTextStyle,
+                          colors: colorizeColors,
+                        ),
+                        ColorizeAnimatedText(
+                          '광고제거',
+                          textStyle: colorizeTextStyle,
+                          colors: colorizeColors,
+                        ),
+                        ColorizeAnimatedText(
+                          '광고제거',
+                          textStyle: colorizeTextStyle,
+                          colors: colorizeColors,
+                        ),
+                      ],
+                      isRepeatingAnimation: true,
+                      onTap: () {
+                        _showAdBlockDialog();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
             // 저장한 노래가 있을 경우만 아이콘 표시
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
               IconButton(
@@ -467,5 +587,196 @@ class _NoteScreenState extends State<NoteScreen> {
             ),
           );
         });
+  }
+
+  _showAdBlockDialog() async {
+    await rewardCheck();
+    await rewardRemainTimeCheck();
+    if (rewardFlag) {
+      _startTimer();
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: kDialogColor,
+              shape: const RoundedRectangleBorder(
+                  side: BorderSide(width: 0.0),
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              title: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: '광고 제거 효과가 적용 중입니다.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.7,
+                        )),
+                  ],
+                ),
+              ),
+              content: StreamBuilder<String>(
+                  stream: _events.stream,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    return Text(
+                      '남은 시간 : ${snapshot.data == null ? '' : snapshot.data}',
+                      style: TextStyle(
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w300,
+                          color: kPrimaryWhiteColor),
+                    );
+                  }),
+              actions: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(kPrimaryGreyColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        side: const BorderSide(width: 0.0),
+                        borderRadius: BorderRadius.circular(8),
+                      ))),
+                  onPressed: () {
+                    _timer.cancel();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "확인",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: kMainColor),
+                  ),
+                ),
+              ],
+            );
+          });
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: kDialogColor,
+            shape: const RoundedRectangleBorder(
+                side: BorderSide(width: 0.0),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            title: Center(
+                child: Text(
+              "광고를 제거해 보세요!",
+              style: TextStyle(
+                  color: kPrimaryLightWhiteColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: defaultSize * 1.8),
+            )),
+            content: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "30초동안 리워드 광고를 시청하시면\n",
+                    style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: defaultSize * 1.5,
+                    ),
+                  ),
+                  TextSpan(
+                      text: '30분 동안 ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.5,
+                      )),
+                  TextSpan(
+                      text: '앱 내의 모든 광고를 ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: kMainColor,
+                        fontSize: defaultSize * 1.5,
+                      )),
+                  TextSpan(
+                      text: '제거해 드릴게요.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.5,
+                      )),
+                ],
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(kPrimaryGreyColor),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                      side: const BorderSide(width: 0.0),
+                      borderRadius: BorderRadius.circular(8),
+                    ))),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "취소",
+                  style:
+                      TextStyle(fontWeight: FontWeight.w600, color: kMainColor),
+                ),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(kMainColor),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                      side: const BorderSide(width: 0.0),
+                      borderRadius: BorderRadius.circular(8),
+                    ))),
+                onPressed: () async {
+                  if (_rewardedAd != null) {
+                    Navigator.pop(context);
+                    _rewardedAd?.show(
+                      onUserEarnedReward: (_, reward) async {
+                        //리워드 광고 재생 및 로컬 스토리지 세팅
+                        //30분 간 광고가 나오지 않게 한다.
+                        int rewardTime = DateTime.now().millisecondsSinceEpoch;
+                        print("광고 보고 리워드 획득 상태 : ${rewardTime}");
+
+                        //30분 추가
+                        rewardTime = rewardTime + 1800000;
+                        print("광고 보고 리워드 획득 상태 30분 증가 : ${rewardTime}");
+                        await storage.write(
+                            key: 'rewardTime', value: rewardTime.toString());
+                      },
+                    );
+                  } else {
+                    Navigator.pop(context);
+                    int rewardTime = DateTime.now().millisecondsSinceEpoch;
+                    print("광고 보고 리워드 획득 상태 : ${rewardTime}");
+
+                    //30분 추가
+                    rewardTime = rewardTime + 300000;
+                    print("광고 보고 리워드 획득 상태 5분 증가 : ${rewardTime}");
+                    await storage.write(
+                        key: 'rewardTime', value: rewardTime.toString());
+                    Fluttertoast.showToast(
+                        msg: "볼 수 있는 광고가 없네요 😅\n5분간 무료로 광고 제거 효과를 적용해드릴게요",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Color(0xFFFF7878),
+                        textColor: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.6);
+                  }
+                },
+                child: Text(
+                  "광고 제거하기",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600, color: kPrimaryWhiteColor),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

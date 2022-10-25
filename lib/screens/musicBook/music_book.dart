@@ -136,15 +136,15 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                                                   style: TextStyle(
                                                       color: kPrimaryWhiteColor,
                                                       fontSize:
-                                                          defaultSize * 1.5)),
+                                                          defaultSize * 1.8)),
                                               Spacer(),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Icon(Icons.close,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Icon(Icons.close,
                                                     color: kPrimaryWhiteColor),
-                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(height: defaultSize * 2),
@@ -152,17 +152,19 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                                               "1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.3)),
+                                                  fontSize: defaultSize * 1.5)),
                                           Text(
                                               "ex) '또모르지내마음이' (x) -> '또 모르지 내 마음이' (o)",
                                               style: TextStyle(
-                                                  color: kPrimaryWhiteColor)),
+                                                  color: kPrimaryWhiteColor,
+                                                  fontSize: defaultSize * 1.5)),
                                           SizedBox(height: defaultSize),
                                           Text(
                                               "2. 입력창에 가사를 입력한 후 키보드의 확인 버튼 또는 완료 버튼을 눌러주세요.",
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.3))
+                                                  fontSize: defaultSize * 1.5)),
+                                          SizedBox(height: defaultSize * 3)
                                         ],
                                       ),
                                     ),

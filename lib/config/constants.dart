@@ -11,3 +11,8 @@ const kPrimaryLightGreyColor = Color(0xFF999999);
 const kPrimaryWhiteColor = Color(0xFFFFFFFF);
 const kPrimaryLightWhiteColor = Color(0xFFE5E5E5);
 const kPrimaryRedColor = Color(0xDDFF0000);
+const kPrimaryLightPurpleColor = Color(0xFFDB8EFF);
+const kPrimaryLightBlueColor = Color(0xFF8E9AFF);
+const kPrimaryLightYellowColor = Color(0xFFFDFF8E);
+const kPrimaryLightRedColor = Color(0xFFFF8E8E);
+

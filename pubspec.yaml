@@ -85,6 +85,7 @@ dependencies:
   toast: ^0.3.0
   facebook_audience_network: ^1.0.1
   flutter_spinkit: ^5.1.0
+  animated_text_kit: ^4.2.2
 
 
 dev_dependencies:
