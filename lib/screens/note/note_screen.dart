@@ -277,36 +277,39 @@ class _NoteScreenState extends State<NoteScreen> {
           ),
           actions: [
             IntrinsicHeight(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: AnimatedTextKit(
-                      totalRepeatCount: 100,
-                      animatedTexts: [
-                        ColorizeAnimatedText(
-                          '광고제거',
-                          textStyle: colorizeTextStyle,
-                          colors: colorizeColors,
-                        ),
-                        ColorizeAnimatedText(
-                          '광고제거',
-                          textStyle: colorizeTextStyle,
-                          colors: colorizeColors,
-                        ),
-                        ColorizeAnimatedText(
-                          '광고제거',
-                          textStyle: colorizeTextStyle,
-                          colors: colorizeColors,
-                        ),
-                      ],
-                      isRepeatingAnimation: true,
-                      onTap: () {
-                        _showAdBlockDialog();
-                      },
-                    ),
-                  )
-                ],
+              child: Padding(
+                padding: (noteData.notes.isNotEmpty) ? EdgeInsets.only(left: 0) : EdgeInsets.only(right: defaultSize * 1.5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: AnimatedTextKit(
+                        totalRepeatCount: 100,
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            '광고제거',
+                            textStyle: colorizeTextStyle,
+                            colors: colorizeColors,
+                          ),
+                          ColorizeAnimatedText(
+                            '광고제거',
+                            textStyle: colorizeTextStyle,
+                            colors: colorizeColors,
+                          ),
+                          ColorizeAnimatedText(
+                            '광고제거',
+                            textStyle: colorizeTextStyle,
+                            colors: colorizeColors,
+                          ),
+                        ],
+                        isRepeatingAnimation: true,
+                        onTap: () {
+                          _showAdBlockDialog();
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             // 저장한 노래가 있을 경우만 아이콘 표시

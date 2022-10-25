@@ -133,7 +133,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                     padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 0.5,
                         defaultSize, defaultSize * 0.5),
                     decoration: BoxDecoration(
-                        color: kMainColor.withOpacity(0.8),
+                        color: kMainColor,
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Text("완료",
                         style: TextStyle(
