@@ -25,6 +25,7 @@ class _MusicSearchBarState extends State<MusicSearchBar> {
   @override
   void dispose() {
     _debounce.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

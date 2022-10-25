@@ -81,16 +81,24 @@ class _SearchBarState extends State<SearchBar> {
                   Provider.of<NoteData>(context, listen: false).controller,
               style: TextStyle(color: kPrimaryWhiteColor),
               onChanged: (text) => {
-                _debounce.call(() {
-                  widget.musicList.runFilter(
-                      text, widget.musicList.tabIndex, _dropdwonValue);
-                })
+                if (_dropdwonValue != '가사')
+                  {
+                    _debounce.call(() {
+                      widget.musicList.runFilter(
+                          text, widget.musicList.tabIndex, _dropdwonValue);
+                    })
+                  }
+              },
+              onSubmitted: (text) => {
+                widget.musicList
+                    .runFilter(text, widget.musicList.tabIndex, _dropdwonValue)
               },
               textAlignVertical: TextAlignVertical.center,
               keyboardType: TextInputType.name,
               cursorColor: kMainColor,
               decoration: InputDecoration(
-                hintText: '노래 검색',
+                hintText:
+                    (_dropdwonValue == '가사') ? '가사 입력 후 확인을 눌러 주세요' : '노래 검색',
                 hintStyle: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: defaultSize * 1.5,

@@ -7,7 +7,6 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/components/added_playlist.dart';
 import 'package:conopot/screens/feed/components/editing_playlist.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -41,6 +40,22 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
   bool _isListEditting = false;
   String _listName = "";
   String _explanation = "";
+  static late TextEditingController _titleController;
+  static late TextEditingController _subscriptionController;
+
+  @override
+  void initState() {
+    _titleController = TextEditingController(text: _listName);
+    _subscriptionController = TextEditingController(text: _explanation);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _subscriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,212 +142,220 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                             fontSize: defaultSize * 1.2))))
           ],
         ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: defaultSize),
-            child: ListView(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: defaultSize * 18,
-                    child: Column(
-                      children: [
-                        Text("감정 이모지",
-                            style: TextStyle(
-                                color: kPrimaryLightWhiteColor,
-                                fontSize: defaultSize * 1.6,
-                                fontWeight: FontWeight.w500)),
-                        SizedBox(height: defaultSize),
-                        Text(
-                          "${_emotionList[_emotionIndex]}",
-                          style: TextStyle(fontSize: defaultSize * 4),
-                        ),
-                        SizedBox(height: defaultSize * 1.25),
-                        (_isIconEditting == false)
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isIconEditting = true;
-                                  });
-                                },
-                                child: Text("변경하기",
-                                    style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: defaultSize * 1.3)))
-                            : Container(
-                                child: IntrinsicWidth(
-                                    child: Column(
-                                  children: [
-                                    Row(
-                                        children: _emotionList1
-                                            .map((e) => Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: defaultSize),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _emotionIndex =
-                                                            _emotionList1
-                                                                .indexOf(e);
-                                                        _isIconEditting = false;
-                                                      });
-                                                    },
-                                                    child: Text(e,
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                defaultSize * 2)),
-                                                  ),
-                                                ))
-                                            .toList()),
-                                    SizedBox(height: defaultSize * 0.5),
-                                    Row(
-                                        children: _emotionList2
-                                            .map((e) => Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: defaultSize),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _emotionIndex =
-                                                            _emotionList2
-                                                                    .indexOf(e) +
-                                                                5;
-                                                        _isIconEditting = false;
-                                                      });
-                                                    },
-                                                    child: Text(e,
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                defaultSize * 2)),
-                                                  ),
-                                                ))
-                                            .toList()),
-                                    SizedBox(height: defaultSize * 0.5),
-                                    GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _isIconEditting = false;
-                                          });
-                                        },
-                                        child: Icon(
-                                          Icons.close,
-                                          color: kPrimaryWhiteColor,
-                                          size: defaultSize * 1.8,
-                                        ))
-                                  ],
-                                )),
-                              ),
-                      ],
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: defaultSize),
+              child: ListView(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: defaultSize * 18,
+                      child: Column(
+                        children: [
+                          Text("감정 이모지",
+                              style: TextStyle(
+                                  color: kPrimaryLightWhiteColor,
+                                  fontSize: defaultSize * 1.6,
+                                  fontWeight: FontWeight.w500)),
+                          SizedBox(height: defaultSize),
+                          Text(
+                            "${_emotionList[_emotionIndex]}",
+                            style: TextStyle(fontSize: defaultSize * 4),
+                          ),
+                          SizedBox(height: defaultSize * 1.25),
+                          (_isIconEditting == false)
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isIconEditting = true;
+                                    });
+                                  },
+                                  child: Text("변경하기",
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontSize: defaultSize * 1.3)))
+                              : Container(
+                                  child: IntrinsicWidth(
+                                      child: Column(
+                                    children: [
+                                      Row(
+                                          children: _emotionList1
+                                              .map((e) => Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: defaultSize),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _emotionIndex =
+                                                              _emotionList1
+                                                                  .indexOf(e);
+                                                          _isIconEditting = false;
+                                                        });
+                                                      },
+                                                      child: Text(e,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  defaultSize *
+                                                                      2)),
+                                                    ),
+                                                  ))
+                                              .toList()),
+                                      SizedBox(height: defaultSize * 0.5),
+                                      Row(
+                                          children: _emotionList2
+                                              .map((e) => Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: defaultSize),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _emotionIndex =
+                                                              _emotionList2
+                                                                      .indexOf(
+                                                                          e) +
+                                                                  5;
+                                                          _isIconEditting = false;
+                                                        });
+                                                      },
+                                                      child: Text(e,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  defaultSize *
+                                                                      2)),
+                                                    ),
+                                                  ))
+                                              .toList()),
+                                      SizedBox(height: defaultSize * 0.5),
+                                      GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _isIconEditting = false;
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: kPrimaryWhiteColor,
+                                            size: defaultSize * 1.8,
+                                          ))
+                                    ],
+                                  )),
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: defaultSize * 2),
+                Text("리스트명 (필수)",
+                    style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: defaultSize * 1.5)),
+                SizedBox(height: defaultSize * 0.5),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                  decoration: BoxDecoration(
+                    color: kPrimaryLightBlackColor,
+                    borderRadius: BorderRadius.all(Radius.circular(0)),
+                  ),
+                  child: TextField(
+                    style: TextStyle(color: kPrimaryWhiteColor),
+                    controller: _titleController,
+                    onChanged: (text) => {
+                      setState(() {
+                        _listName = text;
+                      })
+                    },
+                    maxLength: 50,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.text,
+                    cursorColor: kMainColor,
+                    decoration: InputDecoration(
+                      counter: SizedBox.shrink(),
+                      hintText: '리스트명을 입력해주세요',
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryLightGreyColor,
+                      ),
+                      border: InputBorder.none,
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: defaultSize * 2),
-              Text("리스트명 (필수)",
-                  style: TextStyle(
-                      color: kPrimaryWhiteColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: defaultSize * 1.5)),
-              SizedBox(height: defaultSize * 0.5),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: defaultSize),
-                decoration: BoxDecoration(
-                  color: kPrimaryLightBlackColor,
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
-                child: TextField(
-                  style: TextStyle(color: kPrimaryWhiteColor),
-                  onChanged: (text) => {
-                    setState(() {
-                      _listName = text;
-                    })
-                  },
-                  maxLength: 50,
-                  textAlign: TextAlign.left,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.text,
-                  cursorColor: kMainColor,
-                  decoration: InputDecoration(
-                    counter: SizedBox.shrink(),
-                    hintText: '리스트명을 입력해주세요',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: defaultSize * 1.5,
-                      color: kPrimaryLightGreyColor,
+                SizedBox(height: defaultSize * 2),
+                Text("추가설명 (선택)",
+                    style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontWeight: FontWeight.w500,
+                        fontSize: defaultSize * 1.5)),
+                SizedBox(height: defaultSize * 0.5),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                  decoration: BoxDecoration(
+                    color: kPrimaryLightBlackColor,
+                    borderRadius: BorderRadius.all(Radius.circular(0)),
+                  ),
+                  child: TextFormField(
+                    style: TextStyle(color: kPrimaryWhiteColor),
+                    onChanged: (text) => {
+                      setState(() {
+                        _explanation = text;
+                      })
+                    },
+                    controller: _subscriptionController,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: 100,
+                    maxLines: 5,
+                    cursorColor: kMainColor,
+                    decoration: InputDecoration(
+                      counter: SizedBox.shrink(),
+                      hintText: '추가설명을 입력해주세요',
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: defaultSize * 1.5,
+                        color: kPrimaryLightGreyColor,
+                      ),
+                      border: InputBorder.none,
                     ),
-                    border: InputBorder.none,
                   ),
                 ),
-              ),
-              SizedBox(height: defaultSize * 2),
-              Text("추가설명 (선택)",
-                  style: TextStyle(
-                      color: kPrimaryWhiteColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: defaultSize * 1.5)),
-              SizedBox(height: defaultSize * 0.5),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: defaultSize),
-                decoration: BoxDecoration(
-                  color: kPrimaryLightBlackColor,
-                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                SizedBox(height: defaultSize * 5),
+                Row(
+                  children: [
+                    Text("플레이리스트",
+                        style: TextStyle(
+                            color: kPrimaryLightWhiteColor,
+                            fontSize: defaultSize * 1.5,
+                            fontWeight: FontWeight.w500)),
+                    Spacer(),
+                    if (Provider.of<NoteData>(context, listen: true)
+                            .lists
+                            .isNotEmpty ||
+                        _isListEditting == true)
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isListEditting = !_isListEditting;
+                            });
+                          },
+                          child: Text((_isListEditting) ? "완료" : "편집하기",
+                              style: TextStyle(
+                                  color: kMainColor,
+                                  fontWeight: FontWeight.w500)))
+                  ],
                 ),
-                child: TextFormField(
-                  style: TextStyle(color: kPrimaryWhiteColor),
-                  onChanged: (text) => {
-                    setState(() {
-                      _explanation = text;
-                    })
-                  },
-                  textAlign: TextAlign.left,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.multiline,
-                  maxLength: 100,
-                  maxLines: 5,
-                  cursorColor: kMainColor,
-                  decoration: InputDecoration(
-                    counter: SizedBox.shrink(),
-                    hintText: '추가설명을 입력해주세요',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: defaultSize * 1.5,
-                      color: kPrimaryLightGreyColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              SizedBox(height: defaultSize * 5),
-              Row(
-                children: [
-                  Text("플레이리스트",
-                      style: TextStyle(
-                          color: kPrimaryLightWhiteColor,
-                          fontSize: defaultSize * 1.5,
-                          fontWeight: FontWeight.w500)),
-                  Spacer(),
-                  if (Provider.of<NoteData>(context, listen: true)
-                          .lists
-                          .isNotEmpty ||
-                      _isListEditting == true)
-                    GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isListEditting = !_isListEditting;
-                          });
-                        },
-                        child: Text((_isListEditting) ? "완료" : "편집하기",
-                            style: TextStyle(
-                                color: kMainColor, fontWeight: FontWeight.w500)))
-                ],
-              ),
-              SizedBox(height: defaultSize),
-              (_isListEditting) ? EditingPlayList() : AddedPlaylist(),
-            ]),
+                SizedBox(height: defaultSize),
+                (_isListEditting) ? EditingPlayList() : AddedPlaylist(),
+              ]),
+            ),
           ),
         ),
       ),
