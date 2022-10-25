@@ -464,6 +464,19 @@ class MusicSearchItemLists extends ChangeNotifier {
             pitchNum,
             tj_title + tj_singer,
             tj_singer + tj_title));
+        Note note = Note(
+          tj_title,
+          tj_singer,
+          tj_songNumber,
+          ky_title,
+          ky_singer,
+          ky_songNumber,
+          gender,
+          pitchNum,
+          "",
+          0,
+        );
+        entireNote.add(note);
       } else {
         combinedSongList.add(FitchMusic(
             tj_title,
@@ -476,20 +489,20 @@ class MusicSearchItemLists extends ChangeNotifier {
             0,
             tj_title + tj_singer,
             tj_singer + tj_title));
+        Note note = Note(
+          tj_title,
+          tj_singer,
+          tj_songNumber,
+          ky_title,
+          ky_singer,
+          ky_songNumber,
+          gender,
+          0,
+          "",
+          0,
+        );
+        entireNote.add(note);
       }
-      Note note = Note(
-        tj_title,
-        tj_singer,
-        tj_songNumber,
-        ky_title,
-        ky_singer,
-        ky_songNumber,
-        gender,
-        pitchNum,
-        "",
-        0,
-      );
-      entireNote.add(note);
     }
 
     combinedFoundItems = combinedSongList;
