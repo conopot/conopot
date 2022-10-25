@@ -1604,7 +1604,7 @@ class NoteData extends ChangeNotifier {
     int nowTime = DateTime.now().millisecondsSinceEpoch;
 
     int distTime = rewardHoldTime - nowTime;
-
+    if (distTime < 0) return "0 초";
     int minute = (distTime) ~/ 60000;
     int second = (distTime - (minute * 60000)) ~/ 1000;
 

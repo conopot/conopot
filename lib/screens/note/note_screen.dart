@@ -204,8 +204,8 @@ class _NoteScreenState extends State<NoteScreen> {
       Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount +=
           1;
     }
-    _events.add(rewardRemainTime);
     _events = StreamController<String>.broadcast();
+    _events.add(rewardRemainTime);
     super.initState();
   }
 
