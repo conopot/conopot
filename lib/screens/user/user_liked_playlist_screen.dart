@@ -52,11 +52,32 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
           'ios': 'ca-app-pub-3940256099942544/2934735716',
         };
 
-  // TODO: Add _bannerAd
-  BannerAd? _bannerAd;
-
   //리워드가 존재하는지 체크
   bool rewardFlag = false;
+
+  Widget adaptiveAdShow() {
+    return (_anchoredAdaptiveAd != null && _isLoaded && !rewardFlag)
+        ? Container(
+            color: Colors.transparent,
+            width: _anchoredAdaptiveAd!.size.width.toDouble(),
+            height: _anchoredAdaptiveAd!.size.height.toDouble(),
+            child: AdWidget(ad: _anchoredAdaptiveAd!),
+          )
+        : (Provider.of<NoteData>(context, listen: false).size != null)
+            ? Container(
+                color: Colors.transparent,
+                width: Provider.of<NoteData>(context, listen: false)
+                    .size!
+                    .width
+                    .toDouble(),
+                height: Provider.of<NoteData>(context, listen: false)
+                    .size!
+                    .height
+                    .toDouble(),
+                child: SizedBox(),
+              )
+            : SizedBox.shrink();
+  }
 
   rewardCheck() async {
     rewardFlag =
@@ -74,7 +95,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
     // TODO: implement dispose
     super.dispose();
     // TODO: Dispose a BannerAd object
-    _bannerAd?.dispose();
+    _anchoredAdaptiveAd?.dispose();
   }
 
   Future<void> _loadAd() async {
@@ -125,15 +146,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
           Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_anchoredAdaptiveAd != null && _isLoaded && !rewardFlag)
-                  Container(
-                    color: Colors.transparent,
-                    width: _anchoredAdaptiveAd!.size.width.toDouble(),
-                    height: _anchoredAdaptiveAd!.size.height.toDouble(),
-                    child: AdWidget(ad: _anchoredAdaptiveAd!),
-                  )
-              ],
+              children: [adaptiveAdShow()],
             ),
             decoration: BoxDecoration(
                 color: kPrimaryLightBlackColor,

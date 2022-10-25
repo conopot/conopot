@@ -61,6 +61,13 @@ class NoteData extends ChangeNotifier {
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   int detailDisposeCount = 0; //광고를 위해, 노트 상세정보에서 나간 횟수를 기록
 
+  AnchoredAdaptiveBannerAdSize? size;
+
+  initAdSize(BuildContext context) async {
+    size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        MediaQuery.of(context).size.width.truncate());
+  }
+
   Map<String, String> Note_Add_Interstitial_UNIT_ID = kReleaseMode
       ? {
           'android': 'ca-app-pub-7139143792782560/4800293433',

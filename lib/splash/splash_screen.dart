@@ -125,6 +125,9 @@ class _SplashScreenState extends State<SplashScreen> {
       prefs.setBool('first_run', false);
     }
 
+    //적응형 광고 크기 초기화
+    Provider.of<NoteData>(context, listen: false).initAdSize(context);
+
     checkConnection();
   }
 
