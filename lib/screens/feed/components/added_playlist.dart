@@ -1,5 +1,6 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/feed/playlist_serach_song_screen.dart';
@@ -106,7 +107,9 @@ class _AddedPlaylistState extends State<AddedPlaylist> {
               margin: EdgeInsets.only(top: defaultSize),
               key: ValueKey(1),
               child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
                 onTap: () {
+                  Provider.of<MusicSearchItemLists>(context, listen: false).initCombinedBook();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
