@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/user/personal_information_screen.dart';
+import 'package:conopot/screens/user/terms_of_user_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/constants.dart';
@@ -33,25 +35,31 @@ class LoginScreen extends StatelessWidget {
               child: Icon(Icons.close, color: kPrimaryWhiteColor)),
         ),
         body: Container(
-          padding: EdgeInsets.only(left: defaultSize * 4),
           color: kBackgroundColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "나만의 노래방 동반자",
-                style: TextStyle(
-                    color: kPrimaryWhiteColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: defaultSize * 2),
+              Spacer(),
+              Padding(
+                padding: EdgeInsets.only(left: defaultSize * 4),
+                child: Text(
+                  "나만의 노래방 동반자",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: defaultSize * 2),
+                ),
               ),
-              Text(
-                "애창곡 노트",
-                style: TextStyle(
-                    color: kMainColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: defaultSize * 3.5),
+              Padding(
+                padding: EdgeInsets.only(left: defaultSize * 4),
+                child: Text(
+                  "애창곡 노트",
+                  style: TextStyle(
+                      color: kMainColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: defaultSize * 3.5),
+                ),
               ),
               SizedBox(height: defaultSize * 8),
               GestureDetector(
@@ -59,6 +67,7 @@ class LoginScreen extends StatelessWidget {
                   kakaoLogin(context);
                 },
                 child: Container(
+                    padding: EdgeInsets.only(left: defaultSize * 4),
                     margin: EdgeInsets.only(right: defaultSize * 4),
                     child: Image.asset(
                         "assets/images/kakao_login_large_wide.png")),
@@ -81,6 +90,59 @@ class LoginScreen extends StatelessWidget {
                           child:
                               Image.asset("assets/images/sign_in_apple.png")))
                   : SizedBox.shrink(),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "회원가입시, ",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor, fontSize: defaultSize),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TermsOfUserScreen()));
+                    },
+                    child: Text(
+                      "이용약관",
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          decoration: TextDecoration.underline,
+                          fontSize: defaultSize),
+                    ),
+                  ),
+                  Text("과 ", style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PersonalInformationScreen()));
+                    },
+                    child: Text(
+                      "개인정보처리방침",
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          decoration: TextDecoration.underline,
+                          fontSize: defaultSize),
+                    ),
+                  ),
+                  Text("에 ", style: TextStyle(
+                        color: kPrimaryLightWhiteColor,
+                        fontSize: defaultSize)),
+                  Text(
+                    "동의하는 것으로 간주됩니다.",
+                    style: TextStyle(
+                        color: kPrimaryLightWhiteColor, fontSize: defaultSize),
+                  )
+                ],
+              ),
+              SizedBox(height: SizeConfig.screenHeight * 0.05)
             ],
           ),
         ));

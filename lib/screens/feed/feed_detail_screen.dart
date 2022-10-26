@@ -147,9 +147,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
           },
         ),
         actions: [
-          if (Provider.of<NoteData>(context, listen: false).isLogined == true &&
-              widget.post.postAuthorId !=
-                  Provider.of<NoteData>(context, listen: false).userId)
+          if (widget.post.postAuthorId !=
+              Provider.of<NoteData>(context, listen: false).userId)
             IconButton(
                 onPressed: () {
                   showReportListOption(context);
@@ -418,7 +417,9 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 ),
                 SizedBox(height: defaultSize),
                 Container(
-                  decoration: BoxDecoration(color: kPrimaryLightBlackColor, borderRadius: BorderRadius.all(Radius.circular(8))),
+                  decoration: BoxDecoration(
+                      color: kPrimaryLightBlackColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
                   padding: EdgeInsets.all(defaultSize),
                   margin: EdgeInsets.symmetric(horizontal: defaultSize),
                   child: Column(
