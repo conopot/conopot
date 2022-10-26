@@ -390,13 +390,13 @@ class NoteData extends ChangeNotifier {
         Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           tt.Toast.show("이미 리스트에 추가된 노래입니다.",
-              backgroundColor: kDialogColor.withOpacity(0.8));
+              backgroundColor: kPrimaryGreyColor);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
           tt.Toast.show("리스트에 노래가 추가 되었습니다.",
-              backgroundColor: kDialogColor.withOpacity(0.8));
+              backgroundColor: kPrimaryGreyColor);
         }
       },
       child: Text("추가",
@@ -505,26 +505,12 @@ class NoteData extends ChangeNotifier {
         Navigator.of(context).pop();
         Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          Fluttertoast.showToast(
-              msg: "이미 등록된 곡입니다 😢",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color(0xFFFF7878),
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
+          tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.", backgroundColor: kPrimaryGreyColor);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          Fluttertoast.showToast(
-              msg: "노래가 추가 되었습니다 🎉",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: kMainColor,
-              textColor: kPrimaryWhiteColor,
-              fontSize: defaultSize * 1.6);
+          tt.Toast.show("애창곡 노트에 노래가 추가되었습니다.", backgroundColor: kPrimaryGreyColor);
         }
       },
       child: Text("추가",

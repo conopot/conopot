@@ -274,11 +274,12 @@ class _NoteScreenState extends State<NoteScreen> {
             ),
           ),
           actions: [
+            if (_listSate != 1)
             IntrinsicHeight(
               child: Padding(
                 padding: (noteData.notes.isNotEmpty)
                     ? EdgeInsets.only(left: 0)
-                    : EdgeInsets.only(right: defaultSize * 1.5),
+                    : EdgeInsets.only(right: defaultSize * 1.4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

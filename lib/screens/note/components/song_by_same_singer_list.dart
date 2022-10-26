@@ -48,6 +48,7 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                 fontSize: defaultSize * 1.5),
           ),
           SizedBox(height: defaultSize),
+          (list.length > 0) ? 
           ListView.builder(
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
@@ -196,7 +197,7 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
                     ),
                   ),
                 );
-              }))
+              })) : Center(child: Text("결과가 없습니다.", style: TextStyle(color: kPrimaryWhiteColor)))
         ],
       ),
     );

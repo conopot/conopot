@@ -55,20 +55,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          Text("가사검색",
-                              style: TextStyle(
-                                  color: Colors.transparent,
-                                  fontSize: defaultSize * 1.2)),
-                          Text("유의사항",
-                              style: TextStyle(
-                                  color: Colors.transparent,
-                                  fontSize: defaultSize * 1.2))
-                        ],
-                      ),
-                    ),
+                    Icon(Icons.info_outline, color: Colors.transparent),
                     Spacer(),
                     TabBar(
                       onTap: (index) {
@@ -112,13 +99,13 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                             return Align(
                               alignment: Alignment.center,
                               child: Padding(
-                                padding: EdgeInsets.all(defaultSize),
+                                padding: EdgeInsets.all(defaultSize * 3),
                                 child: Material(
-                                  color: kDialogColor.withOpacity(0.9),
+                                  color: kDialogColor,
                                   shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
+                                      borderRadius: BorderRadius.circular(8)),
                                   child: Padding(
-                                    padding: EdgeInsets.all(16),
+                                    padding: EdgeInsets.all(defaultSize * 1.5),
                                     child: IntrinsicWidth(
                                       child: Column(
                                         crossAxisAlignment:
@@ -129,22 +116,11 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Icon(Icons.close,
-                                                  color: Colors.transparent),
-                                              Spacer(),
-                                              Text("가사 검색 주의사항",
+                                              Text("가사 검색시 주의사항 안내",
                                                   style: TextStyle(
                                                       color: kPrimaryWhiteColor,
                                                       fontSize:
-                                                          defaultSize * 1.8)),
-                                              Spacer(),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Icon(Icons.close,
-                                                    color: kPrimaryWhiteColor),
-                                              ),
+                                                          defaultSize * 1.7)),
                                             ],
                                           ),
                                           SizedBox(height: defaultSize * 2),
@@ -152,18 +128,18 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                                               "1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.5)),
+                                                  fontSize: defaultSize * 1.4)),
                                           Text(
                                               "ex) '또모르지내마음이' (x) -> '또 모르지 내 마음이' (o)",
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.5)),
-                                          SizedBox(height: defaultSize),
+                                                  fontSize: defaultSize * 1.4)),
+                                          SizedBox(height: defaultSize * 1.5),
                                           Text(
                                               "2. 입력창에 가사를 입력한 후 키보드의 확인 버튼 또는 완료 버튼을 눌러주세요.",
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.5)),
+                                                  fontSize: defaultSize * 1.4)),
                                           SizedBox(height: defaultSize * 3)
                                         ],
                                       ),
@@ -175,27 +151,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                           },
                         );
                       },
-                      child: IntrinsicHeight(
-                        child: Container(
-                          padding: EdgeInsets.all(defaultSize * 0.45),
-                          decoration: BoxDecoration(
-                              color: kMainColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          child: Column(
-                            children: [
-                              Text("가사검색",
-                                  style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize)),
-                              Text("주의사항",
-                                  style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize))
-                            ],
-                          ),
-                        ),
-                      ),
+                      child: Icon(Icons.info_outline, color: kMainColor)
                     ),
                   ],
                 ),

@@ -382,7 +382,10 @@ class _UserScreenState extends State<UserScreen> {
   userProfile() {
     if (Provider.of<NoteData>(context, listen: true).userImage == "") {
       // 기본 이미지
-      return SvgPicture.asset("assets/icons/profile.svg");
+      return SizedBox(
+          height: defaultSize * 4.5,
+          width: defaultSize * 4.5,
+          child: Image.asset("assets/images/profile.png"));
     }
     String? serverURL = dotenv.env['USER_SERVER_URL'];
     return ClipRRect(
@@ -393,7 +396,11 @@ class _UserScreenState extends State<UserScreen> {
           child: Image.network(
             Provider.of<NoteData>(context, listen: true).userImage,
             errorBuilder: ((context, error, stackTrace) {
-              return Image.asset("assets/images/profile.png");
+              return SizedBox(
+                  height: defaultSize * 4.5,
+                  width: defaultSize * 4.5,
+                  child: Image.asset("assets/images/profile.png"));
+              ;
             }),
             fit: BoxFit.cover,
           ),

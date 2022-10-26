@@ -183,7 +183,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                       Text(
                         "내 애창곡 리스트에 추가",
                         style: TextStyle(
-                            color: kMainColor, fontSize: defaultSize * 1.3),
+                            color: kMainColor),
                       )
                     ],
                   ),
@@ -222,8 +222,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                   Text(
                                     "전체 선택",
                                     style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: defaultSize * 1.1),
+                                        color: kMainColor),
                                   )
                                 ]),
                               ),
@@ -242,8 +241,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                   Text(
                                     "전체 해제",
                                     style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: defaultSize * 1.1),
+                                        color: kMainColor),
                                   )
                                 ]),
                               ),
@@ -266,7 +264,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                           color: kMainColor),
                       child: Text("${_checkCount}",
                           style: TextStyle(
-                              color: kPrimaryWhiteColor, fontSize: defaultSize),
+                              color: kPrimaryWhiteColor),
                           key: ValueKey(_checkCount)),
                     ),
                   )

@@ -127,7 +127,7 @@ class _FeedScreenState extends State<FeedScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return Scaffold(
       appBar: AppBar(
-        title: Text("싱스타그램"),
+        title: Text("싱스타그램", style: TextStyle(fontWeight: FontWeight.w700),),
         centerTitle: false,
         actions: [
           IconButton(
@@ -191,8 +191,7 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
             SizedBox(height: defaultSize),
             Container(
-              padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 1.5,
-                  defaultSize, defaultSize * 1.5),
+              padding: EdgeInsets.all(defaultSize * 1.5),
               margin: EdgeInsets.all(defaultSize),
               decoration: BoxDecoration(
                   color: kPrimaryLightBlackColor.withOpacity(0.8),
