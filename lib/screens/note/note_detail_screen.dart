@@ -57,15 +57,22 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
         throw HttpException('${response.statusCode}');
       setState(() {
         if (Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric !=
-            "") {
-          lyric =
-              Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).lyric;
-        }
-        if (lyric.replaceAll('\n\n', '\n') != "") {
-          lyric = lyric.replaceAll('\n\n', '\n');
-        }
-        //크롤링한 가사가 비어있는 경우
-        if (lyric == "") {
+            null) {
+          if (Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
+                  .lyric !=
+              "") {
+            lyric = Lyric.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
+                .lyric;
+          }
+          if (lyric.replaceAll('\n\n', '\n') != "") {
+            lyric = lyric.replaceAll('\n\n', '\n');
+          }
+          //크롤링한 가사가 비어있는 경우
+          if (lyric == "") {
+            lyric =
+                "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
+          }
+        } else {
           lyric =
               "해당 노래에 대한 가사 정보가 없습니다\n가사 요청은\n내 정보 페이지 하단의 문의하기를 이용해주세요 🙋‍♂️";
         }

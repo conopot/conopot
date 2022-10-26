@@ -46,7 +46,6 @@ class _PostListViewState extends State<PostListView> {
     "💌"
   ];
 
-
   _PostListViewState(FeedScrrenController _controller) {
     _controller.lastPostId = _lastPostId;
     _controller.loadMore = _loadMore;
@@ -215,14 +214,14 @@ class _PostListViewState extends State<PostListView> {
       },
     ).toList();
     if (_isLoadMoreRunning == true)
-      items.add(GestureDetector(
-        onTap: () {},
-        child: Center(
-          child: SpinKitFadingCircle(
+      items.add(
+        GestureDetector(
+          onTap: () {},
+          child: Center(
+              child: SpinKitFadingCircle(
             color: kPrimaryWhiteColor,
             size: defaultSize * 3,
-          ) 
-          ),
+          )),
         ),
       );
     if (_hasNextPage == false && _isFirstLoadRunning == false)
@@ -355,7 +354,9 @@ class _PostListViewState extends State<PostListView> {
       );
       var data = json.decode(response.body);
       setState(() {
-        _lastPostId = data['lastPostId'];
+        if (data['lastPostId'] != null) {
+          _lastPostId = data['lastPostId'];
+        }
         for (var e in data['posts']) {
           _posts.add(Post.fromJson(e));
         }
