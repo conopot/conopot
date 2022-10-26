@@ -475,13 +475,19 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            FeedReportScreen(post: widget.post),
-                      ),
-                    );
+                    if (Provider.of<NoteData>(context, listen: false)
+                            .isLogined ==
+                        false) {
+                      EasyLoading.showToast("로그인 후 이용가능합니다.");
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              FeedReportScreen(post: widget.post),
+                        ),
+                      );
+                    }
                   },
                   child: Row(
                     children: [
@@ -502,8 +508,14 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    // 차단하기
-                    showBlockDialog(context);
+                    if (Provider.of<NoteData>(context, listen: false)
+                            .isLogined ==
+                        false) {
+                      EasyLoading.showToast("로그인 후 이용가능합니다.");
+                    } else {
+                      // 차단하기
+                      showBlockDialog(context);
+                    }
                   },
                   child: Row(
                     children: [
