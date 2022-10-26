@@ -90,9 +90,8 @@ class TermsOfUserScreen extends StatelessWidget {
 
 회사가 제공하는 서비스의 내용은 다음 각 호와 같습니다.
 
-가. 제로웨이스트 챌린지
-
-나. 팔로우를 통한 타 사용자와의 교류
+가. 애창곡 검색, 저장 및 관리
+나. 플레이리스트 공유를 통한 사용자와의 교류
 
 제10조 (서비스 이용요금)
 
@@ -297,7 +296,10 @@ class TermsOfUserScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Text(content, style: TextStyle(color: kPrimaryLightWhiteColor),),
+          child: Text(
+            content,
+            style: TextStyle(color: kPrimaryLightWhiteColor),
+          ),
         ),
       ),
     );
