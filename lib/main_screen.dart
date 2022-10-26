@@ -62,7 +62,6 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-    rewardCheck();
     _widgetOptions = <Widget>[
       NoteScreen(),
       MusicBookScreen(),
@@ -180,6 +179,7 @@ class _MainScreenState extends State<MainScreen>
     return WillPopScope(
       onWillPop: () async {
         if (_selectedIndex == 0) {
+          rewardCheck();
           return showExitPopup(context);
         } else {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget

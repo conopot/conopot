@@ -44,16 +44,18 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   bool rewardFlag = false;
 
   Widget adaptiveAdShow() {
-    return (_anchoredAdaptiveAd != null && _isLoaded && !rewardFlag)
-        ? Container(
-            color: Colors.transparent,
-            width: _anchoredAdaptiveAd!.size.width.toDouble(),
-            height: _anchoredAdaptiveAd!.size.height.toDouble(),
-            child: AdWidget(ad: _anchoredAdaptiveAd!),
-          )
-        : (Provider.of<NoteData>(context, listen: false).size != null &&
-                !rewardFlag)
+    return (rewardFlag) //리워드 효과 시
+        ? SizedBox.shrink()
+        //광고를 불러온 경우
+        : (_anchoredAdaptiveAd != null && _isLoaded)
             ? Container(
+                color: Colors.transparent,
+                width: _anchoredAdaptiveAd!.size.width.toDouble(),
+                height: _anchoredAdaptiveAd!.size.height.toDouble(),
+                child: AdWidget(ad: _anchoredAdaptiveAd!),
+              )
+            //광고를 불러오지 못한 경우
+            : Container(
                 color: Colors.transparent,
                 width: Provider.of<NoteData>(context, listen: false)
                     .size!
@@ -64,8 +66,7 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
                     .height
                     .toDouble(),
                 child: SizedBox(),
-              )
-            : SizedBox.shrink();
+              );
   }
 
   rewardCheck() async {
