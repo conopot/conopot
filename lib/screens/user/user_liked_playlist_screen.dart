@@ -52,11 +52,8 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
           'ios': 'ca-app-pub-3940256099942544/2934735716',
         };
 
-  //리워드가 존재하는지 체크
-  bool rewardFlag = false;
-
   Widget adaptiveAdShow() {
-    return (rewardFlag) //리워드 효과 시
+    return (Provider.of<NoteData>(context, listen: false).rewardFlag) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
         : (_anchoredAdaptiveAd != null && _isLoaded)
@@ -81,15 +78,10 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
               );
   }
 
-  rewardCheck() async {
-    rewardFlag =
-        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!rewardFlag) _loadAd();
+    if (!Provider.of<NoteData>(context, listen: false).rewardFlag) _loadAd();
   }
 
   @override
@@ -129,7 +121,7 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
 
   @override
   void initState() {
-    rewardCheck();
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
     userId = Provider.of<NoteData>(context, listen: false).userId;
     _firstLoad();
     super.initState();

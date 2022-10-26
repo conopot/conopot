@@ -127,7 +127,6 @@ class NoteData extends ChangeNotifier {
   }
 
   void _showInterstitialAd(String command) async {
-    bool rewardFlag = await isUserRewarded();
     if (_interstitialAd == null || rewardFlag) {
       return;
     }
@@ -164,6 +163,10 @@ class NoteData extends ChangeNotifier {
     isSubscribed = flag;
   }
 
+  changeRewardState() {
+    rewardFlag = true;
+  }
+
   //Splash 화면에서 로그인 상태 확인
   initLoginState() async {
     String? jwt = await storage.read(key: 'jwt');
@@ -175,6 +178,8 @@ class NoteData extends ChangeNotifier {
     initSubscirbeState();
     initLoginState();
     initAccountInfo();
+
+    await isUserRewarded();
     // Read all values
     String? allValues = await storage.read(key: 'notes');
     if (allValues != null) {
@@ -848,7 +853,7 @@ class NoteData extends ChangeNotifier {
   }
 
   // 스토어 오픈 다이어로그
-  Future<bool> showOpenStoreDialog(context) async {
+  showOpenStoreDialog(context) async {
     // !event: 스토어연결_뷰__페이지뷰
     Analytics_config().storeRequestPageViewEvent();
     double defaultSize = SizeConfig.defaultSize;
@@ -950,7 +955,7 @@ class NoteData extends ChangeNotifier {
   }
 
   // 채널톡 오픈 다이어로그
-  Future<bool> showChannelTalkDialog(context) async {
+  showChannelTalkDialog(context) async {
     // !event: 채널톡연결_뷰__페이지뷰
     Analytics_config().channelTalkRequestPageVeiwnEvent();
     double defaultSize = SizeConfig.defaultSize;
@@ -1585,8 +1590,10 @@ class NoteData extends ChangeNotifier {
         });
   }
 
+  bool rewardFlag = false;
+
   //해당 사용자가 현재 리워드 보상(광고 제거)이 유지되어있는지 검사하는 함수
-  Future<bool> isUserRewarded() async {
+  isUserRewarded() async {
     String? rewardHoldTimeString = await storage.read(key: 'rewardTime');
     if (rewardHoldTimeString == null) return false;
     int rewardHoldTime = int.parse(rewardHoldTimeString);
@@ -1594,9 +1601,9 @@ class NoteData extends ChangeNotifier {
 
     //현재 시각이 리워드 시각 이후라면
     if (nowTime > rewardHoldTime) {
-      return false; //리워드 미적용
+      rewardFlag = false; //리워드 미적용
     } else {
-      return true; //리워드 적용
+      rewardFlag = true; //리워드 적용
     }
   }
 

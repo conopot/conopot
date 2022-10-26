@@ -42,17 +42,9 @@ class _FeedScreenState extends State<FeedScreen> {
           'ios': 'ca-app-pub-3940256099942544/2934735716',
         };
 
-  //리워드가 존재하는지 체크
-  bool rewardFlag = false;
-
-  rewardCheck() async {
-    rewardFlag =
-        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
-  }
-
   @override
   void initState() {
-    rewardCheck();
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _controller = ScrollController()
       ..addListener(() {
         if (_controller.position.maxScrollExtent ==
@@ -66,7 +58,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!rewardFlag) _loadAd();
+    if (!Provider.of<NoteData>(context, listen: false).rewardFlag) _loadAd();
   }
 
   @override
@@ -105,7 +97,7 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget adaptiveAdShow() {
-    return (rewardFlag) //리워드 효과 시
+    return (Provider.of<NoteData>(context, listen: false).rewardFlag) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
         : (_anchoredAdaptiveAd != null && _isLoaded)

@@ -40,14 +40,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   String lyric = "";
   bool internetCheck = true;
 
-  //리워드가 존재하는지 체크
-  bool rewardFlag = false;
-
-  rewardCheck() async {
-    rewardFlag = await Provider.of<NoteData>(this.context, listen: false)
-        .isUserRewarded();
-  }
-
   void getLyrics(String songNum) async {
     String url =
         'https://880k1orwu8.execute-api.ap-northeast-2.amazonaws.com/default/Conopot_Lyrics?songNum=$songNum';
@@ -183,7 +175,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
 
   @override
   void initState() {
-    rewardCheck();
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _interstitialAd = createInterstitialAd();
     _tabController = new TabController(length: 2, vsync: this);
     _tabController

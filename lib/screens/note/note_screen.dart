@@ -38,6 +38,8 @@ class _NoteScreenState extends State<NoteScreen> {
   bool isLoaded = false;
   final storage = new FlutterSecureStorage();
 
+  bool isReward = false;
+
   List<Color> colorizeColors = [
     kPrimaryLightPurpleColor,
     kPrimaryLightBlueColor,
@@ -53,13 +55,7 @@ class _NoteScreenState extends State<NoteScreen> {
   late StreamController<String> _events;
 
   //리워드가 존재하는지 체크
-  bool rewardFlag = false;
   String rewardRemainTime = "";
-
-  rewardCheck() async {
-    rewardFlag =
-        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
-  }
 
   rewardRemainTimeCheck() async {
     rewardRemainTime =
@@ -178,6 +174,8 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
+    isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
     //첫 세션인 사용자를 대상으로 한다.
@@ -278,7 +276,9 @@ class _NoteScreenState extends State<NoteScreen> {
           actions: [
             IntrinsicHeight(
               child: Padding(
-                padding: (noteData.notes.isNotEmpty) ? EdgeInsets.only(left: 0) : EdgeInsets.only(right: defaultSize * 1.5),
+                padding: (noteData.notes.isNotEmpty)
+                    ? EdgeInsets.only(left: 0)
+                    : EdgeInsets.only(right: defaultSize * 1.5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -593,9 +593,8 @@ class _NoteScreenState extends State<NoteScreen> {
   }
 
   _showAdBlockDialog() async {
-    await rewardCheck();
     await rewardRemainTimeCheck();
-    if (rewardFlag) {
+    if (isReward) {
       _startTimer();
       showDialog(
           barrierDismissible: false,
@@ -748,6 +747,9 @@ class _NoteScreenState extends State<NoteScreen> {
                         print("광고 보고 리워드 획득 상태 30분 증가 : ${rewardTime}");
                         await storage.write(
                             key: 'rewardTime', value: rewardTime.toString());
+                        setState(() {
+                          isReward = true;
+                        });
                       },
                     );
                   } else {
@@ -760,6 +762,9 @@ class _NoteScreenState extends State<NoteScreen> {
                     print("광고 보고 리워드 획득 상태 5분 증가 : ${rewardTime}");
                     await storage.write(
                         key: 'rewardTime', value: rewardTime.toString());
+                    setState(() {
+                      isReward = true;
+                    });
                     Fluttertoast.showToast(
                         msg: "볼 수 있는 광고가 없네요 😅\n5분간 무료로 광고 제거 효과를 적용해드릴게요",
                         toastLength: Toast.LENGTH_SHORT,

@@ -40,11 +40,8 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   BannerAd? _anchoredAdaptiveAd;
   bool _isLoaded = false;
 
-  //리워드가 존재하는지 체크
-  bool rewardFlag = false;
-
   Widget adaptiveAdShow() {
-    return (rewardFlag) //리워드 효과 시
+    return (Provider.of<NoteData>(context, listen: false).rewardFlag) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
         : (_anchoredAdaptiveAd != null && _isLoaded)
@@ -69,14 +66,9 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
               );
   }
 
-  rewardCheck() async {
-    rewardFlag =
-        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
-  }
-
   @override
   void initState() {
-    rewardCheck();
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
     userId = Provider.of<NoteData>(context, listen: false).userId;
     _firstLoad();
     super.initState();
@@ -97,7 +89,7 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!rewardFlag) _loadAd();
+    if (!Provider.of<NoteData>(context, listen: false).rewardFlag) _loadAd();
   }
 
   @override

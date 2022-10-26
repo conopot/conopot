@@ -52,16 +52,10 @@ class _MainScreenState extends State<MainScreen>
 
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
-  //리워드가 존재하는지 체크
-  bool rewardFlag = false;
-
-  rewardCheck() async {
-    rewardFlag =
-        await Provider.of<NoteData>(context, listen: false).isUserRewarded();
-  }
 
   @override
   void initState() {
+    Provider.of<NoteData>(context, listen: false).isUserRewarded();
     _widgetOptions = <Widget>[
       NoteScreen(),
       MusicBookScreen(),
@@ -110,7 +104,8 @@ class _MainScreenState extends State<MainScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TODO: Display a banner when ready
-                if (_bannerAd != null && !rewardFlag)
+                if (_bannerAd != null &&
+                    !Provider.of<NoteData>(context, listen: false).rewardFlag)
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(
@@ -179,7 +174,6 @@ class _MainScreenState extends State<MainScreen>
     return WillPopScope(
       onWillPop: () async {
         if (_selectedIndex == 0) {
-          rewardCheck();
           return showExitPopup(context);
         } else {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
