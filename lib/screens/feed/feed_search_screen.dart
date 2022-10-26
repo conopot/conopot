@@ -177,7 +177,7 @@ class _FeedSearchScrrenState extends State<FeedSearchScrren> {
                                                     null
                                                 ? ""
                                                 : _posts[index]
-                                                    .postSubscription!
+                                                    .postSubscription
                                                     .trim()
                                                     .replaceAll("\n", " "),
                                             style: TextStyle(

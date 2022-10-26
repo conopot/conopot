@@ -63,7 +63,8 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
             height: _anchoredAdaptiveAd!.size.height.toDouble(),
             child: AdWidget(ad: _anchoredAdaptiveAd!),
           )
-        : (Provider.of<NoteData>(context, listen: false).size != null)
+        : (Provider.of<NoteData>(context, listen: false).size != null &&
+                !rewardFlag)
             ? Container(
                 color: Colors.transparent,
                 width: Provider.of<NoteData>(context, listen: false)
