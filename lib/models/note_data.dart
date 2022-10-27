@@ -503,7 +503,6 @@ class NoteData extends ChangeNotifier {
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
         Navigator.of(context).pop();
-        Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.", backgroundColor: kPrimaryGreyColor);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();

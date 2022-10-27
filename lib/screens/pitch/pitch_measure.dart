@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bubble/bubble.dart';
 import 'package:conopot/components/custom_page_route.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_capture/flutter_audio_capture.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pitch_detector_dart/pitch_detector.dart';
 import 'package:pitchupdart/instrument_type.dart';
@@ -443,58 +445,81 @@ class _PitchMeasureState extends State<PitchMeasure> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            margin: EdgeInsets.only(left: defaultSize * 3),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                '노래를 불러 보세요 🎤',
-                style: TextStyle(
-                  color: kPrimaryWhiteColor,
-                  fontSize: defaultSize * 2,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(
-                height: SizeConfig.defaultSize * 1.5,
-              ),
-              Row(
-                children: [
-                  Text(
-                    '최고',
-                    style: TextStyle(
-                      color: kPrimaryWhiteColor,
-                      fontSize: defaultSize * 2,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                    padding: EdgeInsets.all(defaultSize),
-                    decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(
-                      "${frequencyToPitch(maxFrequency)}",
-                      style: TextStyle(
-                        color: kPrimaryWhiteColor,
-                        fontSize: defaultSize * 2,
-                        fontWeight: FontWeight.w500,
+          SizedBox(
+            child: Bubble(
+              padding: BubbleEdges.all(defaultSize),
+              margin: BubbleEdges.only(left: defaultSize),
+              alignment: Alignment.topLeft,
+              color: kPrimaryLightBlackColor,
+              nip: BubbleNip.rightBottom,
+              child: IntrinsicWidth(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '노래를 불러 보세요 🎤',
+                        style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                  ),
-                  Text(
-                    '까지 올라갔어요!',
-                    style: TextStyle(
-                      color: kPrimaryWhiteColor,
-                      fontSize: defaultSize * 2,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+                      SizedBox(
+                        height: SizeConfig.defaultSize * 1.5,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '최고',
+                            style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.symmetric(horizontal: defaultSize),
+                            padding: EdgeInsets.all(defaultSize),
+                            decoration: BoxDecoration(
+                              color: kPrimaryGreyColor,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              "${frequencyToPitch(maxFrequency)}",
+                              style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.5,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '까지 올라갔어요!',
+                            style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.5,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
               ),
-            ]),
+            ),
+          ),
+          Image.asset(
+            (frequency == 0)
+                ? "assets/images/Level0.png"
+                    : (frequency <= 200)
+                        ? "assets/images/Level1.png"
+                        : (frequency <= 555)
+                            ? "assets/images/Level2.png"
+                            : (frequency <= 741)
+                                ? "assets/images/Level3.png"
+                                : "assets/images/Level4.png",
+            width: defaultSize * 20,
+            height: defaultSize * 20,
           ),
           Container(
             width: double.infinity,
@@ -510,7 +535,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                   Text(
                     "현재 측정 음",
                     style: TextStyle(
-                      fontSize: defaultSize * 1.8,
+                      fontSize: defaultSize * 1.5,
                       fontWeight: FontWeight.w500,
                       color: kPrimaryWhiteColor,
                     ),
@@ -521,7 +546,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: defaultSize * 5),
+                                    vertical: defaultSize * 3),
                                 child: Icon(
                                   Icons.remove,
                                   color: kPrimaryWhiteColor,
@@ -539,14 +564,14 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
-                                      horizontal: defaultSize * 3.5),
+                                      horizontal: defaultSize * 5),
                                   padding: EdgeInsets.all(defaultSize),
                                   child: Center(
                                       child: Text(
                                     "측정 시작",
                                     style: TextStyle(
                                         color: kPrimaryWhiteColor,
-                                        fontSize: defaultSize * 1.6,
+                                        fontSize: defaultSize * 1.5,
                                         fontWeight: FontWeight.w600),
                                   )),
                                   decoration: BoxDecoration(
@@ -560,17 +585,18 @@ class _PitchMeasureState extends State<PitchMeasure> {
                       : Expanded(
                           child: Column(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: defaultSize * 5),
-                                child: Text(
-                                  frequencyToPitch(frequency),
-                                  style: TextStyle(
-                                      color: kPrimaryWhiteColor,
-                                      fontSize: defaultSize * 3,
-                                      fontWeight: FontWeight.w700),
-                                ),
+                              SizedBox(height: defaultSize * 2),
+                              Text(
+                                frequency.toStringAsFixed(1) +
+                                    "Hz (" +
+                                    frequencyToPitch(frequency) +
+                                    ")",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 2,
+                                    fontWeight: FontWeight.w700),
                               ),
+                              SizedBox(height: defaultSize * 3),
                               GestureDetector(
                                 onTap: () {
                                   // !event : 직접 음역대 측정 뷰  - 측정 중지
@@ -583,14 +609,14 @@ class _PitchMeasureState extends State<PitchMeasure> {
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
-                                      horizontal: defaultSize * 3.5),
+                                      horizontal: defaultSize * 5),
                                   padding: EdgeInsets.all(defaultSize),
                                   child: Center(
                                       child: Text(
                                     "측정 완료",
                                     style: TextStyle(
-                                        color: kPrimaryWhiteColor,
-                                        fontSize: defaultSize * 1.6,
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 1.5,
                                         fontWeight: FontWeight.w600),
                                   )),
                                   decoration: BoxDecoration(
@@ -600,7 +626,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                               ),
                             ],
                           ),
-                        )
+                        ),
                 ],
               ),
             ),
@@ -683,8 +709,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                           child: Text(
                         "다시 측정",
                         style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w600),
+                            color: kMainColor, fontWeight: FontWeight.w600),
                       )),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),

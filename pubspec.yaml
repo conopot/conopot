@@ -86,6 +86,7 @@ dependencies:
   facebook_audience_network: ^1.0.1
   flutter_spinkit: ^5.1.0
   animated_text_kit: ^4.2.2
+  bubble: ^1.2.1
 
 
 dev_dependencies:
