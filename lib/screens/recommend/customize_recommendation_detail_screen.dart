@@ -130,8 +130,8 @@ class _CustomizeRecommendationDetailScreenState
                 child: Text("추천 다시 받기",
                     style: TextStyle(
                         color: kMainColor,
-                        fontSize: defaultSize * 1.3,
-                        fontWeight: FontWeight.w400)),
+                        fontSize: defaultSize * 1.4,
+                        fontWeight: FontWeight.w500)),
               ),
             ),
           ),

@@ -129,17 +129,11 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                     }
                   }
                 },
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 0.5,
-                        defaultSize, defaultSize * 0.5),
-                    decoration: BoxDecoration(
+                child: Text("완료",
+                    style: TextStyle(
                         color: kMainColor,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
-                    child: Text("완료",
-                        style: TextStyle(
-                            color: kPrimaryWhiteColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: defaultSize * 1.2))))
+                        fontWeight: FontWeight.w500,
+                        fontSize: defaultSize * 1.5)))
           ],
         ),
         body: SafeArea(

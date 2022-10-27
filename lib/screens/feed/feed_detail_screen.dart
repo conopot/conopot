@@ -182,8 +182,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                       SizedBox(width: defaultSize),
                       Text(
                         "내 애창곡 리스트에 추가",
-                        style: TextStyle(
-                            color: kMainColor),
+                        style: TextStyle(color: kMainColor),
                       )
                     ],
                   ),
@@ -221,8 +220,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                   Icon(Icons.list, color: kMainColor),
                                   Text(
                                     "전체 선택",
-                                    style: TextStyle(
-                                        color: kMainColor),
+                                    style: TextStyle(color: kMainColor),
                                   )
                                 ]),
                               ),
@@ -240,8 +238,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                       color: kMainColor),
                                   Text(
                                     "전체 해제",
-                                    style: TextStyle(
-                                        color: kMainColor),
+                                    style: TextStyle(color: kMainColor),
                                   )
                                 ]),
                               ),
@@ -263,8 +260,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(90)),
                           color: kMainColor),
                       child: Text("${_checkCount}",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor),
+                          style: TextStyle(color: kPrimaryWhiteColor),
                           key: ValueKey(_checkCount)),
                     ),
                   )
@@ -394,21 +390,14 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                                   _isEditting = false;
                                 });
                               },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(
-                                    defaultSize,
-                                    defaultSize * 0.5,
-                                    defaultSize,
-                                    defaultSize * 0.5),
-                                decoration: BoxDecoration(
-                                    color: kMainColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(right: defaultSize * 0.5),
                                 child: Text("추가",
                                     style: TextStyle(
-                                        color: kPrimaryWhiteColor,
-                                        fontSize: defaultSize * 1.2,
-                                        fontWeight: FontWeight.w600)),
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 1.3,
+                                        fontWeight: FontWeight.w500)),
                               )),
                     ],
                   ),

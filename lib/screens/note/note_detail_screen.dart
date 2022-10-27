@@ -226,7 +226,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                   "삭제",
                   style: TextStyle(
                       color: kMainColor,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w500,
                       fontSize: defaultSize * 1.5),
                 ))
           ],

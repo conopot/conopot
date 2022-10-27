@@ -218,7 +218,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                   "추가",
                   style: TextStyle(
                       color: kMainColor,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w500,
                       fontSize: defaultSize * 1.5),
                 ))
           ],

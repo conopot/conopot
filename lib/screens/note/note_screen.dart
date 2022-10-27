@@ -331,7 +331,7 @@ class _NoteScreenState extends State<NoteScreen> {
                     },
                     child: Text("완료",
                         style: TextStyle(
-                            color: kMainColor, fontSize: defaultSize * 1.6)))
+                            color: kMainColor, fontSize: defaultSize * 1.5, fontWeight: FontWeight.w500)))
               ]
             ]
           ],
