@@ -95,7 +95,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                         onTap: () {
                           showCautionDialog(context);
                         },
-                        child: Icon(Icons.info_outline, color: kMainColor)),
+                        child: Icon(Icons.announcement, color: kMainColor)),
                   ],
                 ),
               ),

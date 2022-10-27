@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -306,7 +307,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  NoteDetailScreen(note: note!)));
+                                  SongDetailScreen(note: note!)));
                   },
                   child: GridTile(
                     child: Container(

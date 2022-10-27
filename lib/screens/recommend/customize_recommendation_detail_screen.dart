@@ -9,6 +9,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_music.dart';
+import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +212,7 @@ class _CustomizeRecommendationDetailScreenState
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NoteDetailScreen(note: note!)));
+                                    SongDetailScreen(note: note!)));
                     }),
               ),
             );
