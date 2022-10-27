@@ -22,7 +22,8 @@ class PostListView extends StatefulWidget {
   State<PostListView> createState() => _PostListViewState(controller);
 }
 
-class _PostListViewState extends State<PostListView> {
+class _PostListViewState extends State<PostListView>
+    with TickerProviderStateMixin {
   double defaultSize = SizeConfig.defaultSize;
   int _lastPostId = 0;
   bool _hasNextPage = true;
@@ -32,6 +33,7 @@ class _PostListViewState extends State<PostListView> {
   int _option = 1; // 인기 or 최신
   late ScrollController _controller;
   int userId = 0;
+  late TabController _tabController;
 
   var _emotionList = [
     "😀",
@@ -63,6 +65,7 @@ class _PostListViewState extends State<PostListView> {
           _loadMore();
         }
       });
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -236,92 +239,60 @@ class _PostListViewState extends State<PostListView> {
       ));
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.only(right: defaultSize),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () async {
-                  setState(() {
-                    if (_option == 2) {
-                      _hasNextPage = true;
-                      _option = 1;
-                      _posts = [];
-                      _lastPostId = 0;
-                      _firstLoad(_option);
-                    }
-                  });
-                },
-                child: _option == 1
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(defaultSize,
-                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
-                        decoration: BoxDecoration(
-                            color: kMainColor.withOpacity(0.9),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-                        child: Text(
-                          "인기",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.fromLTRB(defaultSize,
-                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
-                        child: Text(
-                          "인기",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Theme(
+              data: Theme.of(context).copyWith(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent),
+              child: SizedBox(
+                width: defaultSize * 9,
+                height: defaultSize * 3,
+                child: TabBar(
+                    onTap: (index) {
+                      if (index == 0) {
+                        if (_option == 2) {
+                          _hasNextPage = true;
+                          _option = 1;
+                          _posts = [];
+                          _lastPostId = 0;
+                          _firstLoad(_option);
+                        }
+                      } else if (index == 1) {
+                        if (_option == 1) {
+                          _hasNextPage = true;
+                          _option = 2;
+                          _posts = [];
+                          _lastPostId = 0;
+                          _firstLoad(_option);
+                        }
+                      }
+                    },
+                    indicatorPadding: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
+                    labelPadding: EdgeInsets.zero,
+                    controller: _tabController,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: kMainColor),
+                    tabs: [
+                      Tab(
+                          child: Text("인기",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 1.3))),
+                      Tab(
+                          child: Text("최신",
+                              style: TextStyle(
+                                  color: kPrimaryWhiteColor,
+                                  fontSize: defaultSize * 1.3))),
+                    ]),
               ),
-              SizedBox(
-                width: defaultSize * 0.5,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  setState(() {
-                    if (_option == 1) {
-                      _hasNextPage = true;
-                      _option = 2;
-                      _posts = [];
-                      _lastPostId = 0;
-                      _firstLoad(_option);
-                    }
-                  });
-                },
-                child: _option == 2
-                    ? Container(
-                        padding: EdgeInsets.fromLTRB(defaultSize,
-                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
-                        decoration: BoxDecoration(
-                            color: kMainColor.withOpacity(0.9),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25))),
-                        child: Text(
-                          "최신",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.fromLTRB(defaultSize,
-                            defaultSize * 0.5, defaultSize, defaultSize * 0.5),
-                        child: Text(
-                          "최신",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(width: defaultSize),
+          ],
         ),
         SizedBox(height: defaultSize * 1.5),
         ListView(
