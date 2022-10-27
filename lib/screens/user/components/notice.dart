@@ -24,7 +24,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
       body: SafeArea(
         child: WebView(
           initialUrl:
-              'https://irradiated-beetle-e0d.notion.site/4de5efeeeeb74bf58ceb04ef650290b6',
+              'https://sphenoid-island-144.notion.site/8304802953b0430b9f82e5fcdfe19e33',
           javascriptMode: JavascriptMode.unrestricted,
           gestureNavigationEnabled: true,
         ),
