@@ -1131,6 +1131,7 @@ class NoteData extends ChangeNotifier {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
+          _showInterstitialAd("AI");
           saveNotes();
           Navigator.of(context).pop();
         },
