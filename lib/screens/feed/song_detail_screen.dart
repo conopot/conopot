@@ -21,6 +21,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SongDetailScreen extends StatefulWidget {
@@ -192,6 +193,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
     String? videoId = Provider.of<MusicSearchItemLists>(context, listen: false)

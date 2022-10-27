@@ -488,7 +488,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             child: Text(
                               "${frequencyToPitch(maxFrequency)}",
                               style: TextStyle(
-                                color: kPrimaryWhiteColor,
+                                color: kMainColor,
                                 fontSize: defaultSize * 1.5,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -511,13 +511,13 @@ class _PitchMeasureState extends State<PitchMeasure> {
           Image.asset(
             (frequency == 0)
                 ? "assets/images/Level0.png"
-                    : (frequency <= 200)
-                        ? "assets/images/Level1.png"
-                        : (frequency <= 555)
-                            ? "assets/images/Level2.png"
-                            : (frequency <= 741)
-                                ? "assets/images/Level3.png"
-                                : "assets/images/Level4.png",
+                : (frequency <= 200)
+                    ? "assets/images/Level1.png"
+                    : (frequency <= 555)
+                        ? "assets/images/Level2.png"
+                        : (frequency <= 741)
+                            ? "assets/images/Level3.png"
+                            : "assets/images/Level4.png",
             width: defaultSize * 20,
             height: defaultSize * 20,
           ),
@@ -546,7 +546,7 @@ class _PitchMeasureState extends State<PitchMeasure> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: defaultSize * 3),
+                                    vertical: defaultSize * 4),
                                 child: Icon(
                                   Icons.remove,
                                   color: kPrimaryWhiteColor,
@@ -586,17 +586,25 @@ class _PitchMeasureState extends State<PitchMeasure> {
                           child: Column(
                             children: [
                               SizedBox(height: defaultSize * 2),
-                              Text(
-                                frequency.toStringAsFixed(1) +
-                                    "Hz (" +
-                                    frequencyToPitch(frequency) +
-                                    ")",
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 2,
-                                    fontWeight: FontWeight.w700),
+                              RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text: frequency.toStringAsFixed(1) + "Hz",
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 2,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  TextSpan(
+                                    text: " (${frequencyToPitch(frequency)})",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 2,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ]),
                               ),
-                              SizedBox(height: defaultSize * 3),
+                              SizedBox(height: defaultSize * 4),
                               GestureDetector(
                                 onTap: () {
                                   // !event : 직접 음역대 측정 뷰  - 측정 중지

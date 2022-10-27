@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class NoteSearchList extends StatefulWidget {
   final MusicSearchItemLists musicList;
@@ -248,6 +249,7 @@ class _NoteSearchListState extends State<NoteSearchList> {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return _ListView(context);
   }
 

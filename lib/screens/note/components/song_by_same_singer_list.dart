@@ -9,6 +9,7 @@ import 'package:conopot/screens/feed/song_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class SongBySameSingerList extends StatefulWidget {
   final Note note;
@@ -30,6 +31,7 @@ class _SongBySameSingerListState extends State<SongBySameSingerList> {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     final defaultSize = SizeConfig.defaultSize;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultSize),

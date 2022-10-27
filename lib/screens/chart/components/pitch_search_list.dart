@@ -7,6 +7,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class PitchSearchList extends StatelessWidget {
   double defaultSize = SizeConfig.defaultSize;
@@ -14,6 +15,7 @@ class PitchSearchList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Consumer<MusicSearchItemLists>(
       builder: (
         context,

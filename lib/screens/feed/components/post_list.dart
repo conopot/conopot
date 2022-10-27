@@ -71,6 +71,7 @@ class _PostListViewState extends State<PostListView>
   @override
   void dispose() {
     _controller.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
