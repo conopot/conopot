@@ -77,16 +77,22 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                           child: Center(
                             child: (index == 0)
                                 ? Image(
+                                    width: defaultSize * 4,
+                                    height: defaultSize * 4,
                                     image:
                                         AssetImage('assets/images/first.png'),
                                   )
                                 : (index == 1)
                                     ? Image(
+                                        width: defaultSize * 4,
+                                        height: defaultSize * 4,
                                         image: AssetImage(
                                             'assets/images/second.png'),
                                       )
                                     : (index == 2)
                                         ? Image(
+                                            width: defaultSize * 4,
+                                            height: defaultSize * 4,
                                             image: AssetImage(
                                                 'assets/images/third.png'),
                                           )
@@ -132,11 +138,11 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
                         onTap: () {
                           if (title != '금영 인기차트') {
                             if (note != null)
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    SongDetailScreen(note: note!)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SongDetailScreen(note: note!)));
                           } else {
                             Provider.of<NoteData>(context, listen: false)
                                 .showAddNoteDialogWithInfo(context,
