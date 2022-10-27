@@ -178,30 +178,25 @@ class _NoteScreenState extends State<NoteScreen> {
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
-    //첫 세션인 사용자를 대상으로 한다.
-    if (Provider.of<MusicSearchItemLists>(context, listen: false)
-            .sessionCount ==
-        0) {
-      Analytics_config().emptyNoteUserEvent();
-      //remote config 변수 가져오기
-      abtest1021_modal =
-          Firebase_Remote_Config().remoteConfig.getString('abtest1021_modal');
-      //유저 프로퍼티 설정하기
-      if (abtest1021_modal != "") {
-        Identify identify = Identify()
-          ..set('10/21 CTA 강조 및 이외 다른 버튼 모두 비활성화', abtest1021_modal);
 
-        Analytics_config().userProps(identify);
-      }
+    //remote config 변수 가져오기
+    abtest1021_modal =
+        Firebase_Remote_Config().remoteConfig.getString('abtest1021_modal');
+    //유저 프로퍼티 설정하기
+    if (abtest1021_modal != "") {
+      Identify identify = Identify()
+        ..set('10/21 CTA 강조 및 이외 다른 버튼 모두 비활성화', abtest1021_modal);
 
-      //화면 빌드 후, 바로 모달 창 띄우는 부분
-      if (abtest1021_modal == 'B') {
-        WidgetsBinding.instance
-            .addPostFrameCallback((_) => _dialogBuilder(context));
-      }
-      Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount +=
-          1;
+      Analytics_config().userProps(identify);
     }
+
+    //화면 빌드 후, 바로 모달 창 띄우는 부분
+    if (abtest1021_modal == 'B') {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _dialogBuilder(context));
+    }
+    Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount += 1;
+
     _events = StreamController<String>.broadcast();
     _events.add(rewardRemainTime);
     super.initState();
@@ -275,44 +270,44 @@ class _NoteScreenState extends State<NoteScreen> {
           ),
           actions: [
             if (_listSate != 1)
-            IntrinsicHeight(
-              child: Padding(
-                padding: (noteData.notes.isNotEmpty)
-                    ? EdgeInsets.only(left: 0)
-                    : EdgeInsets.only(right: defaultSize * 1.4),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: AnimatedTextKit(
-                        totalRepeatCount: 100,
-                        animatedTexts: [
-                          ColorizeAnimatedText(
-                            '광고제거',
-                            textStyle: colorizeTextStyle,
-                            colors: colorizeColors,
-                          ),
-                          ColorizeAnimatedText(
-                            '광고제거',
-                            textStyle: colorizeTextStyle,
-                            colors: colorizeColors,
-                          ),
-                          ColorizeAnimatedText(
-                            '광고제거',
-                            textStyle: colorizeTextStyle,
-                            colors: colorizeColors,
-                          ),
-                        ],
-                        isRepeatingAnimation: true,
-                        onTap: () {
-                          _showAdBlockDialog();
-                        },
-                      ),
-                    )
-                  ],
+              IntrinsicHeight(
+                child: Padding(
+                  padding: (noteData.notes.isNotEmpty)
+                      ? EdgeInsets.only(left: 0)
+                      : EdgeInsets.only(right: defaultSize * 1.4),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: AnimatedTextKit(
+                          totalRepeatCount: 100,
+                          animatedTexts: [
+                            ColorizeAnimatedText(
+                              '광고제거',
+                              textStyle: colorizeTextStyle,
+                              colors: colorizeColors,
+                            ),
+                            ColorizeAnimatedText(
+                              '광고제거',
+                              textStyle: colorizeTextStyle,
+                              colors: colorizeColors,
+                            ),
+                            ColorizeAnimatedText(
+                              '광고제거',
+                              textStyle: colorizeTextStyle,
+                              colors: colorizeColors,
+                            ),
+                          ],
+                          isRepeatingAnimation: true,
+                          onTap: () {
+                            _showAdBlockDialog();
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
             // 저장한 노래가 있을 경우만 아이콘 표시
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
               IconButton(
