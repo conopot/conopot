@@ -92,67 +92,10 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                     ),
                     Spacer(),
                     GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: EdgeInsets.all(defaultSize * 3),
-                                child: Material(
-                                  color: kDialogColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(defaultSize * 1.5),
-                                    child: IntrinsicWidth(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text("가사 검색시 주의사항 안내",
-                                                  style: TextStyle(
-                                                      color: kPrimaryWhiteColor,
-                                                      fontSize:
-                                                          defaultSize * 1.7)),
-                                            ],
-                                          ),
-                                          SizedBox(height: defaultSize * 2),
-                                          Text(
-                                              "1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
-                                              style: TextStyle(
-                                                  color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.4)),
-                                          Text(
-                                              "ex) '또모르지내마음이' (x) -> '또 모르지 내 마음이' (o)",
-                                              style: TextStyle(
-                                                  color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.4)),
-                                          SizedBox(height: defaultSize * 1.5),
-                                          Text(
-                                              "2. 입력창에 가사를 입력한 후 키보드의 확인 버튼 또는 완료 버튼을 눌러주세요.",
-                                              style: TextStyle(
-                                                  color: kPrimaryWhiteColor,
-                                                  fontSize: defaultSize * 1.4)),
-                                          SizedBox(height: defaultSize * 3)
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      child: Icon(Icons.info_outline, color: kMainColor)
-                    ),
+                        onTap: () {
+                          showCautionDialog(context);
+                        },
+                        child: Icon(Icons.info_outline, color: kMainColor)),
                   ],
                 ),
               ),
@@ -172,5 +115,61 @@ class _MusicBookScreenState extends State<MusicBookScreen>
         ),
       ),
     );
+  }
+
+  void showCautionDialog(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
+    double screenWidth = SizeConfig.screenWidth;
+
+     Widget okButton = Container(
+      width: screenWidth * 0.3,
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(kMainColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              side: const BorderSide(width: 0.0),
+              borderRadius: BorderRadius.circular(8),
+            ))),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text("확인", style: TextStyle(fontWeight: FontWeight.w600)),
+      ),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: IntrinsicHeight(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Center(
+              child: Text("가사 검색시 주의사항 안내",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+          SizedBox(height: defaultSize * 2),
+          Text("1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4)),
+          Text("ex) '또모르지내마음이' (x) -> '또 모르지 내 마음이' (o)",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4)),
+          SizedBox(height: defaultSize * 1.5),
+          Text("2. 입력창에 가사를 입력한 후 키보드의 확인 버튼 또는 완료 버튼을 눌러주세요.",
+              style: TextStyle(
+                  color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4)),
+        ]),
+      ),
+      backgroundColor: kDialogColor,
+      actionsAlignment: MainAxisAlignment.center,
+      actions: [
+        okButton,
+      ],
+    );
+
+    showDialog(
+        context: context,
+        
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
   }
 }
