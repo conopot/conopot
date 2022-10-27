@@ -230,7 +230,7 @@ class NoteData extends ChangeNotifier {
   }
 
   aiInterstitialAd() {
-    if (_interstitialAd != null) {
+    if (_interstitialAd != null && !rewardFlag) {
       _showInterstitialAd("AI");
     }
   }
@@ -301,7 +301,8 @@ class NoteData extends ChangeNotifier {
         .getBool('noteAddInterstitialSetting');
     if (noteAddCount % 5 == 0 &&
         noteAddInterstitialSetting &&
-        _interstitialAd != null) {
+        _interstitialAd != null &&
+        !rewardFlag) {
       _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
@@ -504,12 +505,14 @@ class NoteData extends ChangeNotifier {
                 .combinedSongList);
         Navigator.of(context).pop();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
-          tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.", backgroundColor: kPrimaryGreyColor);
+          tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
+              backgroundColor: kPrimaryGreyColor);
           Provider.of<NoteData>(context, listen: false).initEmptyCheck();
         } else {
           Analytics_config().addViewSongAddEvent(title);
           Analytics_config().musicAddEvent(title);
-          tt.Toast.show("애창곡 노트에 노래가 추가되었습니다.", backgroundColor: kPrimaryGreyColor);
+          tt.Toast.show("애창곡 노트에 노래가 추가되었습니다.",
+              backgroundColor: kPrimaryGreyColor);
         }
       },
       child: Text("추가",
