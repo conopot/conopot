@@ -173,9 +173,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     _interstitialAd = null;
   }
 
+  bool? reward;
+
   @override
   void initState() {
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
+    reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
     _tabController = new TabController(length: 2, vsync: this);
     _tabController
@@ -192,9 +195,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    // if (provider.detailDisposeCount % 3 == 0 && rewardFlag != true) {
-    //   _showInterstitialAd();
-    // }
+    if (provider.detailDisposeCount % 3 == 0 && reward != true) {
+      _showInterstitialAd();
+    }
     super.dispose();
     _tabController.dispose();
   }
