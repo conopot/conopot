@@ -191,7 +191,10 @@ class _NoteScreenState extends State<NoteScreen> {
     }
 
     //화면 빌드 후, 바로 모달 창 띄우는 부분
-    if (abtest1021_modal == 'B') {
+    if (abtest1021_modal == 'B' &&
+        Provider.of<MusicSearchItemLists>(context, listen: false)
+                .sessionCount ==
+            0) {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => _dialogBuilder(context));
     }
@@ -326,7 +329,9 @@ class _NoteScreenState extends State<NoteScreen> {
                     },
                     child: Text("완료",
                         style: TextStyle(
-                            color: kMainColor, fontSize: defaultSize * 1.5, fontWeight: FontWeight.w500)))
+                            color: kMainColor,
+                            fontSize: defaultSize * 1.5,
+                            fontWeight: FontWeight.w500)))
               ]
             ]
           ],
