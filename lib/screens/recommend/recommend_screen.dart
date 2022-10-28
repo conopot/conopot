@@ -10,6 +10,7 @@ import 'package:conopot/screens/recommend/components/pitch_detection_banner.dart
 import 'package:conopot/screens/recommend/components/popular_song_recommendation.dart';
 import 'package:conopot/screens/recommend/components/season_recommendation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 class RecommendScreen extends StatefulWidget {
@@ -21,6 +22,12 @@ class RecommendScreen extends StatefulWidget {
 
 class _RecommendScreenState extends State<RecommendScreen> {
   double defaultSize = SizeConfig.defaultSize;
+
+  @override
+  void dispose() {
+    EasyLoading.dismiss();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

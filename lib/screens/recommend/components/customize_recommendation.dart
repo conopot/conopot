@@ -60,18 +60,14 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
         String? recommendList = response.body;
         if (recommendList != null) {
           widget.musicList.saveAiRecommendationList(recommendList);
-          setState(() {});
           EasyLoading.showSuccess('분석에 성공했습니다!');
         } else {
-          setState(() {});
           EasyLoading.showToast('분석을 위한 데이터가 부족합니다\n노트를 좀더 추가해주세요');
         }
       } else {
-        setState(() {});
         EasyLoading.showToast('서버 문제가 발생했습니다\n채널톡에 문의해주세요');
       }
     }, onError: (e) {
-      setState(() {});
       EasyLoading.showToast('분석에 실패했습니다\n인터넷 연결을 확인해 주세요');
     });
   }
@@ -177,6 +173,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     //!event: 추천_뷰__AI추천받기
                     Analytics_config().clickAIRecommendationEvent();
                     requestCFApi();
+                    setState(() {});
                     //전면 광고
                     Provider.of<NoteData>(context, listen: false)
                         .aiInterstitialAd();
@@ -251,6 +248,7 @@ class _CustomizeRecommendationState extends State<CustomizeRecommendation> {
                     //!event: 추천_뷰__AI추천받기
                     Analytics_config().clickAIRecommendationEvent();
                     requestCFApi();
+                    setState(() {});
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,

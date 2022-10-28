@@ -67,24 +67,20 @@ class _CustomizeRecommendationDetailScreenState
         String? recommendList = response.body;
         if (recommendList != null) {
           widget.musicList.saveAiRecommendationList(recommendList);
-          setState(() {});
           EasyLoading.showToast('분석에 성공했습니다.');
         } else {
-          setState(() {});
           EasyLoading.instance
             ..fontSize = defaultSize * 1.2
             ..displayDuration = Duration(seconds: 2);
           EasyLoading.showToast('분석을 위한 데이터가 부족합니다\n애창곡 노트에 노래를 좀 더 추가해 주세요.');
         }
       } else {
-        setState(() {});
         EasyLoading.instance
           ..fontSize = defaultSize * 1.2
           ..displayDuration = Duration(seconds: 2);
         EasyLoading.showToast('서버 문제가 발생했습니다 채널톡에 문의해 주세요.');
       }
     }, onError: (e) {
-      setState(() {});
       EasyLoading.instance
         ..fontSize = defaultSize * 1.2
         ..displayDuration = Duration(seconds: 2);
@@ -119,6 +115,7 @@ class _CustomizeRecommendationDetailScreenState
                 EasyLoading.showToast('최소 5개 이상의 노트를 추가해 주세요.');
               } else {
                 requestCFApi();
+                setState(() {});
                 //전면 광고
                 Provider.of<NoteData>(context, listen: false)
                     .aiInterstitialAd();
@@ -224,6 +221,7 @@ class _CustomizeRecommendationDetailScreenState
 
   @override
   void dispose() {
+    EasyLoading.dismiss();
     super.dispose();
   }
 }
