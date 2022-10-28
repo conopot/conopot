@@ -1075,8 +1075,8 @@ class NoteData extends ChangeNotifier {
                 borderRadius: BorderRadius.circular(8),
               ))),
           onPressed: () async {
-            await loadNotes(context);
             Navigator.of(context).pop();
+            await loadNotes(context);
           },
           child: Text("가져오기",
               style:
@@ -1128,8 +1128,8 @@ class NoteData extends ChangeNotifier {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
-          saveNotes();
           Navigator.of(context).pop();
+          saveNotes();
         },
         child: Text("백업 계속하기", style: TextStyle(fontWeight: FontWeight.w600)),
       ),
