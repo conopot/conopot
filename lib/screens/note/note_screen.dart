@@ -258,11 +258,14 @@ class _NoteScreenState extends State<NoteScreen> {
     super.dispose();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     rewardRemainTimeCheck();
     return Consumer<NoteData>(
       builder: (context, noteData, child) => Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
             "애창곡 노트",
@@ -657,7 +660,7 @@ class _NoteScreenState extends State<NoteScreen> {
     } else {
       showDialog(
         context: context,
-        builder: (context) {
+        builder: (dialogContex) {
           return AlertDialog(
             backgroundColor: kDialogColor,
             shape: const RoundedRectangleBorder(
@@ -751,6 +754,8 @@ class _NoteScreenState extends State<NoteScreen> {
                         setState(() {
                           isReward = true;
                         });
+                        Provider.of<NoteData>(context, listen: false)
+                            .changeRewardState();
                       },
                     );
                   } else {

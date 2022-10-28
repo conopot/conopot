@@ -165,6 +165,7 @@ class NoteData extends ChangeNotifier {
 
   changeRewardState() {
     rewardFlag = true;
+    notifyListeners();
   }
 
   //Splash 화면에서 로그인 상태 확인
@@ -1132,7 +1133,6 @@ class NoteData extends ChangeNotifier {
             ))),
         onPressed: () {
           if (!rewardFlag) _showInterstitialAd("AI");
-          saveNotes();
           Navigator.of(context).pop();
           saveNotes();
         },
