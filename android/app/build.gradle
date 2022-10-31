@@ -100,10 +100,18 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+    implementation 'com.facebook.android:facebook-android-sdk:15.0.0'
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.android.gms:play-services-ads:20.1.0'
     implementation 'com.google.android.ads:mediation-test-suite:2.0.0'
     implementation 'com.google.ads.mediation:facebook:6.8.0.0'
+    constraints {
+        implementation('com.facebook.android:audience-network-sdk') {
+            version {
+                strictly '6.8.0'
+            }
+    }
+  }
+
 }

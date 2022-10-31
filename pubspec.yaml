@@ -87,6 +87,8 @@ dependencies:
   flutter_spinkit: ^5.1.0
   animated_text_kit: ^4.2.2
   bubble: ^1.2.1
+  firebase_core_platform_interface: 4.5.1
+
 
 
 dev_dependencies:
