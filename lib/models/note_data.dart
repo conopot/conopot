@@ -1302,6 +1302,7 @@ class NoteData extends ChangeNotifier {
           logoutAccount();
 
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
       child: Text((command == "delete") ? "회원탈퇴" : "로그아웃",
           style: TextStyle(fontWeight: FontWeight.w600)),
