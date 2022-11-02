@@ -36,7 +36,7 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
-  String abtest1021_modal = "";
+  String abtest1102_modal = "";
   bool isLoaded = false;
   String test = "";
   final storage = new FlutterSecureStorage();
@@ -182,23 +182,16 @@ class _NoteScreenState extends State<NoteScreen> {
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
     //remote config 변수 가져오기
-    abtest1021_modal =
-        Firebase_Remote_Config().remoteConfig.getString('abtest1021_modal');
+    abtest1102_modal =
+        Firebase_Remote_Config().remoteConfig.getString('abtest1102_modal');
+    print("여기 ${abtest1102_modal}");
     //유저 프로퍼티 설정하기
-    if (abtest1021_modal != "") {
-      Identify identify = Identify()
-        ..set('10/21 CTA 강조 및 이외 다른 버튼 모두 비활성화', abtest1021_modal);
-      Analytics_config().userProps(identify);
-    }
-
-    //화면 빌드 후, 바로 모달 창 띄우는 부분
-    if (abtest1021_modal == 'B' &&
+    if (abtest1102_modal != "" &&
         Provider.of<MusicSearchItemLists>(context, listen: false)
                 .sessionCount ==
-            0 &&
-        Provider.of<NoteData>(context, listen: false).notes.length == 0) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _dialogBuilder(context));
+            0) {
+      Identify identify = Identify()..set('11/2 노트 모양의 버튼', abtest1102_modal);
+      Analytics_config().userProps(identify);
     }
     Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount += 1;
 
@@ -457,7 +450,15 @@ class _NoteScreenState extends State<NoteScreen> {
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
                 // abtest
-                EmptyNoteList(),
+                //화면 빌드 후, 바로 모달 창 띄우는 부분
+                if (abtest1102_modal == 'B' &&
+                    Provider.of<MusicSearchItemLists>(context, listen: false)
+                            .sessionCount ==
+                        0) ...[
+                  MemoShapeButton()
+                ] else ...[
+                  EmptyNoteList(),
+                ]
                 // MemoShapeButton()
               ] else if (_listSate == 1) ...[
                 Expanded(

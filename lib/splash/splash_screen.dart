@@ -128,8 +128,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Provider.of<NoteData>(context, listen: false).initAdSize(context);
 
     // Firebase FCM token
-    // var token = await FirebaseMessaging.instance.getToken();
-    // print("FCM token: ${token}");
+    var token = await FirebaseMessaging.instance.getToken();
+    print("FCM token: ${token}");
 
     checkConnection();
   }
