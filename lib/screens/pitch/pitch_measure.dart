@@ -376,7 +376,11 @@ class _PitchMeasureState extends State<PitchMeasure> {
           ),
         ),
         body: SafeArea(
-            child: flag == 0 || flag == 1 ? _firstScreen() : _secondScreen()));
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(top: defaultSize * 5),
+            child: flag == 0 || flag == 1 ? _firstScreen() : _secondScreen(),
+          ),
+        ));
   }
 
   Widget _picker1() {
