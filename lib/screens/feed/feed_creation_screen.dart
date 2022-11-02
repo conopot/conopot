@@ -147,100 +147,97 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: defaultSize * 18,
-                      child: Column(
-                        children: [
-                          Text("감정 이모지",
-                              style: TextStyle(
-                                  color: kPrimaryLightWhiteColor,
-                                  fontSize: defaultSize * 1.6,
-                                  fontWeight: FontWeight.w500)),
-                          SizedBox(height: defaultSize),
-                          Text(
-                            "${_emotionList[_emotionIndex]}",
-                            style: TextStyle(fontSize: defaultSize * 4),
-                          ),
-                          SizedBox(height: defaultSize * 1.25),
-                          (_isIconEditting == false)
-                              ? GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _isIconEditting = true;
-                                    });
-                                  },
-                                  child: Text("변경하기",
-                                      style: TextStyle(
-                                          color: kMainColor,
-                                          fontSize: defaultSize * 1.3)))
-                              : Container(
-                                  child: IntrinsicWidth(
-                                      child: Column(
-                                    children: [
-                                      Row(
-                                          children: _emotionList1
-                                              .map((e) => Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: defaultSize),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _emotionIndex =
-                                                              _emotionList1
-                                                                  .indexOf(e);
-                                                          _isIconEditting = false;
-                                                        });
-                                                      },
-                                                      child: Text(e,
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  defaultSize *
-                                                                      2)),
-                                                    ),
-                                                  ))
-                                              .toList()),
-                                      SizedBox(height: defaultSize * 0.5),
-                                      Row(
-                                          children: _emotionList2
-                                              .map((e) => Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: defaultSize),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          _emotionIndex =
-                                                              _emotionList2
-                                                                      .indexOf(
-                                                                          e) +
-                                                                  5;
-                                                          _isIconEditting = false;
-                                                        });
-                                                      },
-                                                      child: Text(e,
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  defaultSize *
-                                                                      2)),
-                                                    ),
-                                                  ))
-                                              .toList()),
-                                      SizedBox(height: defaultSize * 0.5),
-                                      GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _isIconEditting = false;
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: kPrimaryWhiteColor,
-                                            size: defaultSize * 1.8,
-                                          ))
-                                    ],
-                                  )),
-                                ),
-                        ],
-                      ),
+                    Column(
+                      children: [
+                        Text("감정 이모지",
+                            style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.6,
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(height: defaultSize),
+                        Text(
+                          "${_emotionList[_emotionIndex]}",
+                          style: TextStyle(fontSize: defaultSize * 4),
+                        ),
+                        SizedBox(height: defaultSize * 1.25),
+                        (_isIconEditting == false)
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isIconEditting = true;
+                                  });
+                                },
+                                child: Text("변경하기",
+                                    style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: defaultSize * 1.3)))
+                            : Container(
+                                child: IntrinsicWidth(
+                                    child: Column(
+                                  children: [
+                                    Row(
+                                        children: _emotionList1
+                                            .map((e) => Container(
+                                                  margin: EdgeInsets.only(
+                                                      left: defaultSize),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _emotionIndex =
+                                                            _emotionList1
+                                                                .indexOf(e);
+                                                        _isIconEditting = false;
+                                                      });
+                                                    },
+                                                    child: Text(e,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    3)),
+                                                  ),
+                                                ))
+                                            .toList()),
+                                    SizedBox(height: defaultSize * 0.5),
+                                    Row(
+                                        children: _emotionList2
+                                            .map((e) => Container(
+                                                  margin: EdgeInsets.only(
+                                                      left: defaultSize),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _emotionIndex =
+                                                            _emotionList2
+                                                                    .indexOf(
+                                                                        e) +
+                                                                5;
+                                                        _isIconEditting = false;
+                                                      });
+                                                    },
+                                                    child: Text(e,
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                defaultSize *
+                                                                    3)),
+                                                  ),
+                                                ))
+                                            .toList()),
+                                    SizedBox(height: defaultSize * 0.5),
+                                    GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _isIconEditting = false;
+                                          });
+                                        },
+                                        child: Icon(
+                                          Icons.close,
+                                          color: kPrimaryWhiteColor,
+                                          size: defaultSize * 3,
+                                        ))
+                                  ],
+                                )),
+                              ),
+                      ],
                     ),
                   ],
                 ),
