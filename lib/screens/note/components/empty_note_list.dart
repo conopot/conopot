@@ -20,7 +20,7 @@ class EmptyNoteList extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "나만의 첫 ",
+                  text: "내 노래방 ",
                   style: TextStyle(
                     color: kPrimaryWhiteColor,
                     fontWeight: FontWeight.w500,
@@ -90,14 +90,20 @@ class EmptyNoteList extends StatelessWidget {
           height: defaultSize * 4,
           decoration: BoxDecoration(
               color: kMainColor,
-              borderRadius: BorderRadius.all(Radius.circular(18))),
+              borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Center(
-            child: Text(
-              "애창곡 추가하기",
-              style: TextStyle(
-                  color: kPrimaryWhiteColor,
-                  fontSize: defaultSize * 1.5,
-                  fontWeight: FontWeight.w700),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add, color: kPrimaryWhiteColor),
+                Text(
+                  "노래 추가하기",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 1.5,
+                      fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
           ),
         ),

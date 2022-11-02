@@ -7,8 +7,8 @@ class Firebase_Remote_Config {
   Future<void> init() async {
     final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: const Duration(minutes: 10),
-      minimumFetchInterval: const Duration(hours: 1),
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: const Duration(minutes: 1),
     ));
     await remoteConfig.setDefaults(<String, dynamic>{
       'musicUpdateSetting': false,

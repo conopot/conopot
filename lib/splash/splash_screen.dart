@@ -12,6 +12,7 @@ import 'package:conopot/main_screen.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -123,8 +124,12 @@ class _SplashScreenState extends State<SplashScreen> {
       prefs.setBool('first_run', false);
     }
 
-    //적응형 광고 크기 초기화
+    // 적응형 광고 크기 초기화
     Provider.of<NoteData>(context, listen: false).initAdSize(context);
+
+    // Firebase FCM token
+    var token = await FirebaseMessaging.instance.getToken();
+    print("FCM token: ${token}");
 
     checkConnection();
   }
