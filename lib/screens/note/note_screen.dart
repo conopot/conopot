@@ -184,7 +184,7 @@ class _NoteScreenState extends State<NoteScreen> {
     //remote config 변수 가져오기
     abtest1102_modal =
         Firebase_Remote_Config().remoteConfig.getString('abtest1102_modal');
-    print("여기 ${abtest1102_modal}");
+    // print("여기 ${abtest1102_modal}");
     //유저 프로퍼티 설정하기
     if (abtest1102_modal != "" &&
         Provider.of<MusicSearchItemLists>(context, listen: false)
