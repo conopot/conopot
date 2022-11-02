@@ -12,8 +12,10 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
+import 'package:conopot/screens/note/components/memo_shape_button.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,6 +38,7 @@ class _NoteScreenState extends State<NoteScreen> {
   int _listSate = 0;
   String abtest1021_modal = "";
   bool isLoaded = false;
+  String test = "";
   final storage = new FlutterSecureStorage();
 
   bool isReward = false;
@@ -178,7 +181,6 @@ class _NoteScreenState extends State<NoteScreen> {
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
-
     //remote config 변수 가져오기
     abtest1021_modal =
         Firebase_Remote_Config().remoteConfig.getString('abtest1021_modal');
@@ -186,7 +188,6 @@ class _NoteScreenState extends State<NoteScreen> {
     if (abtest1021_modal != "") {
       Identify identify = Identify()
         ..set('10/21 CTA 강조 및 이외 다른 버튼 모두 비활성화', abtest1021_modal);
-
       Analytics_config().userProps(identify);
     }
 
@@ -194,7 +195,8 @@ class _NoteScreenState extends State<NoteScreen> {
     if (abtest1021_modal == 'B' &&
         Provider.of<MusicSearchItemLists>(context, listen: false)
                 .sessionCount ==
-            0) {
+            0 &&
+        Provider.of<NoteData>(context, listen: false).notes.length == 0) {
       WidgetsBinding.instance
           .addPostFrameCallback((_) => _dialogBuilder(context));
     }
@@ -454,7 +456,9 @@ class _NoteScreenState extends State<NoteScreen> {
             CarouselSliderBanner(),
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
+                // abtest
                 EmptyNoteList(),
+                // MemoShapeButton()
               ] else if (_listSate == 1) ...[
                 Expanded(
                   child: Center(
