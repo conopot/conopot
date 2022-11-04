@@ -3,6 +3,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
@@ -380,30 +381,39 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   userProfile() {
-    if (Provider.of<NoteData>(context, listen: true).userImage == "") {
+    if (Provider.of<NoteData>(context, listen: false).userImage == "") {
       // 기본 이미지
       return SizedBox(
           height: defaultSize * 4.5,
           width: defaultSize * 4.5,
           child: Image.asset("assets/images/profile.png"));
     }
-    String? serverURL = dotenv.env['USER_SERVER_URL'];
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(100),
-        child: SizedBox(
-          width: defaultSize * 5,
-          height: defaultSize * 5,
-          child: Image.network(
-            Provider.of<NoteData>(context, listen: true).userImage,
-            errorBuilder: ((context, error, stackTrace) {
-              return SizedBox(
-                  height: defaultSize * 4.5,
-                  width: defaultSize * 4.5,
-                  child: Image.asset("assets/images/profile.png"));
-              ;
-            }),
-            fit: BoxFit.cover,
-          ),
-        ));
+    var profileState =
+        Provider.of<NoteData>(context, listen: false).profileStatus;
+    if (profileState == 0) {
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: SizedBox(
+            width: defaultSize * 5,
+            height: defaultSize * 5,
+            child: Image.network(
+              Provider.of<NoteData>(context, listen: false).userImage,
+              errorBuilder: ((BuildContext context, Object? error,
+                  StackTrace? stackTrace) {
+                return SizedBox(
+                    height: defaultSize * 4.5,
+                    width: defaultSize * 4.5,
+                    child: Image.asset("assets/images/profile.png"));
+              }),
+              fit: BoxFit.cover,
+            ),
+          ));
+    }
+    if (profileState == 1) {
+      return SizedBox(
+          height: defaultSize * 4.5,
+          width: defaultSize * 4.5,
+          child: Image.asset("assets/images/profile.png"));
+    }
   }
 }

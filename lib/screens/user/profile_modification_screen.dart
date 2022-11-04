@@ -1,17 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
@@ -28,12 +23,22 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   late TextEditingController _controller;
   final storage = new FlutterSecureStorage();
   double defaultSize = SizeConfig.defaultSize;
+  bool _isProfileEditting = false;
+  int _profileStatus = 0;
+  String _originName = "";
+  late int _originProfileStatus;
+  late int _userId;
 
   @override
   void initState() {
     this._controller = TextEditingController(
       text: Provider.of<NoteData>(context, listen: false).userNickname,
     );
+    _originName = Provider.of<NoteData>(context, listen: false).userNickname;
+    _profileStatus =
+        Provider.of<NoteData>(context, listen: false).profileStatus;
+    _originProfileStatus = _profileStatus;
+    _userId = Provider.of<NoteData>(context, listen: false).userId;
     super.initState();
   }
 
@@ -58,17 +63,78 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                         child: userProfile(),
                       )),
                   SizedBox(height: defaultSize * 1.5),
-                  GestureDetector(
-                      onTap: () {
-                        EasyLoading.showInfo("서비스 준비중입니다 😿");
-                      },
-                      child: Text("프로필 아이콘 변경",
-                          style: TextStyle(color: kMainColor)))
+                  if (!_isProfileEditting && Provider.of<NoteData>(context, listen: false).userImage.isNotEmpty)
+                    GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isProfileEditting = !_isProfileEditting;
+                          });
+                        },
+                        child: Text("프로필 아이콘 변경",
+                            style: TextStyle(color: kMainColor))),
+                  if (_isProfileEditting && Provider.of<NoteData>(context, listen: false).userImage.isNotEmpty)
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _profileStatus = 0;
+                                });
+                              },
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(90.0),
+                                  child: SizedBox(
+                                    width: defaultSize * 5,
+                                    height: defaultSize * 5,
+                                    child: Image.network(
+                                      Provider.of<NoteData>(context,
+                                              listen: true)
+                                          .userImage,
+                                      errorBuilder:
+                                          ((context, error, stackTrace) {
+                                        return SizedBox(
+                                            height: defaultSize * 4.5,
+                                            width: defaultSize * 4.5,
+                                            child: Image.asset(
+                                                "assets/images/profile.png"));
+                                      }),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(width: defaultSize),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _profileStatus = 1;
+                                });
+                              },
+                              child: SizedBox(
+                                  width: defaultSize * 5,
+                                  height: defaultSize * 5,
+                                  child:
+                                      Image.asset("assets/images/profile.png")),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: defaultSize),
+                        GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isProfileEditting = !_isProfileEditting;
+                              });
+                            },
+                            child:
+                                Text("확인", style: TextStyle(color: kMainColor)))
+                      ],
+                    )
                 ],
               ),
             ],
           ),
-          SizedBox(height: defaultSize * 8),
+          SizedBox(height: defaultSize * 3),
           Container(
             margin: EdgeInsets.symmetric(horizontal: defaultSize * 3),
             child: Column(
@@ -99,73 +165,146 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
               ],
             ),
           ),
-          SizedBox(height: defaultSize * 5),
+          SizedBox(height: SizeConfig.screenHeight * 0.3),
           GestureDetector(
             onTap: () async {
-              //사전에 인터넷 연결 꼭 체크할것!!!
-
-              //닉네임 변경 로직
-              if (2 <= (_controller.text.trim()).length &&
-                  (_controller.text.trim()).length <= 10) {
-                //print("올바른 글자수");
-                //api 호출
-                String? serverURL = dotenv.env['USER_SERVER_URL'];
-                String url = '$serverURL/user/account/nickname';
-                String? jwtToken = await storage.read(key: 'jwt');
+              if (_originName == _controller.text &&
+                  _originProfileStatus == _profileStatus) {
+                Navigator.of(context).pop();
+              } else if (_originName == _controller.text &&
+                  _originProfileStatus != _profileStatus) {
+                // 프로필 수정
                 try {
-                  final response = await http.put(
-                    Uri.parse(url),
+                  String? serverURL = dotenv.env['USER_SERVER_URL'];
+                  final response2 = await http.put(
+                    Uri.parse('$serverURL/user/profile/status'),
                     headers: <String, String>{
                       'Content-Type': 'application/json; charset=UTF-8',
-                      'Authorization': jwtToken!,
                     },
-                    body: jsonEncode({
-                      "username": (_controller.text.trim()),
-                    }),
+                    body: jsonEncode(
+                        {"userId": _userId, "status": _profileStatus}),
                   );
-
-                  //print(response.statusCode);
-
-                  //이미 존재하는 닉네임이라면
-                  if (response.statusCode == 503) {
-                    Fluttertoast.showToast(
-                        msg: "이미 존재하는 닉네임입니다 😢",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Color(0xFFFF7878),
-                        textColor: kPrimaryWhiteColor,
-                        fontSize: defaultSize * 1.6);
-                  }
-                  //응답이 제대로 왔다면
-                  else if (response.statusCode == 200) {
-                    //jwt 토큰 반환
-                    String? jwtToken = response.headers['authorization'];
-
-                    //로그인 성공 시 처리
-                    //로컬 스토리지에 jwt 토큰 저장
+                  if (response2.statusCode == 200) {
                     Provider.of<NoteData>(context, listen: false)
-                        .writeJWT(jwtToken);
-
-                    Provider.of<NoteData>(context, listen: false)
-                        .initAccountInfo();
-                    //변경할 수 있다면
+                        .changeProfileStatus(_profileStatus);
+                    EasyLoading.showToast("프로필 수정이 완료되었습니다.");
                     Navigator.of(context).pop();
                   }
-                } catch (err) {
-                  //print(err);
+                } catch (e) {
+                  EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+                }
+              } else if (_originName != _controller.text &&
+                  _originProfileStatus == _profileStatus) {
+                //닉네임 변경 로직
+                if (2 <= (_controller.text.trim()).length &&
+                    (_controller.text.trim()).length <= 10) {
+                  //print("올바른 글자수");
+                  //api 호출
+                  String? serverURL = dotenv.env['USER_SERVER_URL'];
+                  String url = '$serverURL/user/account/nickname';
+                  String? jwtToken = await storage.read(key: 'jwt');
+                  try {
+                    final response1 = await http.put(
+                      Uri.parse(url),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'Authorization': jwtToken!,
+                      },
+                      body: jsonEncode({
+                        "username": (_controller.text.trim()),
+                      }),
+                    );
+
+                    //print(response1.statusCode);
+
+                    //이미 존재하는 닉네임이라면
+                    if (response1.statusCode == 503) {
+                      EasyLoading.showToast("이미 존재하는 닉네임입니다.");
+                    }
+                    //응답이 제대로 왔다면
+                    else if (response1.statusCode == 200) {
+                      //jwt 토큰 반환
+                      String? jwtToken = response1.headers['authorization'];
+                      //로그인 성공 시 처리
+                      //로컬 스토리지에 jwt 토큰 저장
+                      Provider.of<NoteData>(context, listen: false)
+                          .writeJWT(jwtToken);
+
+                      Provider.of<NoteData>(context, listen: false)
+                          .initAccountInfo();
+                    }
+                    EasyLoading.showToast("프로필 수정이 완료되었습니다.");
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+                  }
                 }
               } else {
-                //print("잘못된 글자수");
-                //닉네임 글자 제한 처리
-                Fluttertoast.showToast(
-                    msg: "2글자 이상 10글자 이하로 설정해주세요 😢",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Color(0xFFFF7878),
-                    textColor: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.6);
+                //사전에 인터넷 연결 꼭 체크할것!!!
+                //닉네임 변경 로직
+                if (2 <= (_controller.text.trim()).length &&
+                    (_controller.text.trim()).length <= 10) {
+                  //print("올바른 글자수");
+                  //api 호출
+                  String? serverURL = dotenv.env['USER_SERVER_URL'];
+                  String url = '$serverURL/user/account/nickname';
+                  String? jwtToken = await storage.read(key: 'jwt');
+                  try {
+                    final response1 = await http.put(
+                      Uri.parse(url),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'Authorization': jwtToken!,
+                      },
+                      body: jsonEncode({
+                        "username": (_controller.text.trim()),
+                      }),
+                    );
+
+                    //print(response1.statusCode);
+
+                    //이미 존재하는 닉네임이라면
+                    if (response1.statusCode == 503) {
+                      EasyLoading.showToast("이미 존재하는 닉네임입니다.");
+                    }
+                    //응답이 제대로 왔다면
+                    else if (response1.statusCode == 200) {
+                      //jwt 토큰 반환
+                      String? jwtToken = response1.headers['authorization'];
+                      //로그인 성공 시 처리
+                      //로컬 스토리지에 jwt 토큰 저장
+                      Provider.of<NoteData>(context, listen: false)
+                          .writeJWT(jwtToken);
+
+                      Provider.of<NoteData>(context, listen: false)
+                          .initAccountInfo();
+                    }
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
+                    final response2 = await http.put(
+                      Uri.parse('$serverURL:3000/user/profile/status'),
+                      headers: <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                      },
+                      body: jsonEncode(
+                          {"userId": _userId, "status": _profileStatus}),
+                    );
+
+                    if (response1.statusCode == 200 &&
+                        response2.statusCode == 200) {
+                      Provider.of<NoteData>(context, listen: false)
+                          .changeProfileStatus(_profileStatus);
+                      //변경할 수 있다면
+                      EasyLoading.showToast("프로필 수정이 완료되었습니다.");
+                      Navigator.of(context).pop();
+                    }
+                  } catch (err) {
+                    EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+                  }
+                } else {
+                  //print("잘못된 글자수");
+                  //닉네임 글자 제한 처리
+                  EasyLoading.showToast("두글자 이상 입력해주세요.");
+                }
               }
             },
             child: Container(
@@ -194,29 +333,39 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
   }
 
   userProfile() {
-    if (Provider.of<NoteData>(context, listen: true).userImage == "") {
+    if (Provider.of<NoteData>(context, listen: false).userImage == "") {
       // 기본 이미지
       return SizedBox(
-          width: defaultSize * 10,
           height: defaultSize * 10,
-          child: SvgPicture.asset("assets/icons/profile.svg"));
+          width: defaultSize * 10,
+          child: Image.asset("assets/images/profile.png"));
     }
-    //인터넷 연결 확인
-    try {
+
+    if (_profileStatus == 0) {
       return ClipRRect(
-          borderRadius: BorderRadius.circular(90.0),
+          borderRadius: BorderRadius.circular(100),
           child: SizedBox(
             width: defaultSize * 10,
             height: defaultSize * 10,
             child: Image.network(
               Provider.of<NoteData>(context, listen: true).userImage,
-              scale: defaultSize,
+              errorBuilder: ((context, error, stackTrace) {
+                return SizedBox(
+                    height: defaultSize * 10,
+                    width: defaultSize * 10,
+                    child: Image.asset("assets/images/profile.png"));
+                ;
+              }),
               fit: BoxFit.cover,
             ),
           ));
-    } on SocketException {
-      // 인터넷 연결이 안 되어 있을 때 -> 기본 이미지
-      return SvgPicture.asset("assets/icons/profile.svg");
+    }
+    if (_profileStatus == 1) {
+      // 기본 이미지
+      return SizedBox(
+          width: defaultSize * 10,
+          height: defaultSize * 10,
+          child: Image.asset("assets/images/profile.png"));
     }
   }
 }

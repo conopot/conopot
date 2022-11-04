@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -56,6 +57,7 @@ class NoteData extends ChangeNotifier {
   String backUpDate = "없음";
   String userImage = "";
   int userId = 0;
+  int profileStatus = 0;
 
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
@@ -1376,6 +1378,9 @@ class NoteData extends ChangeNotifier {
     Analytics_config().userlogoutEvent();
     //jwt 토큰 삭제
     await storage.delete(key: 'jwt');
+    userNickname = "";
+    userImage = "";
+    profileStatus = 0;
     isLogined = false;
     userImage = "";
     notifyListeners();
@@ -1403,6 +1408,8 @@ class NoteData extends ChangeNotifier {
       if (payload["userId"] != null) {
         userId = payload["userId"];
       }
+      String? status = await storage.read(key: 'profileStatus');
+      if (status != null) profileStatus = int.parse(status);
     }
 
     String? storage_backupdate = await storage.read(key: 'backupdate');
@@ -1411,6 +1418,13 @@ class NoteData extends ChangeNotifier {
       backUpDate = storage_backupdate;
     }
 
+    notifyListeners();
+  }
+
+  changeProfileStatus(int status) async {
+    profileStatus = status;
+    String statusString = status.toString();
+    await storage.write(key: 'profileStatus', value: statusString);
     notifyListeners();
   }
 

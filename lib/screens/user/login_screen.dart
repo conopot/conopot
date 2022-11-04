@@ -5,6 +5,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/personal_information_screen.dart';
 import 'package:conopot/screens/user/terms_of_user_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -75,23 +76,24 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: defaultSize),
               Platform.isIOS
                   ? Padding(
-                    padding: EdgeInsets.only(left: defaultSize * 4),
-                    child: GestureDetector(
-                        onTap: () async {
-                          final credential =
-                              await SignInWithApple.getAppleIDCredential(scopes: [
-                            AppleIDAuthorizationScopes.email,
-                            AppleIDAuthorizationScopes.fullName,
-                          ]);
-                          // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
-                          // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
-                          appleRegister(context, credential);
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(right: defaultSize * 4),
-                            child:
-                                Image.asset("assets/images/sign_in_apple.png"))),
-                  )
+                      padding: EdgeInsets.only(left: defaultSize * 4),
+                      child: GestureDetector(
+                          onTap: () async {
+                            final credential =
+                                await SignInWithApple.getAppleIDCredential(
+                                    scopes: [
+                                  AppleIDAuthorizationScopes.email,
+                                  AppleIDAuthorizationScopes.fullName,
+                                ]);
+                            // credential 발급 후 backend쪽으로 firstname, lastname, authorizationcode를 넘겨줘야 한다고함
+                            // backend에서 아래 넘겨준 정보로 validate하고 jwt반환
+                            appleRegister(context, credential);
+                          },
+                          child: Container(
+                              margin: EdgeInsets.only(right: defaultSize * 4),
+                              child: Image.asset(
+                                  "assets/images/sign_in_apple.png"))),
+                    )
                   : SizedBox.shrink(),
               Spacer(),
               Row(
@@ -105,9 +107,9 @@ class LoginScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TermsOfUserScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TermsOfUserScreen()));
                     },
                     child: Text(
                       "이용약관",
@@ -117,15 +119,17 @@ class LoginScreen extends StatelessWidget {
                           fontSize: defaultSize),
                     ),
                   ),
-                  Text("과 ", style: TextStyle(
-                        color: kPrimaryLightWhiteColor,
-                        fontSize: defaultSize)),
+                  Text("과 ",
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          fontSize: defaultSize)),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PersonalInformationScreen()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  PersonalInformationScreen()));
                     },
                     child: Text(
                       "개인정보처리방침",
@@ -135,9 +139,10 @@ class LoginScreen extends StatelessWidget {
                           fontSize: defaultSize),
                     ),
                   ),
-                  Text("에 ", style: TextStyle(
-                        color: kPrimaryLightWhiteColor,
-                        fontSize: defaultSize)),
+                  Text("에 ",
+                      style: TextStyle(
+                          color: kPrimaryLightWhiteColor,
+                          fontSize: defaultSize)),
                   Text(
                     "동의하는 것으로 간주됩니다.",
                     style: TextStyle(
@@ -253,7 +258,7 @@ void appleRegister(
   }
 }
 
-void loginSuccess(String? jwtToken, BuildContext context) {
+void loginSuccess(String? jwtToken, BuildContext context) async {
   //로컬 스토리지에 jwt 토큰 저장
   Provider.of<NoteData>(context, listen: false).writeJWT(jwtToken);
   Provider.of<NoteData>(context, listen: false).initAccountInfo();
@@ -269,6 +274,18 @@ void loginSuccess(String? jwtToken, BuildContext context) {
           .catchError((error) {
         print(error.toString());
       });
+    }
+    try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
+      final response = await http.get(
+        Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      Provider.of<NoteData>(context, listen: false).changeProfileStatus(jsonDecode(response.body)['profileStatus']);
+    } catch (e) {
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
     }
   }
 }
