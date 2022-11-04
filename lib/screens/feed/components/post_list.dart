@@ -328,6 +328,7 @@ class _PostListViewState extends State<PostListView>
         },
       );
       var data = json.decode(response.body);
+      if (data == null) throw Exception();
       setState(() {
         if (data['lastPostId'] != null) {
           _lastPostId = data['lastPostId'];
@@ -339,7 +340,9 @@ class _PostListViewState extends State<PostListView>
       });
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
-      EasyLoading.showToast("인터넷 연결을 확인해주세요");
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+    } on Exception catch (e) {
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
     }
   }
 
