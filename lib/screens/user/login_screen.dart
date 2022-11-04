@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/personal_information_screen.dart';
 import 'package:conopot/screens/user/terms_of_user_screen.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -213,7 +214,20 @@ void kakaoRegister(BuildContext context, OAuthToken token) async {
 
     //로그인 성공 시 처리
     loginSuccess(jwtToken, context);
-
+    var userId = Provider.of<NoteData>(context, listen: false).userId;
+    try {
+      String? serverURL = dotenv.env['USER_SERVER_URL'];
+      final response = await http.get(
+        Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      Provider.of<NoteData>(context, listen: false)
+          .changeProfileStatus(jsonDecode(response.body)['profileStatus']);
+    } on SocketException {
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+    }
     Navigator.of(context).pop();
   } catch (err) {
     //print("카카오 로그인 백엔드 연결 실패 : ${err}");
@@ -247,6 +261,20 @@ void appleRegister(
 
       //로그인 성공 시 처리
       loginSuccess(jwtToken, context);
+      var userId = Provider.of<NoteData>(context, listen: false).userId;
+      try {
+        String? serverURL = dotenv.env['USER_SERVER_URL'];
+        final response = await http.get(
+          Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+        Provider.of<NoteData>(context, listen: false)
+            .changeProfileStatus(jsonDecode(response.body)['profileStatus']);
+      } on SocketException {
+        EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+      }
 
       Navigator.of(context).pop();
     } else {
@@ -271,21 +299,7 @@ void loginSuccess(String? jwtToken, BuildContext context) async {
       OneSignal.shared
           .setExternalUserId(externalUserId)
           .then((results) {})
-          .catchError((error) {
-        print(error.toString());
-      });
-    }
-    try {
-      String? serverURL = dotenv.env['USER_SERVER_URL'];
-      final response = await http.get(
-        Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      Provider.of<NoteData>(context, listen: false).changeProfileStatus(jsonDecode(response.body)['profileStatus']);
-    } catch (e) {
-      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+          .catchError((error) {});
     }
   }
 }

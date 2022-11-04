@@ -90,7 +90,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
                                     height: defaultSize * 5,
                                     child: Image.network(
                                       Provider.of<NoteData>(context,
-                                              listen: true)
+                                              listen: false)
                                           .userImage,
                                       errorBuilder:
                                           ((context, error, stackTrace) {
@@ -348,7 +348,7 @@ class _ProfileModificationScreenState extends State<ProfileModificationScreen> {
             width: defaultSize * 10,
             height: defaultSize * 10,
             child: Image.network(
-              Provider.of<NoteData>(context, listen: true).userImage,
+              Provider.of<NoteData>(context, listen: false).userImage,
               errorBuilder: ((context, error, stackTrace) {
                 return SizedBox(
                     height: defaultSize * 10,
