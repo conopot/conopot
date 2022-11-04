@@ -23,6 +23,7 @@ class SearchList extends StatefulWidget {
 class _SearchListState extends State<SearchList> {
   double defaultSize = SizeConfig.defaultSize;
   double screenHeight = SizeConfig.screenHeight;
+  late var songList;
 
   // bool isLoaded1 = false, isLoaded2 = false;
 
@@ -37,7 +38,7 @@ class _SearchListState extends State<SearchList> {
   //         'ios': 'ca-app-pub-3940256099942544/3986624511',
   //       };
 
-  // Native 광고 위치
+  // Native 광고 T치
   // static final _kAdIndex = 0;
   // // TODO: Add a native ad instance
   // NativeAd? _ad_odd;
@@ -67,8 +68,9 @@ class _SearchListState extends State<SearchList> {
 
   @override
   void initState() {
+    songList = Provider.of<MusicSearchItemLists>(context, listen: false)
+        .initalMusicbookList;
     super.initState();
-
     // TODO: Create a NativeAd instance
     // _ad_odd = NativeAd(
     //   adUnitId: Search_Native_UNIT_ID_ODD[Platform.isIOS ? 'ios' : 'android']!,
@@ -93,111 +95,222 @@ class _SearchListState extends State<SearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.musicList.foundItems.isNotEmpty
+    return (Provider.of<NoteData>(context, listen: false)
+            .controller
+            .text
+            .isEmpty)
         ? ListView.builder(
-            itemCount: widget.musicList.foundItems.length,
+            padding: EdgeInsets.only(bottom: screenHeight * 0.3),
+            itemCount: songList.length,
             itemBuilder: (context, index) {
-              final item = widget.musicList.foundItems[index];
-              String songNumber = item.songNumber;
-              String title = item.title;
-              String singer = item.singer;
-
-              return GestureDetector(
-                onTap: () {
-                  if (widget.musicList.tabIndex == 1) {
-                    Set<Note> entireNote = Provider.of<MusicSearchItemLists>(
-                              context,
-                              listen: false)
-                          .entireNote;
-                      Note? note;
-                      for (Note e in entireNote) {
-                        if (e.tj_songNumber == songNumber) {
-                          note = e;
-                        }
-                      }
-                      if (note != null) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    SongDetailScreen(note: note!)));
-                      }
-                  } else {
-                    Provider.of<NoteData>(context, listen: false)
-                        .showAddNoteDialogWithInfo(context,
-                            isTj: false,
-                            songNumber: songNumber,
-                            title: title,
-                            singer: singer);
-                  }
-                },
-                child: Container(
+              String songNumber = songList[index].songNumber;
+              String songTitle = songList[index].title;
+              String singer = songList[index].singer;
+              Set<Note> entireNote =
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .entireNote;
+              Note? note;
+              for (Note e in entireNote) {
+                if (e.tj_songNumber == songNumber) {
+                  note = e;
+                }
+              }
+              return ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Card(
                   margin: EdgeInsets.fromLTRB(
-                      defaultSize, 0, defaultSize, defaultSize),
-                  padding: EdgeInsets.all(defaultSize * 1.5),
-                  decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Row(children: [
-                    SizedBox(
-                      width: defaultSize * 6,
-                      child: Center(
-                          child: Text("${songNumber}",
-                              style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: defaultSize * 1.4,
-                                  fontWeight: FontWeight.w500))),
-                    ),
-                    SizedBox(width: defaultSize),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${title}",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize * 1.4,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(height: defaultSize * 0.5),
-                          Text(
-                            "${singer}",
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: kPrimaryLightWhiteColor,
-                                fontSize: defaultSize * 1.2,
-                                fontWeight: FontWeight.w300),
-                          )
-                        ],
+                      defaultSize, 0, defaultSize, defaultSize * 0.5),
+                  color: kPrimaryLightBlackColor,
+                  elevation: 1,
+                  child: ListTile(
+                      leading: SizedBox(
+                        width: defaultSize * 6.5,
+                        child: Center(
+                          child: (index == 0)
+                              ? Image(
+                                  width: defaultSize * 4,
+                                  height: defaultSize * 4,
+                                  image: AssetImage('assets/images/first.png'),
+                                )
+                              : (index == 1)
+                                  ? Image(
+                                      width: defaultSize * 4,
+                                      height: defaultSize * 4,
+                                      image: AssetImage(
+                                          'assets/images/second.png'),
+                                    )
+                                  : (index == 2)
+                                      ? Image(
+                                          width: defaultSize * 4,
+                                          height: defaultSize * 4,
+                                          image: AssetImage(
+                                              'assets/images/third.png'),
+                                        )
+                                      : Text(
+                                          (index + 1).toString() + "위",
+                                          style: TextStyle(
+                                            color: kMainColor,
+                                            fontSize: defaultSize * 1.4,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                        ),
                       ),
-                    ),
-                    if (widget.musicList.tabIndex == 1)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor),
-                        Text("상세정보",
-                            style: TextStyle(
-                                color: kPrimaryWhiteColor,
-                                fontSize: defaultSize))
-                      ],
-                    )
-                  ]),
+                      title: Text(
+                        songTitle,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.4,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        singer,
+                        style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            color: kPrimaryLightWhiteColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: defaultSize * 1.2),
+                      ),
+                      trailing: IntrinsicWidth(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: defaultSize * 5,
+                              child: Center(
+                                child: Text(
+                                  songNumber,
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: defaultSize * 1.2),
+                                ),
+                              ),
+                            ),
+                            Icon(Icons.chevron_right,
+                                color: kPrimaryWhiteColor),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        if (note != null)
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SongDetailScreen(note: note!)));
+                      }),
                 ),
               );
-            })
-        : Center(
-            child: Text(
-              '검색 결과가 없습니다',
-              style: TextStyle(
-                fontSize: defaultSize * 1.8,
-                color: kPrimaryWhiteColor,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          );
+            },
+          )
+        : widget.musicList.foundItems.isNotEmpty
+            ? ListView.builder(
+                itemCount: widget.musicList.foundItems.length,
+                itemBuilder: (context, index) {
+                  final item = widget.musicList.foundItems[index];
+                  String songNumber = item.songNumber;
+                  String title = item.title;
+                  String singer = item.singer;
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (widget.musicList.tabIndex == 1) {
+                        Set<Note> entireNote =
+                            Provider.of<MusicSearchItemLists>(context,
+                                    listen: false)
+                                .entireNote;
+                        Note? note;
+                        for (Note e in entireNote) {
+                          if (e.tj_songNumber == songNumber) {
+                            note = e;
+                          }
+                        }
+                        if (note != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SongDetailScreen(note: note!)));
+                        }
+                      } else {
+                        Provider.of<NoteData>(context, listen: false)
+                            .showAddNoteDialogWithInfo(context,
+                                isTj: false,
+                                songNumber: songNumber,
+                                title: title,
+                                singer: singer);
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(
+                          defaultSize, 0, defaultSize, defaultSize),
+                      padding: EdgeInsets.all(defaultSize * 1.5),
+                      decoration: BoxDecoration(
+                          color: kPrimaryLightBlackColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                      child: Row(children: [
+                        SizedBox(
+                          width: defaultSize * 6,
+                          child: Center(
+                              child: Text("${songNumber}",
+                                  style: TextStyle(
+                                      color: kMainColor,
+                                      fontSize: defaultSize * 1.4,
+                                      fontWeight: FontWeight.w500))),
+                        ),
+                        SizedBox(width: defaultSize),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${title}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.4,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(height: defaultSize * 0.5),
+                              Text(
+                                "${singer}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: kPrimaryLightWhiteColor,
+                                    fontSize: defaultSize * 1.2,
+                                    fontWeight: FontWeight.w300),
+                              )
+                            ],
+                          ),
+                        ),
+                        if (widget.musicList.tabIndex == 1)
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.chevron_right,
+                                  color: kPrimaryWhiteColor),
+                              Text("상세정보",
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontSize: defaultSize))
+                            ],
+                          )
+                      ]),
+                    ),
+                  );
+                })
+            : Center(
+                child: Text(
+                  '검색 결과가 없습니다',
+                  style: TextStyle(
+                    fontSize: defaultSize * 1.8,
+                    color: kPrimaryWhiteColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
   }
 
   @override

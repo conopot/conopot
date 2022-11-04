@@ -48,113 +48,120 @@ class PopularRecommendationDetailScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-          child: ListView.builder(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.3),
-              itemCount: songList.length,
-              itemBuilder: (context, index) {
-                String songNumber = songList[index].songNumber;
-                String songTitle = songList[index].title;
-                String singer = songList[index].singer;
-                Set<Note> entireNote =
-                    Provider.of<MusicSearchItemLists>(context, listen: false)
-                        .entireNote;
-                Note? note;
-                for (Note e in entireNote) {
-                  if (e.tj_songNumber == songNumber) {
-                    note = e;
-                  }
+        child: ListView.builder(
+            padding: EdgeInsets.only(bottom: screenHeight * 0.3),
+            itemCount: songList.length,
+            itemBuilder: (context, index) {
+              String songNumber = songList[index].songNumber;
+              String songTitle = songList[index].title;
+              String singer = songList[index].singer;
+              Set<Note> entireNote =
+                  Provider.of<MusicSearchItemLists>(context, listen: false)
+                      .entireNote;
+              Note? note;
+              for (Note e in entireNote) {
+                if (e.tj_songNumber == songNumber) {
+                  note = e;
                 }
-                return ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                  child: Card(
-                    margin: EdgeInsets.fromLTRB(
-                        defaultSize, 0, defaultSize, defaultSize * 0.5),
-                    color: kPrimaryLightBlackColor,
-                    elevation: 1,
-                    child: ListTile(
-                        leading: SizedBox(
-                          width: defaultSize * 6.5,
-                          child: Center(
-                            child: (index == 0)
-                                ? Image(
-                                    width: defaultSize * 4,
-                                    height: defaultSize * 4,
-                                    image:
-                                        AssetImage('assets/images/first.png'),
-                                  )
-                                : (index == 1)
-                                    ? Image(
-                                        width: defaultSize * 4,
-                                        height: defaultSize * 4,
-                                        image: AssetImage(
-                                            'assets/images/second.png'),
-                                      )
-                                    : (index == 2)
-                                        ? Image(
-                                            width: defaultSize * 4,
-                                            height: defaultSize * 4,
-                                            image: AssetImage(
-                                                'assets/images/third.png'),
-                                          )
-                                        : Text(
-                                            (index + 1).toString() + "위",
-                                            style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              fontSize: defaultSize * 1.4,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+              }
+              return ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                child: Card(
+                  margin: EdgeInsets.fromLTRB(
+                      defaultSize, 0, defaultSize, defaultSize * 0.5),
+                  color: kPrimaryLightBlackColor,
+                  elevation: 1,
+                  child: ListTile(
+                      leading: SizedBox(
+                        width: defaultSize * 6.5,
+                        child: Center(
+                          child: (index == 0)
+                              ? Image(
+                                  width: defaultSize * 4,
+                                  height: defaultSize * 4,
+                                  image: AssetImage('assets/images/first.png'),
+                                )
+                              : (index == 1)
+                                  ? Image(
+                                      width: defaultSize * 4,
+                                      height: defaultSize * 4,
+                                      image: AssetImage(
+                                          'assets/images/second.png'),
+                                    )
+                                  : (index == 2)
+                                      ? Image(
+                                          width: defaultSize * 4,
+                                          height: defaultSize * 4,
+                                          image: AssetImage(
+                                              'assets/images/third.png'),
+                                        )
+                                      : Text(
+                                          (index + 1).toString() + "위",
+                                          style: TextStyle(
+                                            color: kMainColor,
+                                            fontSize: defaultSize * 1.4,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                          ),
+                                        ),
                         ),
-                        title: Text(
-                          songTitle,
-                          style: TextStyle(
+                      ),
+                      title: Text(
+                        songTitle,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.4,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        singer,
+                        style: TextStyle(
                             overflow: TextOverflow.ellipsis,
-                            color: kPrimaryWhiteColor,
-                            fontSize: defaultSize * 1.3,
+                            color: kPrimaryLightWhiteColor,
                             fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        subtitle: Text(
-                          singer,
-                          style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: kPrimaryLightWhiteColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: defaultSize * 1.2),
-                        ),
-                        trailing: SizedBox(
-                          width: defaultSize * 5,
-                          child: Center(
-                            child: Text(
-                              songNumber,
-                              style: TextStyle(
-                                  color: kMainColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: defaultSize * 1.3),
+                            fontSize: defaultSize * 1.2),
+                      ),
+                      trailing: IntrinsicWidth(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: defaultSize * 5,
+                              child: Center(
+                                child: Text(
+                                  songNumber,
+                                  style: TextStyle(
+                                      color: kPrimaryWhiteColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: defaultSize * 1.3),
+                                ),
+                              ),
                             ),
-                          ),
+                            Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
+                          ],
                         ),
-                        onTap: () {
-                          if (title != '금영 인기차트') {
-                            if (note != null)
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SongDetailScreen(note: note!)));
-                          } else {
-                            Provider.of<NoteData>(context, listen: false)
-                                .showAddNoteDialogWithInfo(context,
-                                    isTj: false,
-                                    songNumber: songNumber,
-                                    title: songTitle,
-                                    singer: singer);
-                          }
-                        }),
-                  ),
-                );
-              })),
+                      ),
+                      onTap: () {
+                        if (title != '금영 인기차트') {
+                          if (note != null)
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SongDetailScreen(note: note!)));
+                        } else {
+                          Provider.of<NoteData>(context, listen: false)
+                              .showAddNoteDialogWithInfo(context,
+                                  isTj: false,
+                                  songNumber: songNumber,
+                                  title: songTitle,
+                                  singer: singer);
+                        }
+                      }),
+                ),
+              );
+            }),
+      ),
     );
   }
 }

@@ -38,6 +38,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   Map<String, String> youtubeURL = {};
   Set<Note> entireNote = new Set<Note>();
   bool recommendRequest = false;
+  List<MusicSearchItem> initalMusicbookList = [];
 
   int tabIndex = 1; // TJ or 금영
   int userPitch = 23;
@@ -503,6 +504,7 @@ class MusicSearchItemLists extends ChangeNotifier {
         );
         entireNote.add(note);
       }
+      initalMusicbookList = tjChartSongList;
     }
 
     combinedFoundItems = combinedSongList;
@@ -520,6 +522,7 @@ class MusicSearchItemLists extends ChangeNotifier {
   void changeTabIndex({required int index}) {
     tabIndex = index;
     foundItems = (index == 1) ? tjSongList : kySongList;
+    initalMusicbookList = (index == 1) ? tjChartSongList : kyChartSongList;
     notifyListeners();
   }
 
