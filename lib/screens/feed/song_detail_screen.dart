@@ -38,6 +38,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
   var scrollController = ScrollController();
   String lyric = "";
   bool internetCheck = true;
+  String? videoId;
 
   void getLyrics(String songNum) async {
     String url =
@@ -172,6 +173,11 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
+     videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+        .youtubeURL[widget.note.tj_songNumber];
+    if (videoId == null) {
+      getLyrics(widget.note.tj_songNumber);
+    }
     _tabController = new TabController(length: 2, vsync: this);
     _tabController
       ..addListener(
@@ -199,8 +205,6 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     ToastContext().init(context);
     double defaultSize = SizeConfig.defaultSize;
     double screenWidth = SizeConfig.screenWidth;
-    String? videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
-        .youtubeURL[widget.note.tj_songNumber];
     provider = Provider.of<NoteData>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
@@ -547,7 +551,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
             : Column(
                 children: [
                   (internetCheck == true)
-                      ? YoutubeVideoPlayer(videoId: videoId)
+                      ? YoutubeVideoPlayer(videoId: videoId!)
                       : Container(
                           height: defaultSize * 5,
                           margin: EdgeInsets.symmetric(horizontal: defaultSize),

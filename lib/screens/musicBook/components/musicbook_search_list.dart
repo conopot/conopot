@@ -194,12 +194,32 @@ class _SearchListState extends State<SearchList> {
                         ),
                       ),
                       onTap: () {
-                        if (note != null)
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SongDetailScreen(note: note!)));
+                        if (widget.musicList.tabIndex == 1) {
+                          Set<Note> entireNote =
+                              Provider.of<MusicSearchItemLists>(context,
+                                      listen: false)
+                                  .entireNote;
+                          Note? note;
+                          for (Note e in entireNote) {
+                            if (e.tj_songNumber == songNumber) {
+                              note = e;
+                            }
+                          }
+                          if (note != null) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SongDetailScreen(note: note!)));
+                          }
+                        } else {
+                          Provider.of<NoteData>(context, listen: false)
+                              .showAddNoteDialogWithInfo(context,
+                                  isTj: false,
+                                  songNumber: songNumber,
+                                  title: songTitle,
+                                  singer: singer);
+                        }
                       }),
                 ),
               );
