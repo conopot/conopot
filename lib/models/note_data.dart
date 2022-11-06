@@ -1380,7 +1380,6 @@ class NoteData extends ChangeNotifier {
     await storage.delete(key: 'jwt');
     userNickname = "";
     userImage = "";
-    profileStatus = 0;
     isLogined = false;
     userImage = "";
     notifyListeners();
@@ -1408,8 +1407,13 @@ class NoteData extends ChangeNotifier {
       if (payload["userId"] != null) {
         userId = payload["userId"];
       }
-      String? status = await storage.read(key: 'profileStatus');
-      if (status != null) profileStatus = int.parse(status);
+      var status = await storage.read(key: 'profileStatus');
+      if (status == null && payload["profileStatus"]["profileStatus"] != null) {
+        profileStatus = payload["profileStatus"]["profileStatus"];
+      }
+      if (status != null) {
+        profileStatus = int.parse(status);
+      }
     }
 
     String? storage_backupdate = await storage.read(key: 'backupdate');

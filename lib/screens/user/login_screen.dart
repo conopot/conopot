@@ -214,20 +214,6 @@ void kakaoRegister(BuildContext context, OAuthToken token) async {
 
     //로그인 성공 시 처리
     loginSuccess(jwtToken, context);
-    var userId = Provider.of<NoteData>(context, listen: false).userId;
-    try {
-      String? serverURL = dotenv.env['USER_SERVER_URL'];
-      final response = await http.get(
-        Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-      Provider.of<NoteData>(context, listen: false)
-          .changeProfileStatus(jsonDecode(response.body)['profileStatus']);
-    } on SocketException {
-      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
-    }
     Navigator.of(context).pop();
   } catch (err) {
     //print("카카오 로그인 백엔드 연결 실패 : ${err}");
@@ -261,21 +247,6 @@ void appleRegister(
 
       //로그인 성공 시 처리
       loginSuccess(jwtToken, context);
-      var userId = Provider.of<NoteData>(context, listen: false).userId;
-      try {
-        String? serverURL = dotenv.env['USER_SERVER_URL'];
-        final response = await http.get(
-          Uri.parse('$serverURL/user/profile/status?userId=${userId}'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        );
-        Provider.of<NoteData>(context, listen: false)
-            .changeProfileStatus(jsonDecode(response.body)['profileStatus']);
-      } on SocketException {
-        EasyLoading.showToast("인터넷 연결을 확인해주세요.");
-      }
-
       Navigator.of(context).pop();
     } else {
       //토큰 검증에 실패한 경우
