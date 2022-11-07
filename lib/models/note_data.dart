@@ -1408,7 +1408,7 @@ class NoteData extends ChangeNotifier {
         userId = payload["userId"];
       }
       var status = await storage.read(key: 'profileStatus');
-      if (status == null && payload["profileStatus"]["profileStatus"] != null) {
+      if (status == null && payload["profileStatus"] != null && payload["profileStatus"]["profileStatus"] != null) {
         profileStatus = payload["profileStatus"]["profileStatus"];
       }
       if (status != null) {

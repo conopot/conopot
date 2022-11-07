@@ -333,8 +333,12 @@ class _PostListViewState extends State<PostListView>
         if (data['lastPostId'] != null) {
           _lastPostId = data['lastPostId'];
         }
-        for (var e in data['posts']) {
-          _posts.add(Post.fromJson(e));
+        if (data['posts'] != null) {
+          for (var e in data['posts']) {
+            _posts.add(Post.fromJson(e));
+          }
+        } else {
+          throw Exception();
         }
         _isFirstLoadRunning = false;
       });
