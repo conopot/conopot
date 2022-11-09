@@ -328,12 +328,12 @@ class _PostListViewState extends State<PostListView>
         },
       );
       var data = json.decode(response.body);
-      if (data == null) throw Exception();
+      if (!data.containsKey('lastPostId') || !data.containsKey('posts') || data == null) throw Exception();
       setState(() {
         if (data['lastPostId'] != null) {
           _lastPostId = data['lastPostId'];
         }
-        if (data['posts'] != null) {
+        if (data['posts'].isNotEmpty) {
           for (var e in data['posts']) {
             _posts.add(Post.fromJson(e));
           }
