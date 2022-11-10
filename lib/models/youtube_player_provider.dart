@@ -8,21 +8,27 @@ class YoutubePlayerProvider extends ChangeNotifier {
   Map<String, String> videoMap = {};
   List<String> videoList = [];
 
-  late YoutubePlayerController controller = YoutubePlayerController(
-    params: const YoutubePlayerParams(
-      showControls: false,
-      mute: false,
-      showFullscreenButton: false,
-      loop: true,
-    ),
-  )..onInit = () {
-      controller.cuePlaylist(list: videoList, listType: ListType.playlist);
-    };
+  YoutubePlayerController controller =  YoutubePlayerController();
 
   void youtubeInit(List<Note> notes, Map<String, String> youtubeURL) {
     for (var note in notes) {
       videoList.add(youtubeURL[note.tj_songNumber]!);
       videoMap[note.tj_songNumber] = youtubeURL[note.tj_songNumber]!;
+    }
+    if (videoList.length == 1) {
+      controller = YoutubePlayerController.fromVideoId(videoId: videoList[0]);
+    }
+    if (videoList.length >= 2) {
+      controller = YoutubePlayerController(
+        params: const YoutubePlayerParams(
+          showControls: true,
+          mute: false,
+          showFullscreenButton: false,
+          loop: true,
+        ),
+      )..onInit = () {
+          controller.cuePlaylist(list: videoList, listType: ListType.playlist);
+        };
     }
   }
 
