@@ -5,6 +5,7 @@ import 'note.dart';
 class YoutubePlayerProvider extends ChangeNotifier {
   bool isHome = true;
   bool isPlaying = false;
+  int playingIndex = 0;
   Map<String, String> videoMap = {};
   List<String> videoList = [];
 
@@ -54,5 +55,9 @@ class YoutubePlayerProvider extends ChangeNotifier {
   void playMiniPlayer() {
     isPlaying = true;
     notifyListeners();
+  }
+
+  void changePlayingIndex(int index) {
+    playingIndex = index;
   }
 }

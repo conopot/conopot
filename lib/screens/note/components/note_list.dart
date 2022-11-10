@@ -95,6 +95,10 @@ class _NoteListState extends State<NoteList> {
                           onTap: () {
                             Provider.of<YoutubePlayerProvider>(context,
                                     listen: false)
+                                .changePlayingIndex(
+                                    noteData.notes.indexOf(note));
+                            Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
                                 .enterNoteDetailScreen();
                             Analytics_config().viewNoteEvent(note);
                             Navigator.push(
