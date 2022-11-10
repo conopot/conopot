@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
@@ -7,13 +5,14 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/note_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class NoteList extends StatefulWidget {
-  const NoteList({Key? key}) : super(key: key);
+  NoteList({Key? key}) : super(key: key);
 
   @override
   State<NoteList> createState() => _NoteListState();
@@ -94,6 +93,9 @@ class _NoteListState extends State<NoteList> {
                             ]),
                         child: GestureDetector(
                           onTap: () {
+                            Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
+                                .enterNoteDetailScreen();
                             Analytics_config().viewNoteEvent(note);
                             Navigator.push(
                               context,
@@ -106,7 +108,7 @@ class _NoteListState extends State<NoteList> {
                           },
                           child: Container(
                             height: note.memo.isEmpty
-                                ? defaultSize * 7 * SizeConfig.textScaleFactor
+                                ? defaultSize * 7
                                 : defaultSize * 8,
                             key: Key(
                               '${noteData.notes.indexOf(note)}',
@@ -168,7 +170,8 @@ class _NoteListState extends State<NoteList> {
                                     if (note.memo.isNotEmpty) ...[
                                       SizedBox(height: defaultSize * 0.3),
                                       Container(
-                                        margin: EdgeInsets.only(right: defaultSize),
+                                        margin:
+                                            EdgeInsets.only(right: defaultSize),
                                         padding:
                                             EdgeInsets.all(defaultSize * 0.5),
                                         width: double.infinity,
@@ -191,7 +194,8 @@ class _NoteListState extends State<NoteList> {
                                       ),
                                     ]
                                   ],
-                                )),Column(
+                                )),
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.chevron_right,

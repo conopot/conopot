@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'package:conopot/base_widget.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
+import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/music_search_item_list.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/splash/splash_screen.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,20 +60,26 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => MusicSearchItemLists()),
         ChangeNotifierProvider<NoteData>(create: (context) => NoteData()),
+        ChangeNotifierProvider<YoutubePlayerProvider>(create: (context) => YoutubePlayerProvider())
       ],
       child: GestureDetector(
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기
         },
         child: MaterialApp(
-          builder: EasyLoading.init(
-            builder: (context, child) => MediaQuery(
+          builder: (context, child) {
+            child = EasyLoading.init()(context, child);
+            child = MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 textScaleFactor: 1.0,
               ),
-              child: child!,
-            ),
-          ),
+              child: child,
+            );
+            child = BaseWidget(child: child);
+            SizeConfig().init(context);
+            return child;
+          },
+          initialRoute: '/',
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           title: 'conopot',

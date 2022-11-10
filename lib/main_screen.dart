@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:conopot/app_open_ad_manager.dart';
-import 'package:conopot/applifecycle_reactor.dart';
 import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/feed/feed_screen.dart';
 import 'package:conopot/screens/musicBook/music_book.dart';
+import 'package:conopot/screens/note/components/mini_youtube_player.dart';
 import 'package:conopot/screens/note/note_screen.dart';
 import 'package:conopot/screens/recommend/recommend_screen.dart';
 import 'package:conopot/screens/user/user_screen.dart';
@@ -19,6 +19,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+
+import 'models/note.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -52,6 +54,14 @@ class _MainScreenState extends State<MainScreen>
 
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
+
+  void initYoutube() {
+    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
+    Map<String, String> youtubeURL =
+        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
+    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        .youtubeInit(notes, youtubeURL);
+  }
 
   @override
   void initState() {
@@ -87,6 +97,7 @@ class _MainScreenState extends State<MainScreen>
       quitBannerSetting =
           Firebase_Remote_Config().remoteConfig.getBool('quitBannerSetting');
     });
+    initYoutube();
     super.initState();
   }
 
@@ -184,96 +195,106 @@ class _MainScreenState extends State<MainScreen>
       },
       child: Scaffold(
         body: _widgetOptions.elementAt(_selectedIndex),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: kPrimaryWhiteColor, width: 0.1))),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            key: Provider.of<NoteData>(context, listen: false).globalKey,
-            selectedFontSize: defaultSize * 1.2,
-            unselectedFontSize: defaultSize * 1.2,
-            backgroundColor: kBackgroundColor,
-            currentIndex: _selectedIndex,
-            selectedItemColor: kMainColor,
-            unselectedItemColor: kPrimaryWhiteColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: kPrimaryWhiteColor,
-                ),
-                label: "홈",
-                activeIcon: Icon(
-                  Icons.home,
-                  color: kMainColor,
-                ),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.book,
-                  color: kPrimaryWhiteColor,
-                ),
-                label: "노래방 책",
-                activeIcon: Icon(
-                  Icons.book,
-                  color: kMainColor,
-                ),
-              ),
-              BottomNavigationBarItem(
-                icon: Padding(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: SvgPicture.asset("assets/icons/recommend.svg",
-                        height: 17, width: 17)),
-                label: "추천",
-                activeIcon: Padding(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: SvgPicture.asset("assets/icons/recommend_click.svg",
-                        height: 17, width: 17)),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.forum,
-                  color: kPrimaryWhiteColor,
-                ),
-                label: "싱스타그램",
-                activeIcon: Icon(
-                  Icons.forum,
-                  color: kMainColor,
-                ),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
-                label: "내 정보",
-                activeIcon: Icon(
-                  Icons.perm_identity,
-                  color: kMainColor,
+        bottomNavigationBar: IntrinsicHeight(
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                        top:
+                            BorderSide(color: kPrimaryWhiteColor, width: 0.1))),
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  key: Provider.of<NoteData>(context, listen: false).globalKey,
+                  selectedFontSize: defaultSize * 1.2,
+                  unselectedFontSize: defaultSize * 1.2,
+                  backgroundColor: kBackgroundColor,
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: kMainColor,
+                  unselectedItemColor: kPrimaryWhiteColor,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.home,
+                        color: kPrimaryWhiteColor,
+                      ),
+                      label: "홈",
+                      activeIcon: Icon(
+                        Icons.home,
+                        color: kMainColor,
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.book,
+                        color: kPrimaryWhiteColor,
+                      ),
+                      label: "노래방 책",
+                      activeIcon: Icon(
+                        Icons.book,
+                        color: kMainColor,
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                          child: SvgPicture.asset("assets/icons/recommend.svg",
+                              height: 17, width: 17)),
+                      label: "추천",
+                      activeIcon: Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                          child: SvgPicture.asset(
+                              "assets/icons/recommend_click.svg",
+                              height: 17,
+                              width: 17)),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.forum,
+                        color: kPrimaryWhiteColor,
+                      ),
+                      label: "싱스타그램",
+                      activeIcon: Icon(
+                        Icons.forum,
+                        color: kMainColor,
+                      ),
+                    ),
+                    BottomNavigationBarItem(
+                      icon:
+                          Icon(Icons.perm_identity, color: kPrimaryWhiteColor),
+                      label: "내 정보",
+                      activeIcon: Icon(
+                        Icons.perm_identity,
+                        color: kMainColor,
+                      ),
+                    ),
+                  ],
+                  onTap: (index) {
+                    // TJ탭
+                    if (index == 1) {
+                      Provider.of<MusicSearchItemLists>(context, listen: false)
+                          .changeTabIndex(index: 1);
+                    }
+                    setState(() {
+                      _selectedIndex = index;
+                      if (index == 1) {
+                        //!event: 네비게이션__검색탭
+                        Analytics_config().clicksearchTapEvent();
+                      } else if (index == 2) {
+                        //!event: 네비게이션__추천탭
+                        Analytics_config().clickRecommendationTapEvent();
+                      } else if (index == 3) {
+                        //!event: 네비게이션__피드탭
+                        Analytics_config().feedTabClickEvent();
+                      } else if (index == 4) {
+                        //!event: 네비게이션__내정보
+                        Analytics_config().clickMyTapEvent();
+                      }
+                    });
+                  },
                 ),
               ),
             ],
-            onTap: (index) {
-              // TJ탭
-              if (index == 1) {
-                Provider.of<MusicSearchItemLists>(context, listen: false)
-                    .changeTabIndex(index: 1);
-              }
-              setState(() {
-                _selectedIndex = index;
-                if (index == 1) {
-                  //!event: 네비게이션__검색탭
-                  Analytics_config().clicksearchTapEvent();
-                } else if (index == 2) {
-                  //!event: 네비게이션__추천탭
-                  Analytics_config().clickRecommendationTapEvent();
-                } else if (index == 3) {
-                  //!event: 네비게이션__피드탭
-                  Analytics_config().feedTabClickEvent();
-                } else if (index == 4) {
-                  //!event: 네비게이션__내정보
-                  Analytics_config().clickMyTapEvent();
-                }
-              });
-            },
           ),
         ),
       ),

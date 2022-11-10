@@ -9,11 +9,13 @@ import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/components/banner.dart';
 import 'package:conopot/screens/note/components/edit_note_list.dart';
 import 'package:conopot/screens/note/components/empty_note_list.dart';
 import 'package:conopot/screens/note/components/memo_shape_button.dart';
 import 'package:conopot/screens/note/components/note_list.dart';
+import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -337,7 +339,12 @@ class _NoteScreenState extends State<NoteScreen> {
             : (_listSate == 0)
                 ? Container(
                     margin: EdgeInsets.fromLTRB(
-                        0, 0, defaultSize * 0.5, defaultSize * 0.5),
+                        0,
+                        0,
+                        defaultSize * 0.5,
+                        defaultSize * 0.5 +
+                            MediaQuery.of(context).padding.bottom +
+                            kBottomNavigationBarHeight),
                     width: 72,
                     height: 72,
                     child: FittedBox(
