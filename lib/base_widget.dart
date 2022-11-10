@@ -22,6 +22,8 @@ class _BaseWidgetState extends State<BaseWidget> {
 
   @override
   void initState() {
+    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh =
+        refresh;
     _controller =
         Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
     super.initState();
@@ -146,17 +148,18 @@ class _BaseWidgetState extends State<BaseWidget> {
                               color: kPrimaryWhiteColor,
                             )),
                         SizedBox(width: defaultSize),
-                        GestureDetector(
-                            onTap: () {
-                              Provider.of<YoutubePlayerProvider>(context,
-                                      listen: false)
-                                  .closePlayer();
-                            },
-                            child: Icon(
-                              Icons.close,
-                              color: kPrimaryWhiteColor,
-                            )),
-                        SizedBox(width: defaultSize),
+                        //   GestureDetector(
+                        //       onTap: () {
+                        //         Provider.of<YoutubePlayerProvider>(context,
+                        //                 listen: false)
+                        //             .closePlayer();
+                        //         setState(() {});
+                        //       },
+                        //       child: Icon(
+                        //         Icons.close,
+                        //         color: kPrimaryWhiteColor,
+                        //       )),
+                        // SizedBox(width: defaultSize),
                       ],
                     ],
                   ),
@@ -168,5 +171,9 @@ class _BaseWidgetState extends State<BaseWidget> {
         ],
       ),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }

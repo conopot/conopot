@@ -95,10 +95,6 @@ class _NoteListState extends State<NoteList> {
                           onTap: () {
                             Provider.of<YoutubePlayerProvider>(context,
                                     listen: false)
-                                .controller
-                                .playVideoAt(noteData.notes.indexOf(note));
-                            Provider.of<YoutubePlayerProvider>(context,
-                                    listen: false)
                                 .changePlayingIndex(
                                     noteData.notes.indexOf(note));
                             Provider.of<YoutubePlayerProvider>(context,
@@ -108,9 +104,8 @@ class _NoteListState extends State<NoteList> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => NoteDetailScreen(
-                                  note: note,
-                                ),
+                                builder: (context) =>
+                                    NoteDetailScreen(note: note),
                               ),
                             );
                           },

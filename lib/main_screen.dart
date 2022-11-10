@@ -270,6 +270,14 @@ class _MainScreenState extends State<MainScreen>
                     ),
                   ],
                   onTap: (index) {
+                    if (index != 0) {
+                      Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                    }
+                    if (index == 0) {
+                      Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                    }
                     // TJ탭
                     if (index == 1) {
                       Provider.of<MusicSearchItemLists>(context, listen: false)
@@ -277,6 +285,7 @@ class _MainScreenState extends State<MainScreen>
                     }
                     setState(() {
                       _selectedIndex = index;
+
                       if (index == 1) {
                         //!event: 네비게이션__검색탭
                         Analytics_config().clicksearchTapEvent();

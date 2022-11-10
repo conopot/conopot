@@ -179,6 +179,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
+    Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();

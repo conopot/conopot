@@ -8,8 +8,9 @@ class YoutubePlayerProvider extends ChangeNotifier {
   int playingIndex = 0;
   Map<String, String> videoMap = {};
   List<String> videoList = [];
+  late Function refresh;
 
-  YoutubePlayerController controller =  YoutubePlayerController();
+  YoutubePlayerController controller = YoutubePlayerController();
 
   void youtubeInit(List<Note> notes, Map<String, String> youtubeURL) {
     for (var note in notes) {
@@ -33,9 +34,14 @@ class YoutubePlayerProvider extends ChangeNotifier {
     }
   }
 
+  void firstStart() {
+    if (videoList.isNotEmpty) {
+      isPlaying = true;
+    }
+  }
+
   void closePlayer() {
     isPlaying = false;
-    notifyListeners();
   }
 
   void enterNoteDetailScreen() {
@@ -59,5 +65,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void changePlayingIndex(int index) {
     playingIndex = index;
+    controller.playVideoAt(index);
+    notifyListeners();
   }
 }
