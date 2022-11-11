@@ -287,6 +287,13 @@ class MusicSearchItemLists extends ChangeNotifier {
 
   // 프로그램 실행 시, 노래방 책 List 초기화 (TJ, KY txt -> List)
   void init(bool firstSession) async {
+    // youtube url 로드
+    String youtubeURLString =
+        await rootBundle.loadString('assets/musics/youtube_Url.txt');
+    // youtube url 파싱
+    LineSplitter ls = new LineSplitter();
+    List<String> youtubeURLArray = ls.convert(youtubeURLString);
+    parseURL(youtubeURLArray, youtubeURL);
     //사용자 음정 불러오기
     String? value = await storage.read(key: 'userPitch');
     if (value != null) {
@@ -337,12 +344,6 @@ class MusicSearchItemLists extends ChangeNotifier {
         ? await firstSessionGetCombinedMusics()
         : await getCombinedMusics();
 
-    // youtube url 로드
-    String youtubeURLString =
-        await rootBundle.loadString('assets/musics/youtube_Url.txt');
-
-    LineSplitter ls = new LineSplitter();
-
     List<String> contents = ls.convert(TJMusics);
 
     parseMusics(contents, tjSongList);
@@ -359,10 +360,6 @@ class MusicSearchItemLists extends ChangeNotifier {
 
     //최고음 db 파싱
     contents = ls.convert(HighMusics);
-
-    // youtube url 파싱
-    List<String> youtubeURLArray = ls.convert(youtubeURLString);
-    parseURL(youtubeURLArray, youtubeURL);
 
     late String tj_songNumber, gender;
     late int pitchNum;

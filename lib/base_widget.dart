@@ -1,6 +1,7 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/persistent_youtube_player.dart';
+import 'package:conopot/screens/note/components/play_pause_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -18,14 +19,11 @@ class BaseWidget extends StatefulWidget {
 class _BaseWidgetState extends State<BaseWidget> {
   late YoutubePlayerController _controller;
   late var playingIndex;
-  bool _isPlaying = false;
 
   @override
   void initState() {
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh =
         refresh;
-    _controller =
-        Provider.of<YoutubePlayerProvider>(context, listen: false).controller;
     super.initState();
   }
 
@@ -59,36 +57,44 @@ class _BaseWidgetState extends State<BaseWidget> {
             children: [
               SizedBox(height: appBarHeight),
               if (Provider.of<YoutubePlayerProvider>(context, listen: false)
-                  .isHome) ...[Spacer()],
+                  .isMini) ...[Spacer()],
               Visibility(
-                visible: !Provider.of<YoutubePlayerProvider>(context,
-                            listen: false)
-                        .isHome ||
-                    (Provider.of<YoutubePlayerProvider>(context, listen: false)
-                            .isHome &&
-                        Provider.of<YoutubePlayerProvider>(context,
-                                listen: false)
-                            .isPlaying),
+                visible:
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .isHome,
                 child: Container(
                   decoration: BoxDecoration(color: kPrimaryBlackColor),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: Provider.of<YoutubePlayerProvider>(context,
-                                      listen: true)
-                                  .isHome
-                              ? 6.5 * defaultSize
-                              : SizeConfig.defaultSize * 20,
-                          width: Provider.of<YoutubePlayerProvider>(context,
-                                      listen: true)
-                                  .isHome
-                              ? 10 * defaultSize
-                              : SizeConfig.screenWidth,
-                          child: PersistentYoutubeVideoPlayer()),
+                      Stack(children: [
+                        SizedBox(
+                            height: Provider.of<YoutubePlayerProvider>(context,
+                                        listen: true)
+                                    .isMini
+                                ? defaultSize * 0.01
+                                : SizeConfig.defaultSize * 20,
+                            width: Provider.of<YoutubePlayerProvider>(context,
+                                        listen: true)
+                                    .isMini
+                                ? defaultSize * 0.01
+                                : SizeConfig.screenWidth,
+                            child: PersistentYoutubeVideoPlayer()),
+                        if (Provider.of<YoutubePlayerProvider>(context,
+                                listen: false)
+                            .isMini)
+                          AbsorbPointer(
+                            child: SizedBox(
+                              height: 6.5 * defaultSize,
+                              width: 10 * defaultSize,
+                              child: Image.network(
+                                  "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
+                            ),
+                          )
+                      ]),
                       if (Provider.of<YoutubePlayerProvider>(context,
                               listen: true)
-                          .isHome) ...[
+                          .isMini) ...[
                         SizedBox(width: defaultSize),
                         Expanded(
                           child: Column(
@@ -114,34 +120,44 @@ class _BaseWidgetState extends State<BaseWidget> {
                         ),
                         GestureDetector(
                             onTap: () {
-                              _controller.previousVideo();
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .previousVideo();
                             },
                             child: Icon(Icons.skip_previous,
                                 color: kPrimaryWhiteColor)),
                         SizedBox(width: defaultSize),
-                        (_isPlaying)
+                        (Provider.of<YoutubePlayerProvider>(context,
+                                    listen: false)
+                                .isPlaying)
                             ? GestureDetector(
-                                onTap: () async {
-                                  _controller.stopVideo();
-                                  setState(() {
-                                    _isPlaying = false;
-                                  });
+                                onTap: () {
+                                  Provider.of<YoutubePlayerProvider>(context,
+                                          listen: false)
+                                      .stopVideo();
+                                  // setState(() {
+                                  //   _isPlaying = false;
+                                  // });
                                 },
                                 child: Icon(Icons.pause,
                                     color: kPrimaryWhiteColor))
                             : GestureDetector(
-                                onTap: () {
-                                  _controller.playVideo();
-                                  setState(() {
-                                    _isPlaying = true;
-                                  });
+                                onTap: () async {
+                                  Provider.of<YoutubePlayerProvider>(context,
+                                          listen: false)
+                                      .playVideo();
+                                  // setState(() {
+                                  //   _isPlaying = true;
+                                  // });
                                 },
                                 child: Icon(Icons.play_arrow,
                                     color: kPrimaryWhiteColor)),
                         SizedBox(width: defaultSize),
                         GestureDetector(
-                            onTap: () async {
-                              await _controller.nextVideo();
+                            onTap: () {
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .nextVideo();
                             },
                             child: Icon(
                               Icons.skip_next,
