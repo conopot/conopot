@@ -60,7 +60,9 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!Provider.of<NoteData>(context, listen: false).rewardFlag) _loadAd();
+    //둘다 없다면
+    if (!Provider.of<NoteData>(context, listen: false).rewardFlag &&
+        !Provider.of<NoteData>(context, listen: false).userAdRemove) _loadAd();
   }
 
   @override
@@ -99,7 +101,9 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 
   Widget adaptiveAdShow() {
-    return (Provider.of<NoteData>(context, listen: false).rewardFlag) //리워드 효과 시
+    return (Provider.of<NoteData>(context, listen: false).rewardFlag ||
+            Provider.of<NoteData>(context, listen: false)
+                .userAdRemove) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
         : (_anchoredAdaptiveAd != null && _isLoaded)

@@ -116,7 +116,8 @@ class _MainScreenState extends State<MainScreen>
               children: [
                 // TODO: Display a banner when ready
                 if (_bannerAd != null &&
-                    !Provider.of<NoteData>(context, listen: false).rewardFlag)
+                    !Provider.of<NoteData>(context, listen: false).rewardFlag &&
+                    !Provider.of<NoteData>(context, listen: false).userAdRemove)
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(

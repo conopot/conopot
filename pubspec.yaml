@@ -88,6 +88,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   bubble: ^1.2.1
   firebase_core_platform_interface: 4.5.1
+  flutter_share: ^2.0.0
 
 
 

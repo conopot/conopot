@@ -56,6 +56,7 @@ class NoteData extends ChangeNotifier {
   String userNickname = "사용자 ID";
   String backUpDate = "없음";
   String userImage = "";
+  bool userAdRemove = false;
   int userId = 0;
   int profileStatus = 0;
 
@@ -129,7 +130,7 @@ class NoteData extends ChangeNotifier {
   }
 
   void _showInterstitialAd(String command) async {
-    if (_interstitialAd == null || rewardFlag) {
+    if (_interstitialAd == null || rewardFlag || userAdRemove) {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
@@ -180,7 +181,8 @@ class NoteData extends ChangeNotifier {
   initNotes() async {
     initSubscirbeState();
     initLoginState();
-    initAccountInfo();
+    await initAccountInfo();
+    await isUserRewarded();
 
     await isUserRewarded();
     // Read all values
@@ -233,7 +235,7 @@ class NoteData extends ChangeNotifier {
   }
 
   aiInterstitialAd() {
-    if (_interstitialAd != null && !rewardFlag) {
+    if (_interstitialAd != null && !rewardFlag && !userAdRemove) {
       _showInterstitialAd("AI");
     }
   }
@@ -305,7 +307,8 @@ class NoteData extends ChangeNotifier {
     if (noteAddCount % 5 == 0 &&
         noteAddInterstitialSetting &&
         _interstitialAd != null &&
-        !rewardFlag) {
+        !rewardFlag &&
+        !userAdRemove) {
       _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
@@ -1134,7 +1137,7 @@ class NoteData extends ChangeNotifier {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
-          if (!rewardFlag) _showInterstitialAd("AI");
+          if (!rewardFlag && !userAdRemove) _showInterstitialAd("AI");
           Navigator.of(context).pop();
           saveNotes();
         },
@@ -1393,6 +1396,10 @@ class NoteData extends ChangeNotifier {
   }
 
   initAccountInfo() async {
+    String? adRemove = await storage.read(key: 'adRemove');
+    if (adRemove != null) {
+      userAdRemove = true;
+    }
     String? jwtToken = await storage.read(key: 'jwt');
     if (jwtToken != null) {
       Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);
@@ -1408,7 +1415,9 @@ class NoteData extends ChangeNotifier {
         userId = payload["userId"];
       }
       var status = await storage.read(key: 'profileStatus');
-      if (status == null && payload["profileStatus"] != null && payload["profileStatus"]["profileStatus"] != null) {
+      if (status == null &&
+          payload["profileStatus"] != null &&
+          payload["profileStatus"]["profileStatus"] != null) {
         profileStatus = payload["profileStatus"]["profileStatus"];
       }
       if (status != null) {
