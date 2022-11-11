@@ -13,6 +13,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
+import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +26,7 @@ import 'components/editable_text_field.dart';
 import 'components/request_pitch_button.dart';
 
 class NoteDetailScreen extends StatefulWidget {
-  late Note note;
+  Note note;
   NoteDetailScreen({Key? key, required this.note}) : super(key: key);
 
   @override
@@ -224,7 +225,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
             leading: BackButton(
               color: kPrimaryLightWhiteColor,
               onPressed: () async {
-                Provider.of<YoutubePlayerProvider>(context, listen: false).leaveNoteDetailScreen();
+                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    .leaveNoteDetailScreen();
                 Navigator.of(context).pop();
               },
             ),
@@ -450,7 +452,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                       child: Text(
                                                     "검색",
                                                     style: TextStyle(
-                                                        color: kPrimaryWhiteColor,
+                                                        color:
+                                                            kPrimaryWhiteColor,
                                                         fontSize:
                                                             defaultSize * 1.2,
                                                         fontWeight:
@@ -573,10 +576,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
               : Column(
                   children: [
                     (internetCheck == true)
-                        ? SizedBox(width: SizeConfig.screenWidth, height: defaultSize * 20)
+                        ? SizedBox(
+                            width: SizeConfig.screenWidth,
+                            height: defaultSize * 20)
                         : Container(
                             height: defaultSize * 5,
-                            margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: defaultSize),
                             decoration: BoxDecoration(
                                 color: kPrimaryLightBlackColor,
                                 borderRadius:
@@ -644,15 +650,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: defaultSize * 1.7))
+                                                    fontSize:
+                                                        defaultSize * 1.7))
                                             ? Container(
                                                 width: double.maxFinite,
                                                 height: defaultSize * 2.5,
                                                 child: Marquee(
-                                                  text: '${widget.note.tj_title}',
+                                                  text:
+                                                      '${widget.note.tj_title}',
                                                   style: TextStyle(
                                                       color: kPrimaryWhiteColor,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontSize:
                                                           defaultSize * 1.7),
                                                   scrollAxis: Axis.horizontal,
@@ -667,8 +676,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                       Duration(seconds: 1),
                                                   accelerationCurve:
                                                       Curves.linear,
-                                                  decelerationDuration: Duration(
-                                                      milliseconds: 1000),
+                                                  decelerationDuration:
+                                                      Duration(
+                                                          milliseconds: 1000),
                                                   decelerationCurve:
                                                       Curves.easeOut,
                                                 ),
@@ -677,16 +687,19 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
                                                     fontWeight: FontWeight.w500,
-                                                    fontSize: defaultSize * 1.7)),
+                                                    fontSize:
+                                                        defaultSize * 1.7)),
                                         SizedBox(height: defaultSize * 0.5),
                                         _willTextOverflow(
-                                                text: '${widget.note.tj_singer}',
+                                                text:
+                                                    '${widget.note.tj_singer}',
                                                 maxWidth: screenWidth * 0.7,
                                                 style: TextStyle(
                                                     color:
                                                         kPrimaryLightWhiteColor,
                                                     fontWeight: FontWeight.w400,
-                                                    fontSize: defaultSize * 1.3))
+                                                    fontSize:
+                                                        defaultSize * 1.3))
                                             ? Container(
                                                 width: double.maxFinite,
                                                 height: defaultSize * 2.5,
@@ -696,7 +709,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                   style: TextStyle(
                                                       color:
                                                           kPrimaryLightWhiteColor,
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                       fontSize:
                                                           defaultSize * 1.3),
                                                   scrollAxis: Axis.horizontal,
@@ -711,8 +725,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                       Duration(seconds: 1),
                                                   accelerationCurve:
                                                       Curves.linear,
-                                                  decelerationDuration: Duration(
-                                                      milliseconds: 1000),
+                                                  decelerationDuration:
+                                                      Duration(
+                                                          milliseconds: 1000),
                                                   decelerationCurve:
                                                       Curves.easeOut,
                                                 ),
@@ -722,7 +737,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                     color:
                                                         kPrimaryLightWhiteColor,
                                                     fontWeight: FontWeight.w400,
-                                                    fontSize: defaultSize * 1.3)),
+                                                    fontSize:
+                                                        defaultSize * 1.3)),
                                       ],
                                     ),
                                   ),
@@ -739,8 +755,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                     padding: EdgeInsets.all(defaultSize * 1.5),
                                     decoration: BoxDecoration(
                                         color: kPrimaryLightBlackColor,
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(8))),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8))),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -762,7 +778,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
                                                     fontSize: defaultSize * 1.5,
-                                                    fontWeight: FontWeight.w400),
+                                                    fontWeight:
+                                                        FontWeight.w400),
                                               ),
                                             ),
                                             SizedBox(width: defaultSize * 1.5),
@@ -785,7 +802,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
                                                     fontSize: defaultSize * 1.5,
-                                                    fontWeight: FontWeight.w400),
+                                                    fontWeight:
+                                                        FontWeight.w400),
                                               ),
                                             ),
                                             SizedBox(width: defaultSize * 1.5),
@@ -800,8 +818,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                     widget.note.ky_songNumber,
                                                     style: TextStyle(
                                                       color: kPrimaryWhiteColor,
-                                                      fontSize: defaultSize * 1.5,
-                                                      fontWeight: FontWeight.w400,
+                                                      fontSize:
+                                                          defaultSize * 1.5,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                           ],
@@ -832,7 +852,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                   "최고음",
                                                   style: TextStyle(
                                                       color: kPrimaryWhiteColor,
-                                                      fontSize: defaultSize * 1.5,
+                                                      fontSize:
+                                                          defaultSize * 1.5,
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 ),
@@ -846,9 +867,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                             color:
                                                                 kPrimaryWhiteColor,
                                                             fontSize:
-                                                                defaultSize * 1.5,
+                                                                defaultSize *
+                                                                    1.5,
                                                             fontWeight:
-                                                                FontWeight.w400),
+                                                                FontWeight
+                                                                    .w400),
                                                       ),
                                               ],
                                             ),
@@ -859,7 +882,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                   "유튜브 검색",
                                                   style: TextStyle(
                                                       color: kPrimaryWhiteColor,
-                                                      fontSize: defaultSize * 1.5,
+                                                      fontSize:
+                                                          defaultSize * 1.5,
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 ),
@@ -868,8 +892,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                     onTap: () async {
                                                       Analytics_config()
                                                           .noteDetailViewYoutube(
-                                                              widget
-                                                                  .note.tj_title);
+                                                              widget.note
+                                                                  .tj_title);
                                                       final url = Uri.parse(
                                                           'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
                                                       if (await canLaunchUrl(
@@ -888,9 +912,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                                             color:
                                                                 kPrimaryWhiteColor,
                                                             fontSize:
-                                                                defaultSize * 0.9,
+                                                                defaultSize *
+                                                                    0.9,
                                                             fontWeight:
-                                                                FontWeight.w300),
+                                                                FontWeight
+                                                                    .w300),
                                                       )
                                                     ])),
                                               ],

@@ -179,6 +179,10 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
+      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
@@ -256,6 +260,7 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
     rewardRemainTimeCheck();
     return Consumer<NoteData>(
       builder: (context, noteData, child) => Scaffold(

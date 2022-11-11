@@ -13,10 +13,6 @@ class PersistentYoutubeVideoPlayer extends StatefulWidget {
 }
 
 class _YoutubeVideoPlayerState extends State<PersistentYoutubeVideoPlayer> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
