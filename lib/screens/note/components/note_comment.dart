@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/note/comment_report_screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -24,14 +25,17 @@ class _NoteCommentState extends State<NoteComment> {
   TextEditingController _controller = TextEditingController();
   bool isAnonymous = true;
   bool isLoading = true;
+  bool isLiking = false;
   String content = "";
   late var userId;
+  late var userName;
 
   List<Comment> _comments = [];
 
   @override
   void initState() {
     userId = Provider.of<NoteData>(context, listen: false).userId;
+    userName = Provider.of<NoteData>(context, listen: false).userNickname;
     load();
     super.initState();
   }
@@ -267,7 +271,11 @@ class _NoteCommentState extends State<NoteComment> {
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   child: Row(children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        if (!isLiking) {
+                          likeComment(comment);
+                        }
+                      },
                       child: Icon(
                         Icons.favorite,
                         color: kMainColor,
@@ -324,6 +332,54 @@ class _NoteCommentState extends State<NoteComment> {
         ),
       ),
     );
+  }
+
+  void likeComment(Comment comment) async {
+    if (comment.isLike) {
+      EasyLoading.showToast('이미 공감했습니다.');
+      return;
+    }
+    if (comment.authorId == userId) {
+      EasyLoading.showToast('자신의 댓글에는 공감할 수 없습니다.');
+      return;
+    }
+    setState(() {
+      isLiking = true;
+    });
+    try {
+      // String? serverURL = dotenv.env['USER_SERVER_URL'];
+      String? serverURL = 'http://10.0.2.2:3000';
+      String URL = '${serverURL}/comment/like';
+      final response = await http.post(
+        Uri.parse(URL),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'userId': userId,
+          'commentId': comment.commentId,
+          'musicId': widget.musicId,
+          'authorId': comment.authorId,
+          'username': userName
+        }),
+      );
+      EasyLoading.showToast('이 댓글을 공감했습니다.');
+      Timer(const Duration(seconds: 1), () {
+        setState(() {
+          EasyLoading.show();
+        });
+      });
+      Timer(const Duration(seconds: 2), () {
+        setState(() {
+          load();
+          EasyLoading.dismiss();
+          isLiking = false;
+        });
+      });
+    } on SocketException catch (e) {
+      // 에러처리 (인터넷 연결 등등)
+      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+    }
   }
 
   // 애창곡 노트 목록 옵션 팝업 함수
