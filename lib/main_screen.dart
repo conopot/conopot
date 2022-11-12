@@ -55,14 +55,6 @@ class _MainScreenState extends State<MainScreen>
   // TODO: Add _bannerAd
   BannerAd? _bannerAd;
 
-  void initYoutube() {
-    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
-    Map<String, String> youtubeURL =
-        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
-    Provider.of<YoutubePlayerProvider>(context, listen: false)
-        .youtubeInit(notes, youtubeURL);
-  }
-
   @override
   void initState() {
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
@@ -97,7 +89,6 @@ class _MainScreenState extends State<MainScreen>
       quitBannerSetting =
           Firebase_Remote_Config().remoteConfig.getBool('quitBannerSetting');
     });
-    initYoutube();
     super.initState();
   }
 
@@ -271,12 +262,16 @@ class _MainScreenState extends State<MainScreen>
                   ],
                   onTap: (index) {
                     if (index != 0) {
-                      Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
-                      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .closePlayer();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .refresh();
                     }
                     if (index == 0) {
-                      Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
-                      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .firstStart();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .refresh();
                     }
                     // TJ탭
                     if (index == 1) {

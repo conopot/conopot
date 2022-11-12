@@ -179,10 +179,10 @@ class _NoteScreenState extends State<NoteScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
-      Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
+    //   Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    // });
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
@@ -316,6 +316,10 @@ class _NoteScreenState extends State<NoteScreen> {
             if (noteData.notes.isNotEmpty && _listSate == 0) ...[
               IconButton(
                   onPressed: () {
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .closePlayer();
+                    Provider.of<YoutubePlayerProvider>(context, listen: false)
+                        .refresh();
                     showNoteListOption(context);
                   },
                   icon: Icon(Icons.more_horiz_outlined)),
@@ -323,6 +327,10 @@ class _NoteScreenState extends State<NoteScreen> {
               if (_listSate == 1) ...[
                 TextButton(
                     onPressed: () {
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .firstStart();
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .refresh();
                       noteData.initEditNote();
                       setState(() {
                         _listSate = 0;
@@ -430,6 +438,8 @@ class _NoteScreenState extends State<NoteScreen> {
                                     noteData
                                         .showDeleteMultipleNoteDialog(context);
                                   }
+                                  Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                                  Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
                                 },
                                 child: Column(
                                   children: [
@@ -553,6 +563,12 @@ class _NoteScreenState extends State<NoteScreen> {
                     Spacer(),
                     GestureDetector(
                         onTap: () {
+                          Provider.of<YoutubePlayerProvider>(context,
+                                  listen: false)
+                              .firstStart();
+                          Provider.of<YoutubePlayerProvider>(context,
+                                  listen: false)
+                              .refresh();
                           Navigator.pop(context);
                         },
                         child: Text(
@@ -623,7 +639,12 @@ class _NoteScreenState extends State<NoteScreen> {
               ]),
             ),
           );
-        });
+        }).whenComplete(() {
+      if (_listSate != 1) {
+        Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
+        Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+      }
+    });
   }
 
   _showAdBlockDialog() async {

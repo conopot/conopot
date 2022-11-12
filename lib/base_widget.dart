@@ -1,7 +1,7 @@
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/note/components/persistent_youtube_player.dart';
-import 'package:conopot/screens/note/components/play_pause_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -24,7 +24,6 @@ class _BaseWidgetState extends State<BaseWidget> {
   void initState() {
     Provider.of<YoutubePlayerProvider>(context, listen: false).refresh =
         refresh;
-    super.initState();
   }
 
   void getIndex() async {
@@ -88,7 +87,14 @@ class _BaseWidgetState extends State<BaseWidget> {
                               height: 6.5 * defaultSize,
                               width: 10 * defaultSize,
                               child: Image.network(
-                                  "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
+                                  errorBuilder: ((context, error, stackTrace) {
+                                return SizedBox(
+                                    height: 6.5 * defaultSize,
+                                    width: 10 * defaultSize,
+                                    child: Image.asset(
+                                        "assets/images/profile.png"));
+                                ;
+                              }), "${Provider.of<YoutubePlayerProvider>(context, listen: false).getThumbnail()}"),
                             ),
                           )
                       ]),
@@ -132,23 +138,27 @@ class _BaseWidgetState extends State<BaseWidget> {
                                 .isPlaying)
                             ? GestureDetector(
                                 onTap: () {
-                                  Provider.of<YoutubePlayerProvider>(context,
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
                                           listen: false)
-                                      .stopVideo();
-                                  // setState(() {
-                                  //   _isPlaying = false;
-                                  // });
+                                      .videoList
+                                      .isNotEmpty)
+                                    Provider.of<YoutubePlayerProvider>(context,
+                                            listen: false)
+                                        .stopVideo();
                                 },
                                 child: Icon(Icons.pause,
                                     color: kPrimaryWhiteColor))
                             : GestureDetector(
                                 onTap: () async {
-                                  Provider.of<YoutubePlayerProvider>(context,
+                                  if (Provider.of<YoutubePlayerProvider>(
+                                          context,
                                           listen: false)
-                                      .playVideo();
-                                  // setState(() {
-                                  //   _isPlaying = true;
-                                  // });
+                                      .videoList
+                                      .isNotEmpty)
+                                    Provider.of<YoutubePlayerProvider>(context,
+                                            listen: false)
+                                        .playVideo();
                                 },
                                 child: Icon(Icons.play_arrow,
                                     color: kPrimaryWhiteColor)),
@@ -164,18 +174,21 @@ class _BaseWidgetState extends State<BaseWidget> {
                               color: kPrimaryWhiteColor,
                             )),
                         SizedBox(width: defaultSize),
-                        //   GestureDetector(
-                        //       onTap: () {
-                        //         Provider.of<YoutubePlayerProvider>(context,
-                        //                 listen: false)
-                        //             .closePlayer();
-                        //         setState(() {});
-                        //       },
-                        //       child: Icon(
-                        //         Icons.close,
-                        //         color: kPrimaryWhiteColor,
-                        //       )),
-                        // SizedBox(width: defaultSize),
+                        SizedBox(width: defaultSize),
+                        GestureDetector(
+                            onTap: () {
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .closePlayer();
+                              Provider.of<YoutubePlayerProvider>(context,
+                                      listen: false)
+                                  .refresh();
+                            },
+                            child: Icon(
+                              Icons.refresh,
+                              color: kPrimaryWhiteColor,
+                            )),
+                        SizedBox(width: defaultSize),
                       ],
                     ],
                   ),

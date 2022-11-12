@@ -10,6 +10,7 @@ import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/main_screen.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/recommendation_item_list.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
@@ -27,6 +28,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  void initYoutube() async{
+    List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
+    Map<String, String> youtubeURL =
+        Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
+    Provider.of<YoutubePlayerProvider>(context, listen: false)
+        .youtubeInit(notes, youtubeURL);
+  }
+
   checkConnection() async {
     //버전이 존재하는지 체크한다.
     final storage = new FlutterSecureStorage();
@@ -63,6 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
       /// 사용자 노트 초기화 (local storage)
       await Provider.of<NoteData>(context, listen: false).initNotes();
       await RecommendationItemList().initRecommendationList();
+      initYoutube();
 
       //앱 오픈 광고
       //리워드가 존재하는지 체크
@@ -73,6 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         await appOpenAds(context);
       }
+      initYoutube();
     }
     //인터넷 연결이 안 되어있다면
     on SocketException {

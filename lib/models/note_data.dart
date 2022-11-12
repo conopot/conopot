@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:amplitude_flutter/identify.dart';
@@ -238,9 +239,17 @@ class NoteData extends ChangeNotifier {
     }
   }
 
-  Future<void> addNoteBySongNumber(BuildContext context, String songNumber,
-      List<FitchMusic> musicList) async {
+  Future<void> addNoteBySongNumber(
+      BuildContext context,
+      String songNumber,
+      List<FitchMusic> musicList,
+      List<String> videoList,
+      Map<String, String> youtubeURL) async {
     noteCount += 1;
+    videoList.add(youtubeURL[songNumber]!);
+    Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
         Note note = Note(
@@ -457,10 +466,29 @@ class NoteData extends ChangeNotifier {
   }
 
   // 노트 삭제 함수
-  Future<void> deleteNote(Note note) async {
+  Future<void> deleteNote(BuildContext context, Note note,
+      List<String> videoList, Map<String, String> youtubeURL) async {
     noteCount -= 1;
     notes.remove(note);
     userMusics.remove(note.tj_songNumber);
+
+    var indexToDelete = 0;
+    for (var i = 0; i < videoList.length; i++) {
+      if (videoList[i] == youtubeURL[note.tj_songNumber]) {
+        indexToDelete = i;
+      }
+    }
+    if (indexToDelete <=
+        Provider.of<YoutubePlayerProvider>(context, listen: false)
+            .playingIndex) {
+      Provider.of<YoutubePlayerProvider>(context, listen: false)
+          .downPlayingIndex();
+    }
+    
+    Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).firstStart();
+    Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
 
     await storage.write(key: 'notes', value: jsonEncode(notes));
 
@@ -505,7 +533,11 @@ class NoteData extends ChangeNotifier {
             context,
             songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList);
+                .combinedSongList,
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .videoList,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .youtubeURL);
         Navigator.of(context).pop();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
@@ -587,7 +619,11 @@ class NoteData extends ChangeNotifier {
             context,
             songNumber,
             Provider.of<MusicSearchItemLists>(context, listen: false)
-                .combinedSongList);
+                .combinedSongList,
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .videoList,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .youtubeURL);
         Navigator.of(context).pop();
         Fluttertoast.cancel();
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
@@ -702,7 +738,13 @@ class NoteData extends ChangeNotifier {
           ))),
       onPressed: () {
         Analytics_config().noteDeleteEvent(note.tj_title);
-        deleteNote(note);
+        deleteNote(
+            context,
+            note,
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .videoList,
+            Provider.of<MusicSearchItemLists>(context, listen: false)
+                .youtubeURL);
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
       child: Text("삭제",
@@ -1408,7 +1450,9 @@ class NoteData extends ChangeNotifier {
         userId = payload["userId"];
       }
       var status = await storage.read(key: 'profileStatus');
-      if (status == null && payload["profileStatus"] != null && payload["profileStatus"]["profileStatus"] != null) {
+      if (status == null &&
+          payload["profileStatus"] != null &&
+          payload["profileStatus"]["profileStatus"] != null) {
         profileStatus = payload["profileStatus"]["profileStatus"];
       }
       if (status != null) {
@@ -1491,14 +1535,18 @@ class NoteData extends ChangeNotifier {
   }
 
   // 노트 여러개 삭제 함수
-  Future<void> deleteMultipleNote() async {
+  Future<void> deleteMultipleNote(BuildContext context) async {
     noteCount -= deleteSet.length;
     List<Note> temp_notes = [];
     List<String> temp_userMusics = [];
+    Provider.of<YoutubePlayerProvider>(context, listen: false).removeAllVideoList();
     for (int i = 0; i < notes.length; i++) {
       if (deleteSet.contains(notes[i])) continue;
       temp_notes.add(notes[i]);
       temp_userMusics.add(notes[i].tj_songNumber);
+      Provider.of<YoutubePlayerProvider>(context, listen: false).addVideoId(
+          notes[i],
+          Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL);
     }
     deleteSet = {};
     notes = temp_notes;
@@ -1553,7 +1601,7 @@ class NoteData extends ChangeNotifier {
             borderRadius: BorderRadius.circular(8),
           ))),
       onPressed: () async {
-        await deleteMultipleNote();
+        await deleteMultipleNote(context);
         if (isChecked.isNotEmpty) {
           isChecked = List<bool>.filled(isChecked.length, false);
         }

@@ -95,11 +95,12 @@ class _NoteListState extends State<NoteList> {
                           onTap: () {
                             Provider.of<YoutubePlayerProvider>(context,
                                     listen: false)
-                                .changePlayingIndex(
+                                .enterNoteDetailScreen(
                                     noteData.notes.indexOf(note));
                             Provider.of<YoutubePlayerProvider>(context,
                                     listen: false)
-                                .enterNoteDetailScreen();
+                                .changePlayingIndex(
+                                    noteData.notes.indexOf(note));
                             Analytics_config().viewNoteEvent(note);
                             Navigator.push(
                               context,
