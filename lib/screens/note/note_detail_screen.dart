@@ -11,6 +11,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/foundation.dart';
@@ -180,7 +181,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     _tabController
       ..addListener(
         () {
@@ -578,29 +579,32 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                             ),
                           )),
                   SizedBox(height: defaultSize * 1.25),
-                  TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: kMainColor,
-                    labelColor: kPrimaryWhiteColor,
-                    unselectedLabelColor: kPrimaryLightGreyColor,
-                    tabs: [
-                      Text(
-                        '정보',
-                        style: TextStyle(
-                          fontSize: defaultSize * 1.8,
-                          fontWeight: FontWeight.w600,
+                  Container(
+                    child: TabBar(
+                      controller: _tabController,
+                      isScrollable: false,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      indicatorColor: kMainColor,
+                      labelColor: kPrimaryWhiteColor,
+                      unselectedLabelColor: kPrimaryLightGreyColor,
+                      tabs: [
+                        Text(
+                          '정보',
+                          style: TextStyle(
+                            fontSize: defaultSize * 1.8,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '가사',
-                        style: TextStyle(
-                          fontSize: defaultSize * 1.8,
-                          fontWeight: FontWeight.w600,
+                        Text(
+                          '가사',
+                          style: TextStyle(
+                            fontSize: defaultSize * 1.8,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                        Icon(Icons.comment)
+                      ],
+                    ),
                   ),
                   SizedBox(height: defaultSize * 1.25),
                   Expanded(
@@ -937,7 +941,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                 ]),
                           )
                         ],
-                      )
+                      ),
+                      // 댓글 탭
+                      NoteComment()
                     ],
                   ))
                 ],
