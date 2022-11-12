@@ -569,7 +569,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                   SizedBox(height: defaultSize * 1.25),
                   TabBar(
                     controller: _tabController,
-                    isScrollable: true,
+                    isScrollable: false,
                     indicatorSize: TabBarIndicatorSize.label,
                     indicatorColor: kMainColor,
                     labelColor: kPrimaryWhiteColor,
@@ -589,6 +589,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      Icon(Icons.comment)
                     ],
                   ),
                   SizedBox(height: defaultSize * 1.25),

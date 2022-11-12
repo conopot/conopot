@@ -579,32 +579,30 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                             ),
                           )),
                   SizedBox(height: defaultSize * 1.25),
-                  Container(
-                    child: TabBar(
-                      controller: _tabController,
-                      isScrollable: false,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: kMainColor,
-                      labelColor: kPrimaryWhiteColor,
-                      unselectedLabelColor: kPrimaryLightGreyColor,
-                      tabs: [
-                        Text(
-                          '정보',
-                          style: TextStyle(
-                            fontSize: defaultSize * 1.8,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  TabBar(
+                    controller: _tabController,
+                    isScrollable: false,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: kMainColor,
+                    labelColor: kPrimaryWhiteColor,
+                    unselectedLabelColor: kPrimaryLightGreyColor,
+                    tabs: [
+                      Text(
+                        '정보',
+                        style: TextStyle(
+                          fontSize: defaultSize * 1.8,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
-                          '가사',
-                          style: TextStyle(
-                            fontSize: defaultSize * 1.8,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      ),
+                      Text(
+                        '가사',
+                        style: TextStyle(
+                          fontSize: defaultSize * 1.8,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Icon(Icons.comment)
-                      ],
-                    ),
+                      ),
+                      Icon(Icons.comment)
+                    ],
                   ),
                   SizedBox(height: defaultSize * 1.25),
                   Expanded(
