@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/screens/note/comment_report_screen.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:conopot/config/constants.dart';
@@ -285,7 +286,7 @@ class _NoteCommentState extends State<NoteComment> {
                           showDeleteSheet(context, comment);
                         }
                         if (comment.authorId != userId) {
-                          // 신고
+                          showReportSheet(context, comment);
                         }
                       },
                       child: Icon(Icons.more_vert,
@@ -472,19 +473,21 @@ class _NoteCommentState extends State<NoteComment> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      showDeleteDialog(context, comment);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  CommentReportScreen(comment: comment)));
                     },
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.delete_forever,
-                          color: kPrimaryWhiteColor,
-                        ),
                         SizedBox(width: defaultSize * 1.5),
                         Text(
                           "신고하기",
                           style: TextStyle(color: kPrimaryWhiteColor),
-                        )
+                        ),
+                        Spacer(),
+                        Icon(Icons.chevron_right, color: kPrimaryWhiteColor)
                       ],
                     ),
                   ),
