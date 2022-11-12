@@ -943,7 +943,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                         ],
                       ),
                       // 댓글 탭
-                      NoteComment()
+                      NoteComment(musicId: int.parse(widget.note.tj_songNumber))
                     ],
                   ))
                 ],
