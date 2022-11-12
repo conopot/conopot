@@ -209,11 +209,13 @@ class _NoteCommentState extends State<NoteComment> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-      SizedBox(height: defaultSize * 1.5),
-      Image.asset('assets/images/emptyComment.png'),
-      SizedBox(height: defaultSize * 1.8),
-      Text('노래에 대한 의견을 댓글로 남겨주세요 🤩', style: TextStyle(color: kPrimaryWhiteColor))
-    ],);
+        SizedBox(height: defaultSize * 1.5),
+        Image.asset('assets/images/emptyComment.png'),
+        SizedBox(height: defaultSize * 1.8),
+        Text('노래에 대한 의견을 댓글로 남겨주세요 🤩',
+            style: TextStyle(color: kPrimaryWhiteColor))
+      ],
+    );
   }
 
   Widget commentWidget(Comment comment) {
@@ -263,10 +265,13 @@ class _NoteCommentState extends State<NoteComment> {
                       color: kPrimaryGreyColor,
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   child: Row(children: [
-                    Icon(
-                      Icons.favorite,
-                      color: kMainColor,
-                      size: defaultSize * 1.5,
+                    GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.favorite,
+                        color: kMainColor,
+                        size: defaultSize * 1.5,
+                      ),
                     ),
                     Container(
                         height: defaultSize * 1.5,
@@ -274,8 +279,18 @@ class _NoteCommentState extends State<NoteComment> {
                           color: kMainColor,
                           thickness: 2,
                         )),
-                    Icon(Icons.more_vert,
-                        color: kMainColor, size: defaultSize * 1.5)
+                    GestureDetector(
+                      onTap: () {
+                        if (comment.authorId == userId) {
+                          showDeleteSheet(context, comment);
+                        }
+                        if (comment.authorId != userId) {
+                          // 신고
+                        }
+                      },
+                      child: Icon(Icons.more_vert,
+                          color: kMainColor, size: defaultSize * 1.5),
+                    )
                   ]),
                 )
               ],
@@ -308,5 +323,176 @@ class _NoteCommentState extends State<NoteComment> {
         ),
       ),
     );
+  }
+
+  // 애창곡 노트 목록 옵션 팝업 함수
+  showDeleteSheet(BuildContext context, Comment comment) {
+    double defaultSize = SizeConfig.defaultSize;
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        backgroundColor: kDialogColor,
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  SizedBox(height: defaultSize * 2),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showDeleteDialog(context, comment);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete_forever,
+                          color: kPrimaryWhiteColor,
+                        ),
+                        SizedBox(width: defaultSize * 1.5),
+                        Text(
+                          "댓글삭제",
+                          style: TextStyle(color: kPrimaryWhiteColor),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: defaultSize * 3)
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void showDeleteDialog(BuildContext context, Comment comment) {
+    double defaultSize = SizeConfig.defaultSize;
+
+    Widget okButton = ElevatedButton(
+      onPressed: () async {
+        try {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          // String? serverURL = dotenv.env['USER_SERVER_URL'];
+          String? serverURL = 'http://10.0.2.2:3000';
+          String URL = '${serverURL}/comment';
+          final response = await http.delete(
+            Uri.parse(URL),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode({
+              'commentId': comment.commentId,
+            }),
+          );
+          EasyLoading.show();
+          Timer(const Duration(seconds: 2), () {
+            setState(() {
+              load();
+              EasyLoading.dismiss();
+            });
+          });
+        } on SocketException catch (e) {
+          // 에러처리 (인터넷 연결 등등)
+          EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+        }
+      },
+      child: Text("삭제",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kMainColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+    );
+
+    Widget cancelButton = ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(kPrimaryGreyColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            side: const BorderSide(width: 0.0),
+            borderRadius: BorderRadius.circular(8),
+          ))),
+      onPressed: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      },
+      child: Text(
+        "취소",
+        style: TextStyle(fontWeight: FontWeight.w600, color: kMainColor),
+      ),
+    );
+
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        '삭제하시겠습니까?',
+        style:
+            TextStyle(fontWeight: FontWeight.w400, color: kPrimaryWhiteColor),
+      ),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+      backgroundColor: kDialogColor,
+      shape: const RoundedRectangleBorder(
+          side: BorderSide(width: 0.0),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(child: alert);
+        });
+  }
+
+  showReportSheet(BuildContext context, Comment comment) {
+    double defaultSize = SizeConfig.defaultSize;
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        backgroundColor: kDialogColor,
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: defaultSize * 1.5),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  SizedBox(height: defaultSize * 2),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showDeleteDialog(context, comment);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete_forever,
+                          color: kPrimaryWhiteColor,
+                        ),
+                        SizedBox(width: defaultSize * 1.5),
+                        Text(
+                          "신고하기",
+                          style: TextStyle(color: kPrimaryWhiteColor),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: defaultSize * 3)
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
