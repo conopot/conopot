@@ -46,9 +46,9 @@ class _NoteCommentState extends State<NoteComment> {
         Expanded(
             child: ListView(
                 children: (isLoading)
-                    ? [Text("로딩중", style: TextStyle(color: kPrimaryWhiteColor))]
+                    ? [Center(child: Text(""))]
                     : (_comments.isEmpty)
-                        ? items
+                        ? [emptyCommentScreen()]
                         : items)),
         Container(
           height: defaultSize * 5,
@@ -203,9 +203,18 @@ class _NoteCommentState extends State<NoteComment> {
     }
   }
 
-  // Widget emptyCommentScreen() {
-    
-  // }
+  Widget emptyCommentScreen() {
+    double defaultSize = SizeConfig.defaultSize;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      SizedBox(height: defaultSize * 1.5),
+      Image.asset('assets/images/emptyComment.png'),
+      SizedBox(height: defaultSize * 1.8),
+      Text('노래에 대한 의견을 댓글로 남겨주세요 🤩', style: TextStyle(color: kPrimaryWhiteColor))
+    ],);
+  }
 
   Widget commentWidget(Comment comment) {
     double defaultSize = SizeConfig.defaultSize;
