@@ -11,6 +11,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
+import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/request_pitch_button.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
@@ -178,7 +179,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     if (videoId == null) {
       getLyrics(widget.note.tj_songNumber);
     }
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     _tabController
       ..addListener(
         () {
@@ -913,7 +914,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                 ]),
                           )
                         ],
-                      )
+                      ),
+                      // 댓글 탭
+                      NoteComment(musicId: int.parse(widget.note.tj_songNumber))
                     ],
                   ))
                 ],

@@ -11,6 +11,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/comment.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 class NoteComment extends StatefulWidget {
@@ -50,6 +51,7 @@ class _NoteCommentState extends State<NoteComment> {
       children: [
         Expanded(
             child: ListView(
+                padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.1),
                 children: (isLoading)
                     ? [Center(child: Text(""))]
                     : (_comments.isEmpty)
@@ -200,6 +202,15 @@ class _NoteCommentState extends State<NoteComment> {
           'anonymous': anoymous
         }),
       );
+      String externalUserId = userId.toString();
+      if (userId != 0) {
+        OneSignal.shared
+            .setExternalUserId(externalUserId)
+            .then((results) {print("여기 : ${results}");})
+            .catchError((error) {
+          print(error.toString());
+        });
+      }
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
       EasyLoading.showToast("인터넷 연결을 확인해주세요.");
@@ -277,7 +288,7 @@ class _NoteCommentState extends State<NoteComment> {
                         }
                       },
                       child: Icon(
-                        Icons.favorite,
+                        Icons.thumb_up,
                         color: kMainColor,
                         size: defaultSize * 1.5,
                       ),
@@ -318,7 +329,7 @@ class _NoteCommentState extends State<NoteComment> {
             SizedBox(height: defaultSize * 0.8),
             Row(
               children: [
-                Icon(Icons.favorite,
+                Icon(Icons.thumb_up,
                     color: kMainColor, size: defaultSize * 1.4),
                 SizedBox(width: defaultSize * 0.5),
                 Text(
