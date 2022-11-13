@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/comment.dart';
@@ -27,7 +28,7 @@ class _CommentReportScreenState extends State<CommentReportScreen> {
         appBar: AppBar(title: Text("신고하기")),
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: (){
+          onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Padding(
@@ -68,6 +69,8 @@ class _CommentReportScreenState extends State<CommentReportScreen> {
                 Spacer(),
                 GestureDetector(
                   onTap: () async {
+                    //!event: 노트_상세정보_뷰__댓글신고하기
+                    Analytics_config().noteReportCommentEvent();
                     String? serverURL = dotenv.env['USER_SERVER_URL'];
                     String URL = '${serverURL}/comment/report';
                     try {
@@ -77,9 +80,9 @@ class _CommentReportScreenState extends State<CommentReportScreen> {
                           'Content-Type': 'application/json; charset=UTF-8',
                         },
                         body: jsonEncode({
-                          'userId' : widget.comment.authorId,
-                          'commentId' : widget.comment.commentId,
-                          'reportScript' : _text
+                          'userId': widget.comment.authorId,
+                          'commentId': widget.comment.commentId,
+                          'reportScript': _text
                         }),
                       );
                       print(response.body);

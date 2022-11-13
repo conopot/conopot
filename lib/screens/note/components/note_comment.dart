@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/screens/note/comment_report_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,6 +37,8 @@ class _NoteCommentState extends State<NoteComment> {
 
   @override
   void initState() {
+    //!event: 노트_상세정보_뷰__댓글_페이지뷰
+    Analytics_config().noteCommentPageView();
     userId = Provider.of<NoteData>(context, listen: false).userId;
     userName = Provider.of<NoteData>(context, listen: false).userNickname;
     load();
@@ -114,7 +117,7 @@ class _NoteCommentState extends State<NoteComment> {
                     textAlign: TextAlign.left,
                     textAlignVertical: TextAlignVertical.center,
                     keyboardType: TextInputType.multiline,
-                    maxLength: 100,
+                    maxLength: 150,
                     cursorColor: kMainColor,
                     decoration: InputDecoration(
                       counter: SizedBox.shrink(),
@@ -136,6 +139,8 @@ class _NoteCommentState extends State<NoteComment> {
                           false) {
                         EasyLoading.showToast("로그인 후 이용가능합니다.");
                       } else if (content.isNotEmpty) {
+                        //!event: 노트_상세정보_뷰__댓글남기기
+                        Analytics_config().noteLeaveCommentEvent();
                         leaveComment();
                         setState(() {
                           _controller.text = "";
@@ -285,10 +290,9 @@ class _NoteCommentState extends State<NoteComment> {
                       ])),
                 ),
                 Container(
-                  margin:
-                      EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, 0),
-                  padding: EdgeInsets.fromLTRB(0,
-                      defaultSize * 0.5, 0, defaultSize * 0.5),
+                  margin: EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, 0),
+                  padding: EdgeInsets.fromLTRB(
+                      0, defaultSize * 0.5, 0, defaultSize * 0.5),
                   decoration: BoxDecoration(
                       color: kPrimaryGreyColor,
                       borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -377,6 +381,8 @@ class _NoteCommentState extends State<NoteComment> {
   }
 
   void likeComment(Comment comment) async {
+    //!event: 노트_상세정보_뷰__댓글좋아요
+    Analytics_config().noteLikeCommentEvent();
     if (comment.isLike) {
       EasyLoading.showToast('이미 공감했습니다.');
       return;
@@ -468,6 +474,8 @@ class _NoteCommentState extends State<NoteComment> {
     Widget okButton = ElevatedButton(
       onPressed: () async {
         try {
+          //!event: 노트_상세정보_뷰__댓글삭제하기
+          Analytics_config().noteDeleteCommentEvent();
           Navigator.of(context).pop();
           Navigator.of(context).pop();
           String? serverURL = dotenv.env['USER_SERVER_URL'];

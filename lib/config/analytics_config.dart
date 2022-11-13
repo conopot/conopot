@@ -150,6 +150,31 @@ class Analytics_config {
     event('노트_상세정보_뷰__최고음요청', {'곡명': title});
   }
 
+  //!event: 노트_상세정보_뷰__댓글_페이지뷰
+  noteCommentPageView() {
+    event('노트_상세정보_뷰__댓글_페이지뷰', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글남기기
+  noteLeaveCommentEvent() {
+    event('노트_상세정보_뷰__댓글남기기', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글좋아요
+  noteLikeCommentEvent() {
+    event('노트_상세정보_뷰__댓글좋아요', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글신고하기
+  noteReportCommentEvent() {
+    event('노트_상세정보_뷰__댓글신고하기', {});
+  }
+
+  //!event: 노트_상세정보_뷰__댓글삭제하기
+  noteDeleteCommentEvent() {
+    event('노트_상세정보_뷰__댓글삭제하기', {});
+  }
+
   //!event: 설정_뷰__페이지뷰
   settingPageView() {
     event('설정_뷰__페이지뷰', {});
