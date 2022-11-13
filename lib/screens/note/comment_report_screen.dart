@@ -5,6 +5,7 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/comment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
@@ -67,8 +68,7 @@ class _CommentReportScreenState extends State<CommentReportScreen> {
                 Spacer(),
                 GestureDetector(
                   onTap: () async {
-                    // String? serverURL = dotenv.env['USER_SERVER_URL'];
-                    String? serverURL = 'http://10.0.2.2:3000';
+                    String? serverURL = dotenv.env['USER_SERVER_URL'];
                     String URL = '${serverURL}/comment/report';
                     try {
                       final response = await http.post(
