@@ -245,7 +245,7 @@ class _NoteCommentState extends State<NoteComment> {
   Widget commentWidget(Comment comment) {
     double defaultSize = SizeConfig.defaultSize;
     return Container(
-      padding: EdgeInsets.only(left: defaultSize * 0.5),
+      padding: EdgeInsets.only(left: defaultSize * 0.8),
       margin: EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, defaultSize),
       decoration: BoxDecoration(
           color: kPrimaryLightBlackColor,
@@ -286,14 +286,15 @@ class _NoteCommentState extends State<NoteComment> {
                 ),
                 Container(
                   margin:
-                      EdgeInsets.fromLTRB(defaultSize, 0, defaultSize * 2, 0),
-                  padding: EdgeInsets.fromLTRB(defaultSize * 1.5,
-                      defaultSize * 0.5, defaultSize * 1.5, defaultSize * 0.5),
+                      EdgeInsets.fromLTRB(defaultSize, 0, defaultSize, 0),
+                  padding: EdgeInsets.fromLTRB(0,
+                      defaultSize * 0.5, 0, defaultSize * 0.5),
                   decoration: BoxDecoration(
                       color: kPrimaryGreyColor,
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   child: Row(children: [
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         if (Provider.of<NoteData>(context, listen: false)
                                 .isLogined ==
@@ -303,20 +304,24 @@ class _NoteCommentState extends State<NoteComment> {
                           likeComment(comment);
                         }
                       },
-                      child: Icon(
-                        Icons.thumb_up,
-                        color: kMainColor,
-                        size: defaultSize * 1.5,
+                      child: SizedBox(
+                        width: defaultSize * 4.5,
+                        child: Icon(
+                          Icons.thumb_up,
+                          color: kMainColor,
+                          size: defaultSize * 1.5,
+                        ),
                       ),
                     ),
                     Container(
                         height: defaultSize * 1.5,
                         child: VerticalDivider(
                           color: kMainColor,
-                          width: defaultSize * 3,
+                          width: 0,
                           thickness: 2,
                         )),
                     GestureDetector(
+                      behavior: HitTestBehavior.translucent,
                       onTap: () {
                         if (Provider.of<NoteData>(context, listen: false)
                                 .isLogined ==
@@ -331,8 +336,11 @@ class _NoteCommentState extends State<NoteComment> {
                           }
                         }
                       },
-                      child: Icon(Icons.more_vert,
-                          color: kMainColor, size: defaultSize * 1.5),
+                      child: SizedBox(
+                        width: defaultSize * 4.5,
+                        child: Icon(Icons.more_vert,
+                            color: kMainColor, size: defaultSize * 1.5),
+                      ),
                     )
                   ]),
                 )
