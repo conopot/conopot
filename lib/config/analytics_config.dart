@@ -505,6 +505,11 @@ class Analytics_config {
     event('첫세션', {});
   }
 
+  //!event: 튜토리얼_뷰__시작하기
+  tutorialStart() {
+    event('튜토리얼_뷰__시작하기', {});
+  }
+
   //!event: 노트가 없는 사용자
   emptyNoteUserEvent() {
     event('노트없는사용자', {});

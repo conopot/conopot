@@ -82,6 +82,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
           (selectedIndex == 3)
               ? GestureDetector(
                   onTap: () async {
+                    //!event: 네비게이션__내정보
+                    Analytics_config().tutorialStart();
                     //"시작하기" 버튼 누를 시, 다음부터는 튜토리얼 화면이 뜨지 않는다.
                     await storage.write(key: 'tutorial', value: '1');
                     if (Provider.of<NoteData>(context, listen: false)
