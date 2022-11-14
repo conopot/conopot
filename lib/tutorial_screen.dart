@@ -158,7 +158,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                       ),
                     ),
                   )),
-          SizedBox(height: defaultSize * 1.5)
+          SizedBox(height: defaultSize * 3)
         ],
       ),
     ));
