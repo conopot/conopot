@@ -44,6 +44,7 @@ class NoteData extends ChangeNotifier {
   late bool isSubscribed; // 구독 여부
   List<bool> feedDetailCheckList = []; // 피드 노래추가 체크여부 확인
   Set<Note> addSet = {}; // 피드 노래 여러개 추가를 위한 set
+  bool isOnboarding = false;
 
   bool isAppOpenBanner = true; //앱 오픈 배너 로드 여부
 
@@ -507,6 +508,12 @@ class NoteData extends ChangeNotifier {
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
         Navigator.of(context).pop();
+        if (isOnboarding) {
+          isOnboarding = false;
+          Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MainScreen()));
+          return;
+        }
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
               backgroundColor: kPrimaryGreyColor);

@@ -1,7 +1,11 @@
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/main_screen.dart';
+import 'package:conopot/models/note_data.dart';
+import 'package:conopot/tutorial_add_note_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class TutorialScreen extends StatefulWidget {
   const TutorialScreen({Key? key}) : super(key: key);
@@ -15,6 +19,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
       PageController(initialPage: 0, viewportFraction: 1.0);
   int selectedIndex = 0;
   double defaultSize = SizeConfig.defaultSize;
+  final storage = new FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +60,25 @@ class _TutorialScreenState extends State<TutorialScreen> {
           ),
           (selectedIndex == 3)
               ? GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     //"시작하기" 버튼 누를 시, 다음부터는 튜토리얼 화면이 뜨지 않는다.
-                    // await storage.write(key: 'tutorial', value: '1');
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => MainScreen()));
+                    await storage.write(key: 'tutorial', value: '1');
+                    if (Provider.of<NoteData>(context, listen: false)
+                        .notes
+                        .isEmpty) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TutorialAddNoteScreen()));
+                      return;
+                    } else if (Provider.of<NoteData>(context, listen: false)
+                        .notes
+                        .isNotEmpty) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainScreen()));
+                    }
                   },
                   child: Container(
                     width: SizeConfig.screenWidth,
