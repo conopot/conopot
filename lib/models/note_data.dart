@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
@@ -508,12 +507,6 @@ class NoteData extends ChangeNotifier {
             Provider.of<MusicSearchItemLists>(context, listen: false)
                 .combinedSongList);
         Navigator.of(context).pop();
-        if (isOnboarding) {
-          isOnboarding = false;
-          Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => MainScreen()));
-          return;
-        }
         if (Provider.of<NoteData>(context, listen: false).emptyCheck == true) {
           tt.Toast.show("애창곡 노트에 이미 등록된 곡입니다.",
               backgroundColor: kPrimaryGreyColor);
@@ -523,6 +516,12 @@ class NoteData extends ChangeNotifier {
           Analytics_config().musicAddEvent(title);
           tt.Toast.show("애창곡 노트에 노래가 추가되었습니다.",
               backgroundColor: kPrimaryGreyColor);
+        }
+        if (isOnboarding) {
+          isOnboarding = false;
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainScreen()));
+          return;
         }
       },
       child: Text("추가",
@@ -1415,7 +1414,9 @@ class NoteData extends ChangeNotifier {
         userId = payload["userId"];
       }
       var status = await storage.read(key: 'profileStatus');
-      if (status == null && payload["profileStatus"] != null && payload["profileStatus"]["profileStatus"] != null) {
+      if (status == null &&
+          payload["profileStatus"] != null &&
+          payload["profileStatus"]["profileStatus"] != null) {
         profileStatus = payload["profileStatus"]["profileStatus"];
       }
       if (status != null) {

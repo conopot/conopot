@@ -36,7 +36,6 @@ class NoteScreen extends StatefulWidget {
 class _NoteScreenState extends State<NoteScreen> {
   double defaultSize = SizeConfig.defaultSize;
   int _listSate = 0;
-  String abtest1106_modal = "";
   bool isLoaded = false;
   String test = "";
   final storage = new FlutterSecureStorage();
@@ -181,19 +180,7 @@ class _NoteScreenState extends State<NoteScreen> {
     isReward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     Analytics_config().noteViewPageViewEvent();
     _loadRewardedAd();
-    //remote config 변수 가져오기
-    abtest1106_modal =
-        Firebase_Remote_Config().remoteConfig.getString('abtest1106_modal');
-    //유저 프로퍼티 설정하기
-    if (abtest1106_modal != "" &&
-        Provider.of<MusicSearchItemLists>(context, listen: false)
-                .sessionCount ==
-            0) {
-      Identify identify = Identify()..set('11/2 노트 모양의 버튼', abtest1106_modal);
-      Analytics_config().userProps(identify);
-    }
     Provider.of<MusicSearchItemLists>(context, listen: false).sessionCount += 1;
-
     _events = StreamController<String>.broadcast();
     _events.add(rewardRemainTime);
     super.initState();
@@ -448,34 +435,27 @@ class _NoteScreenState extends State<NoteScreen> {
             CarouselSliderBanner(),
             if (noteData.notes.isEmpty) ...[
               if (_listSate == 0) ...[
-                // abtest
-                //화면 빌드 후, 바로 모달 창 띄우는 부분
-                if (abtest1106_modal == 'B' &&
-                    Provider.of<MusicSearchItemLists>(context, listen: false)
-                            .sessionCount ==
-                        0) ...[
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return AddNoteScreen();
-                        }));
-                      },
-                      child: Center(
-                          child: SizedBox(
-                        width: defaultSize * 12,
-                        height: defaultSize * 12,
-                        child: Image.asset(
-                          "./assets/images/abtest.png",
-                          fit: BoxFit.fill,
-                        ),
-                      )),
-                    ),
-                  ),
-                ] else ...[
-                  EmptyNoteList(),
-                ]
+                EmptyNoteList()
+                // 손가락 있는 버튼
+                // Expanded(
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       Navigator.push(context,
+                //           MaterialPageRoute(builder: (context) {
+                //         return AddNoteScreen();
+                //       }));
+                //     },
+                //     child: Center(
+                //         child: SizedBox(
+                //       width: defaultSize * 12,
+                //       height: defaultSize * 12,
+                //       child: Image.asset(
+                //         "./assets/images/abtest.png",
+                //         fit: BoxFit.fill,
+                //       ),
+                //     )),
+                //   ),
+                // ),
               ] else if (_listSate == 1) ...[
                 Expanded(
                   child: Center(

@@ -1,6 +1,10 @@
+import 'package:amplitude_flutter/identify.dart';
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
+import 'package:conopot/config/firebase_remote_config.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/main_screen.dart';
+import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/tutorial_add_note_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +24,23 @@ class _TutorialScreenState extends State<TutorialScreen> {
   int selectedIndex = 0;
   double defaultSize = SizeConfig.defaultSize;
   final storage = new FlutterSecureStorage();
+  String abtest1114_modal = "";
+
+  @override
+  void initState() {
+    //remote config 변수 가져오기
+    abtest1114_modal =
+        Firebase_Remote_Config().remoteConfig.getString('abtest1114_modal');
+    //유저 프로퍼티 설정하기
+    if (abtest1114_modal != "" &&
+        Provider.of<MusicSearchItemLists>(context, listen: false)
+                .sessionCount ==
+            0) {
+      Identify identify = Identify()..set('11/14 튜토리얼', abtest1114_modal);
+      Analytics_config().userProps(identify);
+      super.initState();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +86,37 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     await storage.write(key: 'tutorial', value: '1');
                     if (Provider.of<NoteData>(context, listen: false)
                         .notes
-                        .isEmpty) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TutorialAddNoteScreen()));
-                      return;
-                    } else if (Provider.of<NoteData>(context, listen: false)
-                        .notes
                         .isNotEmpty) {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MainScreen()));
+                      return;
                     }
+                    if (Provider.of<NoteData>(context, listen: false)
+                            .notes
+                            .isEmpty &&
+                        abtest1114_modal == 'A') {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainScreen()));
+                      return;
+                    }
+                    if (Provider.of<NoteData>(context, listen: false)
+                            .notes
+                            .isEmpty &&
+                        abtest1114_modal == 'B') {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TutorialAddNoteScreen()));
+                      return;
+                    }
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TutorialAddNoteScreen()));
                   },
                   child: Container(
                     width: SizeConfig.screenWidth,
@@ -119,7 +157,8 @@ class _TutorialScreenState extends State<TutorialScreen> {
                             fontSize: defaultSize * 1.5),
                       ),
                     ),
-                  ))
+                  )),
+          SizedBox(height: defaultSize * 1.5)
         ],
       ),
     ));
