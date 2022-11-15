@@ -253,7 +253,7 @@ class _NoteScreenState extends State<NoteScreen> {
             ),
           ),
           actions: [
-            if (_listSate != 1)
+            if (_listSate != 1 && _rewardedAd != null)
               IntrinsicHeight(
                 child: Padding(
                   padding: (noteData.notes.isNotEmpty)
