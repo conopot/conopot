@@ -45,13 +45,15 @@ class _PlaylistSearchSongScreenState extends State<PlaylistSearchSongScreen> {
                     centerTitle: false,
                   ),
                 ),
-                body: Column(
-                  children: [
-                    SizedBox(height: defaultSize * 1.8),
-                    SearchSongList(
-                      musicList: musicList,
-                    ),
-                  ],
+                body: SafeArea(
+                  child: Column(
+                    children: [
+                      SizedBox(height: defaultSize * 1.8),
+                      SearchSongList(
+                        musicList: musicList,
+                      ),
+                    ],
+                  ),
                 )));
   }
 }

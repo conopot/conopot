@@ -327,6 +327,11 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                             color: kPrimaryLightWhiteColor,
                             fontSize: defaultSize * 1.5,
                             fontWeight: FontWeight.w500)),
+                    SizedBox(width: defaultSize * 0.5),
+                    Text(
+                        '${Provider.of<NoteData>(context, listen: false).lists.length}곡',
+                        style: TextStyle(
+                            color: kMainColor, fontSize: defaultSize * 1.3)),
                     Spacer(),
                     if (Provider.of<NoteData>(context, listen: true)
                             .lists
@@ -341,6 +346,7 @@ class _CreateFeedScreenState extends State<CreateFeedScreen> {
                           child: Text((_isListEditting) ? "완료" : "편집하기",
                               style: TextStyle(
                                   color: kMainColor,
+                                  fontSize: defaultSize * 1.3,
                                   fontWeight: FontWeight.w500)))
                   ],
                 ),
