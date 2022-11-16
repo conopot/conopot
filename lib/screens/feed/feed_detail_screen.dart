@@ -119,323 +119,329 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   Widget build(BuildContext context) {
     ToastContext().init(context);
     double defaultSize = SizeConfig.defaultSize;
-    return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          padding: EdgeInsets.all(defaultSize * 0.5),
-          decoration: BoxDecoration(
-              color: kPrimaryGreyColor,
-              borderRadius: BorderRadius.all(Radius.circular(8))),
-          child: IntrinsicWidth(
-            child: Row(
-              children: [
-                Text("${_emotionList[widget.post.postIconId]} "),
-                Expanded(
-                  child: Text(
-                    "${widget.post.postTitle}",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: defaultSize * 1.5),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context, _state);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Container(
+            padding: EdgeInsets.all(defaultSize * 0.5),
+            decoration: BoxDecoration(
+                color: kPrimaryGreyColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: IntrinsicWidth(
+              child: Row(
+                children: [
+                  Text("${_emotionList[widget.post.postIconId]} "),
+                  Expanded(
+                    child: Text(
+                      "${widget.post.postTitle}",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: defaultSize * 1.5),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
+          leading: BackButton(
+            color: kPrimaryLightWhiteColor,
+            onPressed: () {
+              Navigator.pop(context, _state); //뒤로가기
+            },
+          ),
+          actions: [
+            if (widget.post.postAuthorId !=
+                Provider.of<NoteData>(context, listen: false).userId)
+              IconButton(
+                  onPressed: () {
+                    showReportListOption(context);
+                  },
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: kPrimaryWhiteColor,
+                  ))
+          ],
         ),
-        leading: BackButton(
-          color: kPrimaryLightWhiteColor,
-          onPressed: () {
-            Navigator.pop(context, _state); //뒤로가기
-          },
-        ),
-        actions: [
-          if (widget.post.postAuthorId !=
-              Provider.of<NoteData>(context, listen: false).userId)
-            IconButton(
-                onPressed: () {
-                  showReportListOption(context);
+        floatingActionButton: (_isEditting == false)
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _checkCount = 0;
+                    _isEditting = true;
+                    Provider.of<NoteData>(context, listen: false)
+                        .initAddFeedSong(widget.post.postMusicList);
+                  });
                 },
-                icon: Icon(
-                  Icons.more_vert,
-                  color: kPrimaryWhiteColor,
-                ))
-        ],
-      ),
-      floatingActionButton: (_isEditting == false)
-          ? GestureDetector(
-              onTap: () {
-                setState(() {
-                  _checkCount = 0;
-                  _isEditting = true;
-                  Provider.of<NoteData>(context, listen: false)
-                      .initAddFeedSong(widget.post.postMusicList);
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 0.5,
-                    defaultSize, defaultSize * 0.5),
-                decoration: BoxDecoration(
-                    color: kPrimaryGreyColor,
-                    borderRadius: BorderRadius.all(Radius.circular(30))),
-                child: IntrinsicWidth(
-                  child: Row(
-                    children: [
-                      Icon(Icons.playlist_add, color: kMainColor),
-                      SizedBox(width: defaultSize),
-                      Text(
-                        "내 애창곡 리스트에 추가",
-                        style: TextStyle(color: kMainColor),
-                      )
-                    ],
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(defaultSize, defaultSize * 0.5,
+                      defaultSize, defaultSize * 0.5),
+                  decoration: BoxDecoration(
+                      color: kPrimaryGreyColor,
+                      borderRadius: BorderRadius.all(Radius.circular(30))),
+                  child: IntrinsicWidth(
+                    child: Row(
+                      children: [
+                        Icon(Icons.playlist_add, color: kMainColor),
+                        SizedBox(width: defaultSize),
+                        Text(
+                          "내 애창곡 리스트에 추가",
+                          style: TextStyle(color: kMainColor),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          : IntrinsicHeight(
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          defaultSize * 2,
-                          defaultSize * 0.5,
-                          defaultSize * 2,
-                          defaultSize * 0.5),
-                      decoration: BoxDecoration(
-                          color: kPrimaryGreyColor,
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: IntrinsicHeight(
-                        child: IntrinsicWidth(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _checkCount = postList.length;
-                                  });
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .checkAllFeedSongs(postList);
-                                },
-                                child: Column(children: [
-                                  Icon(Icons.list, color: kMainColor),
-                                  Text(
-                                    "전체 선택",
-                                    style: TextStyle(color: kMainColor),
-                                  )
-                                ]),
-                              ),
-                              SizedBox(width: defaultSize),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _checkCount = 0;
-                                  });
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .uncheckAllFeedSongs();
-                                },
-                                child: Column(children: [
-                                  Icon(Icons.playlist_remove,
-                                      color: kMainColor),
-                                  Text(
-                                    "전체 해제",
-                                    style: TextStyle(color: kMainColor),
-                                  )
-                                ]),
-                              ),
-                            ],
+              )
+            : IntrinsicHeight(
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(
+                            defaultSize * 2,
+                            defaultSize * 0.5,
+                            defaultSize * 2,
+                            defaultSize * 0.5),
+                        decoration: BoxDecoration(
+                            color: kPrimaryGreyColor,
+                            borderRadius: BorderRadius.all(Radius.circular(30))),
+                        child: IntrinsicHeight(
+                          child: IntrinsicWidth(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _checkCount = postList.length;
+                                    });
+                                    Provider.of<NoteData>(context, listen: false)
+                                        .checkAllFeedSongs(postList);
+                                  },
+                                  child: Column(children: [
+                                    Icon(Icons.list, color: kMainColor),
+                                    Text(
+                                      "전체 선택",
+                                      style: TextStyle(color: kMainColor),
+                                    )
+                                  ]),
+                                ),
+                                SizedBox(width: defaultSize),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _checkCount = 0;
+                                    });
+                                    Provider.of<NoteData>(context, listen: false)
+                                        .uncheckAllFeedSongs();
+                                  },
+                                  child: Column(children: [
+                                    Icon(Icons.playlist_remove,
+                                        color: kMainColor),
+                                    Text(
+                                      "전체 해제",
+                                      style: TextStyle(color: kMainColor),
+                                    )
+                                  ]),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment(0, -1.7),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          defaultSize * 0.8,
-                          defaultSize * 0.4,
-                          defaultSize * 0.8,
-                          defaultSize * 0.4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(90)),
-                          color: kMainColor),
-                      child: Text("${_checkCount}",
-                          style: TextStyle(color: kPrimaryWhiteColor),
-                          key: ValueKey(_checkCount)),
+                    Align(
+                      alignment: Alignment(0, -1.7),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(
+                            defaultSize * 0.8,
+                            defaultSize * 0.4,
+                            defaultSize * 0.8,
+                            defaultSize * 0.4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(90)),
+                            color: kMainColor),
+                        child: Text("${_checkCount}",
+                            style: TextStyle(color: kPrimaryWhiteColor),
+                            key: ValueKey(_checkCount)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        body: SafeArea(
+          child: Column(children: [
+            if (videoId == null) ...[
+              Text(
+                "유튜브 영상을 지원하지 않는 노래입니다",
+                style: TextStyle(color: kMainColor),
+              ),
+            ] else ...[
+              YoutubeVideoPlayer(videoId: videoId!, key: ValueKey(videoId)),
+            ],
+            SizedBox(height: defaultSize * 2),
+            Expanded(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: defaultSize),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: SizedBox(
+                            width: defaultSize * 4,
+                            height: defaultSize * 4,
+                            child: (widget.post.userImage == null)
+                                ? Image.asset("assets/images/profile.png")
+                                : Image.network(widget.post.userImage!,
+                                    fit: BoxFit.cover),
+                          ),
+                        ),
+                        SizedBox(width: defaultSize),
+                        Text("${widget.post.userName}",
+                            style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.5),
+                            overflow: TextOverflow.ellipsis),
+                        Spacer(),
+                        (_isEditting == false)
+                            ? GestureDetector(
+                                onTap: () async {
+                                  Analytics_config().feedViewClickLikeEvent();
+                                  if (widget.post.postAuthorId ==
+                                      Provider.of<NoteData>(context,
+                                              listen: false)
+                                          .userId) {
+                                    EasyLoading.showToast("좋아요할 수 없습니다.");
+                                  } else if (Provider.of<NoteData>(context,
+                                              listen: false)
+                                          .isLogined ==
+                                      false) {
+                                    EasyLoading.showToast("로그인 이후 이용가능합니다.");
+                                  } else {
+                                    String URL = "";
+                                    String body = "";
+                                    setState(() {
+                                      if (_like == false) {
+                                        _like = true;
+                                        _state = 1;
+                                        String? serverURL =
+                                            dotenv.env['USER_SERVER_URL'];
+                                        URL = '${serverURL}/playlist/heart';
+                                        body = jsonEncode({
+                                          "postId": widget.post.postId,
+                                          "userId": Provider.of<NoteData>(context,
+                                                  listen: false)
+                                              .userId,
+                                          "postAuthorId":
+                                              widget.post.postAuthorId,
+                                          "postTitle": widget.post.postTitle,
+                                          "username": Provider.of<NoteData>(
+                                                  context,
+                                                  listen: false)
+                                              .userNickname
+                                        });
+                                      } else {
+                                        _like = false;
+                                        _state = -1;
+                                        String? serverURL =
+                                            dotenv.env['USER_SERVER_URL'];
+                                        URL = '${serverURL}/playlist/hate';
+                                        body = jsonEncode({
+                                          "postId": widget.post.postId,
+                                          "userId": Provider.of<NoteData>(context,
+                                                  listen: false)
+                                              .userId,
+                                        });
+                                      }
+                                    });
+                                    try {
+                                      final response =
+                                          await http.post(Uri.parse(URL),
+                                              headers: <String, String>{
+                                                'Content-Type':
+                                                    'application/json; charset=UTF-8',
+                                              },
+                                              body: body);
+                                    } on SocketException {
+                                      // 에러처리 (인터넷 연결 등등)
+                                      EasyLoading.showToast("인터넷 연결을 확인해주세요.");
+                                    }
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    (_like == true)
+                                        ? Icon(Icons.favorite, color: kMainColor)
+                                        : Icon(Icons.favorite_border,
+                                            color: kMainColor),
+                                    SizedBox(width: defaultSize * 0.3),
+                                    Text("좋아요",
+                                        style: TextStyle(color: kMainColor))
+                                  ],
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  if (_checkCount > 0) {
+                                    Provider.of<NoteData>(context, listen: false)
+                                        .addMultipleFeedSongs();
+                                  }
+                                  setState(() {
+                                    _isEditting = false;
+                                  });
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(right: defaultSize * 0.5),
+                                  child: Text("추가",
+                                      style: TextStyle(
+                                          color: kMainColor,
+                                          fontSize: defaultSize * 1.3,
+                                          fontWeight: FontWeight.w500)),
+                                )),
+                      ],
                     ),
-                  )
+                  ),
+                  SizedBox(height: defaultSize),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: kPrimaryLightBlackColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    padding: EdgeInsets.all(defaultSize),
+                    margin: EdgeInsets.symmetric(horizontal: defaultSize),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${widget.post.postTitle}",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 1.5)),
+                        Text("${widget.post.postSubscription}",
+                            style: TextStyle(
+                                color: kPrimaryLightWhiteColor,
+                                fontSize: defaultSize * 1.3)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: defaultSize),
+                  (_isEditting == false)
+                      ? FeedDetailSongList(
+                          postList: postList, indexChange: _indexChange)
+                      : EditFeedDetailSongList(
+                          postList: postList,
+                          checkedCountChange: _checkCountChange)
                 ],
               ),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: SafeArea(
-        child: Column(children: [
-          if (videoId == null) ...[
-            Text(
-              "유튜브 영상을 지원하지 않는 노래입니다",
-              style: TextStyle(color: kMainColor),
-            ),
-          ] else ...[
-            YoutubeVideoPlayer(videoId: videoId!, key: ValueKey(videoId)),
-          ],
-          SizedBox(height: defaultSize * 2),
-          Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: defaultSize),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: SizedBox(
-                          width: defaultSize * 4,
-                          height: defaultSize * 4,
-                          child: (widget.post.userImage == null)
-                              ? Image.asset("assets/images/profile.png")
-                              : Image.network(widget.post.userImage!,
-                                  fit: BoxFit.cover),
-                        ),
-                      ),
-                      SizedBox(width: defaultSize),
-                      Text("${widget.post.userName}",
-                          style: TextStyle(
-                              color: kPrimaryLightWhiteColor,
-                              fontSize: defaultSize * 1.5),
-                          overflow: TextOverflow.ellipsis),
-                      Spacer(),
-                      (_isEditting == false)
-                          ? GestureDetector(
-                              onTap: () async {
-                                Analytics_config().feedViewClickLikeEvent();
-                                if (widget.post.postAuthorId ==
-                                    Provider.of<NoteData>(context,
-                                            listen: false)
-                                        .userId) {
-                                  EasyLoading.showToast("좋아요할 수 없습니다.");
-                                } else if (Provider.of<NoteData>(context,
-                                            listen: false)
-                                        .isLogined ==
-                                    false) {
-                                  EasyLoading.showToast("로그인 이후 이용가능합니다.");
-                                } else {
-                                  String URL = "";
-                                  String body = "";
-                                  setState(() {
-                                    if (_like == false) {
-                                      _like = true;
-                                      _state = 1;
-                                      String? serverURL =
-                                          dotenv.env['USER_SERVER_URL'];
-                                      URL = '${serverURL}/playlist/heart';
-                                      body = jsonEncode({
-                                        "postId": widget.post.postId,
-                                        "userId": Provider.of<NoteData>(context,
-                                                listen: false)
-                                            .userId,
-                                        "postAuthorId":
-                                            widget.post.postAuthorId,
-                                        "postTitle": widget.post.postTitle,
-                                        "username": Provider.of<NoteData>(
-                                                context,
-                                                listen: false)
-                                            .userNickname
-                                      });
-                                    } else {
-                                      _like = false;
-                                      _state = -1;
-                                      String? serverURL =
-                                          dotenv.env['USER_SERVER_URL'];
-                                      URL = '${serverURL}/playlist/hate';
-                                      body = jsonEncode({
-                                        "postId": widget.post.postId,
-                                        "userId": Provider.of<NoteData>(context,
-                                                listen: false)
-                                            .userId,
-                                      });
-                                    }
-                                  });
-                                  try {
-                                    final response =
-                                        await http.post(Uri.parse(URL),
-                                            headers: <String, String>{
-                                              'Content-Type':
-                                                  'application/json; charset=UTF-8',
-                                            },
-                                            body: body);
-                                  } on SocketException {
-                                    // 에러처리 (인터넷 연결 등등)
-                                    EasyLoading.showToast("인터넷 연결을 확인해주세요.");
-                                  }
-                                }
-                              },
-                              child: Row(
-                                children: [
-                                  (_like == true)
-                                      ? Icon(Icons.favorite, color: kMainColor)
-                                      : Icon(Icons.favorite_border,
-                                          color: kMainColor),
-                                  SizedBox(width: defaultSize * 0.3),
-                                  Text("좋아요",
-                                      style: TextStyle(color: kMainColor))
-                                ],
-                              ),
-                            )
-                          : GestureDetector(
-                              onTap: () {
-                                if (_checkCount > 0) {
-                                  Provider.of<NoteData>(context, listen: false)
-                                      .addMultipleFeedSongs();
-                                }
-                                setState(() {
-                                  _isEditting = false;
-                                });
-                              },
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.only(right: defaultSize * 0.5),
-                                child: Text("추가",
-                                    style: TextStyle(
-                                        color: kMainColor,
-                                        fontSize: defaultSize * 1.3,
-                                        fontWeight: FontWeight.w500)),
-                              )),
-                    ],
-                  ),
-                ),
-                SizedBox(height: defaultSize),
-                Container(
-                  decoration: BoxDecoration(
-                      color: kPrimaryLightBlackColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  padding: EdgeInsets.all(defaultSize),
-                  margin: EdgeInsets.symmetric(horizontal: defaultSize),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("${widget.post.postTitle}",
-                          style: TextStyle(
-                              color: kPrimaryWhiteColor,
-                              fontSize: defaultSize * 1.5)),
-                      Text("${widget.post.postSubscription}",
-                          style: TextStyle(
-                              color: kPrimaryLightWhiteColor,
-                              fontSize: defaultSize * 1.3)),
-                    ],
-                  ),
-                ),
-                SizedBox(height: defaultSize),
-                (_isEditting == false)
-                    ? FeedDetailSongList(
-                        postList: postList, indexChange: _indexChange)
-                    : EditFeedDetailSongList(
-                        postList: postList,
-                        checkedCountChange: _checkCountChange)
-              ],
-            ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

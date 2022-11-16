@@ -88,6 +88,7 @@ class _PostListViewState extends State<PostListView>
                     builder: (_) => FeedDetailScreen(
                           post: _posts[_posts.indexOf(e)],
                         )));
+            print(result);
             if (result == 1) {
               _posts[_posts.indexOf(e)].postLikeCount += 1;
               setState(() {});
