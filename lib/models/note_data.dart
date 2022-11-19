@@ -59,6 +59,8 @@ class NoteData extends ChangeNotifier {
   int userId = 0;
   int profileStatus = 0;
 
+  bool userAdRemove = false;
+
   // AdMob
   int noteAddCount = 0; // 광고를 위해, 한 세션 당 노트 추가 횟수를 기록
   int detailDisposeCount = 0; //광고를 위해, 노트 상세정보에서 나간 횟수를 기록
@@ -129,7 +131,7 @@ class NoteData extends ChangeNotifier {
   }
 
   void _showInterstitialAd(String command) async {
-    if (_interstitialAd == null || rewardFlag) {
+    if (_interstitialAd == null || rewardFlag || userAdRemove) {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
@@ -180,7 +182,7 @@ class NoteData extends ChangeNotifier {
   initNotes() async {
     initSubscirbeState();
     initLoginState();
-    initAccountInfo();
+    await initAccountInfo();
 
     await isUserRewarded();
     // Read all values
@@ -233,7 +235,7 @@ class NoteData extends ChangeNotifier {
   }
 
   aiInterstitialAd() {
-    if (_interstitialAd != null && !rewardFlag) {
+    if (_interstitialAd != null && !rewardFlag && !userAdRemove) {
       _showInterstitialAd("AI");
     }
   }
@@ -305,7 +307,8 @@ class NoteData extends ChangeNotifier {
     if (noteAddCount % 5 == 0 &&
         noteAddInterstitialSetting &&
         _interstitialAd != null &&
-        !rewardFlag) {
+        !rewardFlag &&
+        !userAdRemove) {
       _showInterstitialAd("noteAdd");
       isOverlapping = true;
     }
@@ -376,6 +379,11 @@ class NoteData extends ChangeNotifier {
     Analytics_config().userProps(identify);
 
     notifyListeners();
+  }
+
+  //사용자 광고 제거 효과 여부
+  bool isUserAdRemove() {
+    return (rewardFlag || userAdRemove) ? true : false;
   }
 
   // 리스트 노래 추가 다이어로그 팝업 함수
@@ -1140,7 +1148,8 @@ class NoteData extends ChangeNotifier {
               borderRadius: BorderRadius.circular(8),
             ))),
         onPressed: () {
-          if (!rewardFlag) _showInterstitialAd("AI");
+          if (_interstitialAd != null && !rewardFlag && !userAdRemove)
+            _showInterstitialAd("AI");
           Navigator.of(context).pop();
           saveNotes();
         },
@@ -1399,6 +1408,10 @@ class NoteData extends ChangeNotifier {
   }
 
   initAccountInfo() async {
+    String? adRemove = await storage.read(key: 'adRemove');
+    if (adRemove != null) {
+      userAdRemove = true;
+    }
     String? jwtToken = await storage.read(key: 'jwt');
     if (jwtToken != null) {
       Map<String, dynamic> payload = Jwt.parseJwt(jwtToken);

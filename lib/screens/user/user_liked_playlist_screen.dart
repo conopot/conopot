@@ -53,7 +53,8 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
         };
 
   Widget adaptiveAdShow() {
-    return (Provider.of<NoteData>(context, listen: false).rewardFlag) //리워드 효과 시
+    return (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+            true) //리워드 효과 시
         ? SizedBox.shrink()
         //광고를 불러온 경우
         : (_anchoredAdaptiveAd != null && _isLoaded)
@@ -81,7 +82,8 @@ class _UserLikedPlaylistScreenState extends State<UserLikedPlaylistScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!Provider.of<NoteData>(context, listen: false).rewardFlag) _loadAd();
+    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() == false)
+      _loadAd();
   }
 
   @override

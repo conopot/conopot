@@ -69,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //앱 오픈 광고
       //리워드가 존재하는지 체크
       //존재한다면 광고 없이 넘어가기
-      if (Provider.of<NoteData>(context, listen: false).rewardFlag) {
+      if (Provider.of<NoteData>(context, listen: false).isUserAdRemove()) {
         /// 튜토리얼 전환
         String? tutorialFlag = await storage.read(key: "tutorial");
         if (tutorialFlag != "1") {

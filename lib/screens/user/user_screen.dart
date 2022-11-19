@@ -8,6 +8,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/etc_screen.dart';
+import 'package:conopot/screens/user/invite_screen.dart';
 import 'package:conopot/screens/user/login_screen.dart';
 import 'package:conopot/screens/user/profile_modification_screen.dart';
 import 'package:conopot/screens/user/user_liked_playlist_screen.dart';
@@ -308,6 +309,43 @@ class _UserScreenState extends State<UserScreen> {
                                     SizedBox(height: defaultSize * 1.5),
                                     Row(children: [
                                       Text("기타",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.chevron_right_outlined,
+                                        color: kPrimaryWhiteColor,
+                                      )
+                                    ]),
+                                    SizedBox(height: defaultSize * 1.5),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    (loginState == true)
+                        ? Container(
+                            color: kPrimaryLightBlackColor,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => InviteScreen()));
+                              },
+                              splashColor: Colors.transparent,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 1.5),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: defaultSize * 1.5),
+                                    Row(children: [
+                                      Text("친구초대하기",
                                           style: TextStyle(
                                             color: kPrimaryWhiteColor,
                                             fontSize: defaultSize * 1.5,

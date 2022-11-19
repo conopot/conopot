@@ -174,7 +174,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
-     videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+    videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
         .youtubeURL[widget.note.tj_songNumber];
     if (videoId == null) {
       getLyrics(widget.note.tj_songNumber);
@@ -194,7 +194,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
   void dispose() {
     provider.detailDisposeCount += 1;
     //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 && reward != true) {
+    if (provider.detailDisposeCount % 3 == 0 &&
+        Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+            false) {
       _showInterstitialAd();
     }
     super.dispose();

@@ -4,8 +4,10 @@ import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/screens/user/invite_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,7 @@ class CarouselSliderBanner extends StatelessWidget {
   final double defaultSize = SizeConfig.defaultSize;
 
   final imageIcons = [
+    "assets/icons/friends.svg",
     "assets/icons/feed.svg",
     "assets/icons/banner_cat.svg",
     "assets/icons/banner_mike.svg",
@@ -20,20 +23,23 @@ class CarouselSliderBanner extends StatelessWidget {
   ];
 
   final sentence1 = [
+    "친구 초대하고 미션 수행 시",
     "다른 사람들은 노래방에서 뭘 부를까? 🤔",
-        "노래방에서 부를 노래를 찾고 계신가요? 😮",
+    "노래방에서 부를 노래를 찾고 계신가요? 😮",
     "노래방 전투력 측정 😎",
     "최고음 표시가 가능한 것을 아시나요? 🧐",
   ];
 
   final sentence2 = [
+    "평생 광고 제거해드려요!",
     "싱스타그램에서 확인해보세요!!",
-        "추천탭에서 노래를 추천받아 보세요!",
+    "추천탭에서 노래를 추천받아 보세요!",
     "당신의 음역대를 측정해보세요",
     "우측 상단 [설정] - [애창곡 노트 설정]",
   ];
 
   final screen = [
+    InviteScreen(),
     Container(),
     Container(),
     PitchMainScreen(),
@@ -47,16 +53,31 @@ class CarouselSliderBanner extends StatelessWidget {
       onTap: () {
         // !event 배너 클릭 이벤트
         if (itemIndex == 0) {
+          //login 여부 확인
+          var loginState =
+              Provider.of<NoteData>(context, listen: false).isLogined;
+          //login 하지 않은 사용자라면 -> 로그인 유도
+          if (loginState == false) {
+            EasyLoading.showToast("로그인 후 사용 가능한 기능입니다 😄");
+          }
+          //login 사용자 -> 친구 초대 스크린 이동
+          else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => screen),
+            );
+          }
+        } else if (itemIndex == 1) {
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(3);
-        } else if (itemIndex == 1) {
+        } else if (itemIndex == 2) {
           Analytics_config().noteViewBannerRecommandEvent();
           (Provider.of<NoteData>(context, listen: false).globalKey.currentWidget
                   as BottomNavigationBar)
               .onTap!(2);
         } else {
-          if (itemIndex == 1) {
+          if (itemIndex == 2) {
             Analytics_config().noteViewBannerMeasureEvent();
           } else {
             Analytics_config().noteViewBannerNoteSettingEvent();
@@ -136,7 +157,7 @@ class CarouselSliderBanner extends StatelessWidget {
         autoPlayInterval: Duration(seconds: 5),
         autoPlayAnimationDuration: Duration(milliseconds: 800),
       ),
-      itemCount: 4,
+      itemCount: 5,
       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
           _bannerItem(context, itemIndex, imageIcons[itemIndex],
               sentence1[itemIndex], sentence2[itemIndex], screen[itemIndex]),
