@@ -123,7 +123,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void previousVideo() {
     if (playingIndex - 1 >= 0) playingIndex -= 1;
-    if (videoList.isNotEmpty) {
+    if (videoList.isNotEmpty && videoList.length > playingIndex) {
       controller.loadVideoById(videoId: videoList[playingIndex]);
     }
     isPlaying = true;
@@ -133,7 +133,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
 
   void nextVideo() {
     if (videoList.length > playingIndex + 1) playingIndex += 1;
-    if (videoList.isNotEmpty) {
+    if (videoList.isNotEmpty && videoList.length > playingIndex) {
       controller.loadVideoById(videoId: videoList[playingIndex]);
     }
     isPlaying = true;
