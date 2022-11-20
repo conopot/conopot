@@ -67,9 +67,14 @@ class _SplashScreenState extends State<SplashScreen> {
       await RecommendationItemList().initRecommendationList();
 
       //앱 오픈 광고
-      //리워드가 존재하는지 체크
+      //리워드, 앱 오픈 플래그가 존재하는지 체크
+      String? appOpenFlag = await storage.read(key: 'appOpenFlag');
+      //예외적으로, 세션이 10번 이상이면 플래그 등록해두기
+      if (sessionCnt >= 10) appOpenFlag = 'true';
+
       //존재한다면 광고 없이 넘어가기
-      if (Provider.of<NoteData>(context, listen: false).isUserAdRemove()) {
+      if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ||
+          appOpenFlag == null) {
         /// 튜토리얼 전환
         String? tutorialFlag = await storage.read(key: "tutorial");
         if (tutorialFlag != "1") {

@@ -285,7 +285,7 @@ class _UserScreenState extends State<UserScreen> {
                                 ]),
                               ),
                             ),
-                            SizedBox(height: defaultSize * 1.5),
+                            SizedBox(height: defaultSize * 1.52),
                           ],
                         ),
                       ),
@@ -320,7 +320,7 @@ class _UserScreenState extends State<UserScreen> {
                                         color: kPrimaryWhiteColor,
                                       )
                                     ]),
-                                    SizedBox(height: defaultSize * 1.5),
+                                    SizedBox(height: defaultSize * 1.52),
                                   ],
                                 ),
                               ),
