@@ -3,6 +3,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/invite_screen.dart';
 import 'package:conopot/screens/user/user_note_setting_screen.dart';
@@ -63,6 +64,10 @@ class CarouselSliderBanner extends StatelessWidget {
           }
           //login 사용자 -> 친구 초대 스크린 이동
           else {
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .closePlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .refresh();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => screen),
@@ -78,7 +83,11 @@ class CarouselSliderBanner extends StatelessWidget {
                   as BottomNavigationBar)
               .onTap!(2);
         } else {
-          if (itemIndex == 2) {
+          if (itemIndex == 3) {
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .closePlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .refresh();
             Analytics_config().noteViewBannerMeasureEvent();
           } else {
             Analytics_config().noteViewBannerNoteSettingEvent();

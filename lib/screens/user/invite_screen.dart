@@ -4,6 +4,7 @@ import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,278 +104,287 @@ class _InviteScreenState extends State<InviteScreen> {
   @override
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("친구초대", style: TextStyle(color: kPrimaryWhiteColor)),
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: defaultSize),
-          padding: EdgeInsets.all(defaultSize * 2),
-          decoration: BoxDecoration(
-              color: kPrimaryLightBlackColor,
-              borderRadius: BorderRadius.all(Radius.circular(8))),
-          child: Column(
-            children: [
-              Text("친구초대하고",
+    return WillPopScope(
+      onWillPop: () async {
+        Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .openPlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .refresh();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("친구초대", style: TextStyle(color: kPrimaryWhiteColor)),
+          centerTitle: false,
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: defaultSize),
+            padding: EdgeInsets.all(defaultSize * 2),
+            decoration: BoxDecoration(
+                color: kPrimaryLightBlackColor,
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: Column(
+              children: [
+                Text("친구초대하고",
+                    style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.9,
+                        fontWeight: FontWeight.w600)),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "평생 광고제거 ",
+                          style: TextStyle(
+                              color: kMainColor,
+                              fontSize: defaultSize * 1.9,
+                              fontWeight: FontWeight.w600)),
+                      TextSpan(
+                          text: "받아보세요!",
+                          style: TextStyle(
+                              color: kPrimaryWhiteColor,
+                              fontSize: defaultSize * 1.9,
+                              fontWeight: FontWeight.w600))
+                    ],
+                  ),
+                ),
+                SizedBox(height: defaultSize * 2),
+                Image.asset(
+                  "assets/images/test.png",
+                  width: defaultSize * 10,
+                  height: defaultSize * 10,
+                ),
+                SizedBox(height: defaultSize * 2),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "초대받은 친구가 ",
+                          style: TextStyle(
+                              color: kPrimaryLightWhiteColor,
+                              fontSize: defaultSize * 1.2,
+                              fontWeight: FontWeight.w600)),
+                      TextSpan(
+                          text: "로그인하고 노트 3개 이상 추가 ",
+                          style: TextStyle(
+                              color: kMainColor,
+                              fontSize: defaultSize * 1.2,
+                              fontWeight: FontWeight.w600)),
+                      TextSpan(
+                          text: "후",
+                          style: TextStyle(
+                              color: kPrimaryLightWhiteColor,
+                              fontSize: defaultSize * 1.2,
+                              fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ),
+                Text(
+                  "내가 준 초대코드를 입력하면 평생 광고제거 받을 수 있어요",
                   style: TextStyle(
-                      color: kPrimaryWhiteColor,
-                      fontSize: defaultSize * 1.9,
-                      fontWeight: FontWeight.w600)),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: "평생 광고제거 ",
-                        style: TextStyle(
-                            color: kMainColor,
-                            fontSize: defaultSize * 1.9,
-                            fontWeight: FontWeight.w600)),
-                    TextSpan(
-                        text: "받아보세요!",
+                      color: kPrimaryLightWhiteColor,
+                      fontSize: defaultSize * 1.2,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: defaultSize * 4),
+                Container(
+                  padding: EdgeInsets.all(defaultSize),
+                  decoration: BoxDecoration(
+                    color: kPrimaryGreyColor,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "내 초대 코드  |  ",
                         style: TextStyle(
                             color: kPrimaryWhiteColor,
-                            fontSize: defaultSize * 1.9,
-                            fontWeight: FontWeight.w600))
-                  ],
-                ),
-              ),
-              SizedBox(height: defaultSize * 2),
-              Image.asset(
-                "assets/images/test.png",
-                width: defaultSize * 10,
-                height: defaultSize * 10,
-              ),
-              SizedBox(height: defaultSize * 2),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                        text: "초대받은 친구가 ",
-                        style: TextStyle(
-                            color: kPrimaryLightWhiteColor,
-                            fontSize: defaultSize * 1.2,
-                            fontWeight: FontWeight.w600)),
-                    TextSpan(
-                        text: "로그인하고 노트 3개 이상 추가 ",
-                        style: TextStyle(
-                            color: kMainColor,
-                            fontSize: defaultSize * 1.2,
-                            fontWeight: FontWeight.w600)),
-                    TextSpan(
-                        text: "후",
-                        style: TextStyle(
-                            color: kPrimaryLightWhiteColor,
-                            fontSize: defaultSize * 1.2,
-                            fontWeight: FontWeight.w600)),
-                  ],
-                ),
-              ),
-              Text(
-                "내가 준 초대코드를 입력하면 평생 광고제거 받을 수 있어요",
-                style: TextStyle(
-                    color: kPrimaryLightWhiteColor,
-                    fontSize: defaultSize * 1.2,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 4),
-              Container(
-                padding: EdgeInsets.all(defaultSize),
-                decoration: BoxDecoration(
-                  color: kPrimaryGreyColor,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "내 초대 코드  |  ",
-                      style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontSize: defaultSize * 1.7,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "  " + userInviteCode + "    ",
-                      style: TextStyle(
-                          color: kPrimaryWhiteColor,
-                          fontSize: defaultSize * 1.7,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    GestureDetector(
-                      child: Icon(
-                        Icons.copy,
-                        color: kPrimaryWhiteColor,
-                        size: defaultSize * 2,
+                            fontSize: defaultSize * 1.7,
+                            fontWeight: FontWeight.w600),
                       ),
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: userInviteCode));
-                        EasyLoading.showToast("초대 코드가 복사되었습니다");
-                      },
+                      Text(
+                        "  " + userInviteCode + "    ",
+                        style: TextStyle(
+                            color: kPrimaryWhiteColor,
+                            fontSize: defaultSize * 1.7,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      GestureDetector(
+                        child: Icon(
+                          Icons.copy,
+                          color: kPrimaryWhiteColor,
+                          size: defaultSize * 2,
+                        ),
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: userInviteCode));
+                          EasyLoading.showToast("초대 코드가 복사되었습니다");
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: defaultSize * 4),
+                Text(
+                  "공유하기",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 1.7,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: defaultSize * 2),
+                GestureDetector(
+                  onTap: () {
+                    Analytics_config().inviteShare();
+                    //카카오톡 공유하기
+                    shareKakaoTalk();
+                  },
+                  child: Image.asset(
+                    "assets/images/kakao-talk.png",
+                    width: defaultSize * 5,
+                    height: defaultSize * 5,
+                  ),
+                ),
+                SizedBox(height: defaultSize * 5),
+                Text(
+                  "초대 코드 입력하기",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 1.7,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: defaultSize * 1),
+                TextField(
+                  controller: _controller,
+                  cursorColor: kPrimaryWhiteColor,
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
+                  decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: kPrimaryWhiteColor),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: kPrimaryWhiteColor)),
+                      border: UnderlineInputBorder(),
+                      hintText: '초대 코드를 입력해 주세요',
+                      hintStyle: TextStyle(color: kPrimaryLightGreyColor),
+                      counterStyle: TextStyle(color: kPrimaryLightWhiteColor)),
+                ),
+                SizedBox(height: defaultSize * 2),
+                GestureDetector(
+                  onTap: () {
+                    // 이미 인증을 한 사용자라면
+                    if (userInviteStatus == true) {
+                      EasyLoading.showToast("이미 인증을 하였습니다.");
+                    }
+                    // 노트를 3개 이상 가지고 있지 않은 사용자라면
+                    else if (Provider.of<NoteData>(context, listen: false)
+                            .notes
+                            .length <
+                        3) {
+                      EasyLoading.showToast("노트를 3개 이상 등록해주세요");
+                    } else {
+                      Analytics_config().inviteAuth();
+                      //인증 로직
+                      inviteValidation(_controller.text);
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,
+                        defaultSize * 1.5, defaultSize),
+                    decoration: BoxDecoration(
+                        color: (userInviteStatus == true)
+                            ? kPrimaryGreyColor
+                            : kMainColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Text(
+                      "인증하기",
+                      style: TextStyle(
+                          color: kPrimaryWhiteColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                SizedBox(height: defaultSize * 5),
+                Text(
+                  "내 친구 초대 현황",
+                  style: TextStyle(
+                      color: kPrimaryWhiteColor,
+                      fontSize: defaultSize * 1.5,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: defaultSize * 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
+                      "assets/images/singing_cat.png",
+                      width: defaultSize * 5,
+                      height: defaultSize * 5,
+                      opacity: (userInvitePersonCount >= 1)
+                          ? AlwaysStoppedAnimation(1)
+                          : AlwaysStoppedAnimation(.3),
+                    ),
+                    Image.asset(
+                      "assets/images/singing_cat.png",
+                      width: defaultSize * 5,
+                      height: defaultSize * 5,
+                      opacity: (userInvitePersonCount >= 2)
+                          ? AlwaysStoppedAnimation(1)
+                          : AlwaysStoppedAnimation(.3),
+                    ),
+                    Image.asset(
+                      "assets/images/singing_cat.png",
+                      width: defaultSize * 5,
+                      height: defaultSize * 5,
+                      opacity: (userInvitePersonCount >= 3)
+                          ? AlwaysStoppedAnimation(1)
+                          : AlwaysStoppedAnimation(.3),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: defaultSize * 4),
-              Text(
-                "공유하기",
-                style: TextStyle(
-                    color: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.7,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 2),
-              GestureDetector(
-                onTap: () {
-                  Analytics_config().inviteShare();
-                  //카카오톡 공유하기
-                  shareKakaoTalk();
-                },
-                child: Image.asset(
-                  "assets/images/kakao-talk.png",
-                  width: defaultSize * 5,
-                  height: defaultSize * 5,
-                ),
-              ),
-              SizedBox(height: defaultSize * 5),
-              Text(
-                "초대 코드 입력하기",
-                style: TextStyle(
-                    color: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.7,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 1),
-              TextField(
-                controller: _controller,
-                cursorColor: kPrimaryWhiteColor,
-                style: TextStyle(
-                    color: kPrimaryWhiteColor, fontSize: defaultSize * 1.4),
-                decoration: InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: kPrimaryWhiteColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: kPrimaryWhiteColor)),
-                    border: UnderlineInputBorder(),
-                    hintText: '초대 코드를 입력해 주세요',
-                    hintStyle: TextStyle(color: kPrimaryLightGreyColor),
-                    counterStyle: TextStyle(color: kPrimaryLightWhiteColor)),
-              ),
-              SizedBox(height: defaultSize * 2),
-              GestureDetector(
-                onTap: () {
-                  // 이미 인증을 한 사용자라면
-                  if (userInviteStatus == true) {
-                    EasyLoading.showToast("이미 인증을 하였습니다.");
-                  }
-                  // 노트를 3개 이상 가지고 있지 않은 사용자라면
-                  else if (Provider.of<NoteData>(context, listen: false)
-                          .notes
-                          .length <
-                      3) {
-                    EasyLoading.showToast("노트를 3개 이상 등록해주세요");
-                  } else {
-                    Analytics_config().inviteAuth();
+                SizedBox(height: defaultSize * 5),
+                GestureDetector(
+                  onTap: () {
+                    // 이미 광고 제거 효과인 경우
+                    if (Provider.of<NoteData>(context, listen: false)
+                            .userAdRemove ==
+                        true) {
+                      EasyLoading.showToast("이미 광고 제거 효과를 받았습니다 😆");
+                    }
                     //인증 로직
-                    inviteValidation(_controller.text);
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,
-                      defaultSize * 1.5, defaultSize),
-                  decoration: BoxDecoration(
-                      color: (userInviteStatus == true)
-                          ? kPrimaryGreyColor
-                          : kMainColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Text(
-                    "인증하기",
-                    style: TextStyle(
-                        color: kPrimaryWhiteColor,
-                        fontSize: defaultSize * 1.5,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-              SizedBox(height: defaultSize * 5),
-              Text(
-                "내 친구 초대 현황",
-                style: TextStyle(
-                    color: kPrimaryWhiteColor,
-                    fontSize: defaultSize * 1.5,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: defaultSize * 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset(
-                    "assets/images/singing_cat.png",
-                    width: defaultSize * 5,
-                    height: defaultSize * 5,
-                    opacity: (userInvitePersonCount >= 1)
-                        ? AlwaysStoppedAnimation(1)
-                        : AlwaysStoppedAnimation(.3),
-                  ),
-                  Image.asset(
-                    "assets/images/singing_cat.png",
-                    width: defaultSize * 5,
-                    height: defaultSize * 5,
-                    opacity: (userInvitePersonCount >= 2)
-                        ? AlwaysStoppedAnimation(1)
-                        : AlwaysStoppedAnimation(.3),
-                  ),
-                  Image.asset(
-                    "assets/images/singing_cat.png",
-                    width: defaultSize * 5,
-                    height: defaultSize * 5,
-                    opacity: (userInvitePersonCount >= 3)
-                        ? AlwaysStoppedAnimation(1)
-                        : AlwaysStoppedAnimation(.3),
-                  ),
-                ],
-              ),
-              SizedBox(height: defaultSize * 5),
-              GestureDetector(
-                onTap: () {
-                  // 이미 광고 제거 효과인 경우
-                  if (Provider.of<NoteData>(context, listen: false)
-                          .userAdRemove ==
-                      true) {
-                    EasyLoading.showToast("이미 광고 제거 효과를 받았습니다 😆");
-                  }
-                  //인증 로직
-                  else if (userInvitePersonCount >= 3) {
-                    Analytics_config().inviteGetReward();
-                    //해당 유저 광고 제거 효과 설정
-                    userAdRemove();
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,
-                      defaultSize * 1.5, defaultSize),
-                  decoration: BoxDecoration(
-                      color: (userInvitePersonCount >= 3)
-                          ? kMainColor
-                          : kPrimaryGreyColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Text(
-                    "광고제거 적용 받기",
-                    style: TextStyle(
+                    else if (userInvitePersonCount >= 3) {
+                      Analytics_config().inviteGetReward();
+                      //해당 유저 광고 제거 효과 설정
+                      userAdRemove();
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(defaultSize * 1.5, defaultSize,
+                        defaultSize * 1.5, defaultSize),
+                    decoration: BoxDecoration(
                         color: (userInvitePersonCount >= 3)
-                            ? kPrimaryWhiteColor
-                            : kPrimaryBlackColor,
-                        fontSize: defaultSize * 1.5,
-                        fontWeight: FontWeight.w600),
+                            ? kMainColor
+                            : kPrimaryGreyColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Text(
+                      "광고제거 적용 받기",
+                      style: TextStyle(
+                          color: (userInvitePersonCount >= 3)
+                              ? kPrimaryWhiteColor
+                              : kPrimaryBlackColor,
+                          fontSize: defaultSize * 1.5,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: defaultSize * 2),
-            ],
+                SizedBox(height: defaultSize * 2),
+              ],
+            ),
           ),
         ),
       ),
