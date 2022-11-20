@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:conopot/config/analytics_config.dart';
 import 'package:conopot/config/constants.dart';
 import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/note_data.dart';
@@ -81,6 +82,7 @@ class _InviteScreenState extends State<InviteScreen> {
 
   @override
   void initState() {
+    Analytics_config().invitePageView();
     this._controller = TextEditingController(
       text: '',
     );
@@ -227,6 +229,7 @@ class _InviteScreenState extends State<InviteScreen> {
               SizedBox(height: defaultSize * 2),
               GestureDetector(
                 onTap: () {
+                  Analytics_config().inviteShare();
                   //카카오톡 공유하기
                   shareKakaoTalk();
                 },
@@ -275,6 +278,7 @@ class _InviteScreenState extends State<InviteScreen> {
                       3) {
                     EasyLoading.showToast("노트를 3개 이상 등록해주세요");
                   } else {
+                    Analytics_config().inviteAuth();
                     //인증 로직
                     inviteValidation(_controller.text);
                   }
@@ -345,6 +349,7 @@ class _InviteScreenState extends State<InviteScreen> {
                   }
                   //인증 로직
                   else if (userInvitePersonCount >= 3) {
+                    Analytics_config().inviteGetReward();
                     //해당 유저 광고 제거 효과 설정
                     userAdRemove();
                   }

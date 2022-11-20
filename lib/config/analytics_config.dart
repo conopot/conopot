@@ -564,4 +564,29 @@ class Analytics_config {
   addRemoveEvent() {
     event('애창곡_노트_뷰__광고제거', {});
   }
+
+  //!event: 친구초대_뷰__페이지뷰
+  invitePageView() {
+    event('친구초대_뷰__페이지뷰', {});
+  }
+
+  //!event: 친구초대_뷰__배너클릭
+  inviteBannerClick() {
+    event('친구초대_뷰__광고제거받기', {});
+  }
+
+  //!event: 친구초대_뷰__공유하기
+  inviteShare() {
+    event('친구초대_뷰__공유하기', {});
+  }
+
+  //!event: 친구초대_뷰__인증하기
+  inviteAuth() {
+    event('친구초대_뷰__인증하기', {});
+  }
+
+  //!event: 친구초대_뷰__광고제거받기
+  inviteGetReward() {
+    event('친구초대_뷰__광고제거받기', {});
+  }
 }

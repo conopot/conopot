@@ -53,6 +53,7 @@ class CarouselSliderBanner extends StatelessWidget {
       onTap: () {
         // !event 배너 클릭 이벤트
         if (itemIndex == 0) {
+          Analytics_config().inviteBannerClick();
           //login 여부 확인
           var loginState =
               Provider.of<NoteData>(context, listen: false).isLogined;
