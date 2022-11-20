@@ -12,7 +12,6 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/models/youtube_player_provider.dart';
-import 'package:conopot/screens/note/components/note_comment.dart';
 import 'package:conopot/screens/note/components/song_by_same_singer_list.dart';
 import 'package:conopot/screens/note/components/youtube_player.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +24,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'components/editable_text_field.dart';
+import 'components/note_comment.dart';
 import 'components/request_pitch_button.dart';
 
 class NoteDetailScreen extends StatefulWidget {
@@ -540,21 +540,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                   ])),
                             )
                           ],
-                          )),
-                  SizedBox(height: defaultSize * 1.25),
-                  TabBar(
-                    controller: _tabController,
-                    isScrollable: false,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: kMainColor,
-                    labelColor: kPrimaryWhiteColor,
-                    unselectedLabelColor: kPrimaryLightGreyColor,
-                    tabs: [
-                      Text(
-                        '정보',
-                        style: TextStyle(
-                          fontSize: defaultSize * 1.8,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: defaultSize),
@@ -596,8 +581,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                             ]),
                       )
                     ]),
-                      Icon(Icons.comment)
-                    ],
                   ),
                 )
               : Column(
@@ -623,7 +606,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                     SizedBox(height: defaultSize * 1.25),
                     TabBar(
                       controller: _tabController,
-                      isScrollable: true,
+                      isScrollable: false,
                       indicatorSize: TabBarIndicatorSize.label,
                       indicatorColor: kMainColor,
                       labelColor: kPrimaryWhiteColor,
@@ -643,6 +626,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        Icon(Icons.comment)
                       ],
                     ),
                     SizedBox(height: defaultSize * 1.25),
@@ -1000,22 +984,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                                   ]),
                             )
                           ],
-                        )
+                        ),
+                        NoteComment(
+                            musicId: int.parse(widget.note.tj_songNumber))
                       ],
                     ))
                   ],
                 )),
     );
-                                ]),
-                          )
-                        ],
-                      ),
-                      // 댓글 탭
-                      NoteComment(musicId: int.parse(widget.note.tj_songNumber))
-                    ],
-                  ))
-                ],
-              ));
   }
 
   // 금영 노래방 번호 검색 팝업 함수
