@@ -60,6 +60,7 @@ class _UserScreenState extends State<UserScreen> {
               ),
               body: SafeArea(
                 child: ListView(
+                  padding: EdgeInsets.only(bottom: defaultSize * 5),
                   children: [
                     Container(
                       padding: EdgeInsets.all(defaultSize * 1.5),
