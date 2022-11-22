@@ -193,13 +193,6 @@ class _SongDetailScreenState extends State<SongDetailScreen>
 
   @override
   void dispose() {
-    provider.detailDisposeCount += 1;
-    //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 &&
-        Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
-            false) {
-      _showInterstitialAd();
-    }
     super.dispose();
     _tabController.dispose();
   }
@@ -442,8 +435,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                     child: Text(
                                                   "검색",
                                                   style: TextStyle(
-                                                      color:
-                                                          kPrimaryWhiteColor,
+                                                      color: kPrimaryWhiteColor,
                                                       fontSize:
                                                           defaultSize * 1.2,
                                                       fontWeight:
@@ -559,8 +551,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                       ? YoutubeVideoPlayer(videoId: videoId!)
                       : Container(
                           height: defaultSize * 5,
-                          margin:
-                              EdgeInsets.symmetric(horizontal: defaultSize),
+                          margin: EdgeInsets.symmetric(horizontal: defaultSize),
                           decoration: BoxDecoration(
                               color: kPrimaryLightBlackColor,
                               borderRadius:
@@ -629,18 +620,15 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize:
-                                                      defaultSize * 1.7))
+                                                  fontSize: defaultSize * 1.7))
                                           ? Container(
                                               width: double.maxFinite,
                                               height: defaultSize * 2.5,
                                               child: Marquee(
-                                                text:
-                                                    '${widget.note.tj_title}',
+                                                text: '${widget.note.tj_title}',
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
-                                                    fontWeight:
-                                                        FontWeight.w500,
+                                                    fontWeight: FontWeight.w500,
                                                     fontSize:
                                                         defaultSize * 1.7),
                                                 scrollAxis: Axis.horizontal,
@@ -655,9 +643,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                     Duration(seconds: 1),
                                                 accelerationCurve:
                                                     Curves.linear,
-                                                decelerationDuration:
-                                                    Duration(
-                                                        milliseconds: 1000),
+                                                decelerationDuration: Duration(
+                                                    milliseconds: 1000),
                                                 decelerationCurve:
                                                     Curves.easeOut,
                                               ),
@@ -666,19 +653,16 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize:
-                                                      defaultSize * 1.7)),
+                                                  fontSize: defaultSize * 1.7)),
                                       SizedBox(height: defaultSize * 0.5),
                                       _willTextOverflow(
-                                              text:
-                                                  '${widget.note.tj_singer}',
+                                              text: '${widget.note.tj_singer}',
                                               maxWidth: screenWidth * 0.7,
                                               style: TextStyle(
                                                   color:
                                                       kPrimaryLightWhiteColor,
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize:
-                                                      defaultSize * 1.3))
+                                                  fontSize: defaultSize * 1.3))
                                           ? Container(
                                               width: double.maxFinite,
                                               height: defaultSize * 2.5,
@@ -688,8 +672,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                 style: TextStyle(
                                                     color:
                                                         kPrimaryLightWhiteColor,
-                                                    fontWeight:
-                                                        FontWeight.w400,
+                                                    fontWeight: FontWeight.w400,
                                                     fontSize:
                                                         defaultSize * 1.3),
                                                 scrollAxis: Axis.horizontal,
@@ -704,9 +687,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                     Duration(seconds: 1),
                                                 accelerationCurve:
                                                     Curves.linear,
-                                                decelerationDuration:
-                                                    Duration(
-                                                        milliseconds: 1000),
+                                                decelerationDuration: Duration(
+                                                    milliseconds: 1000),
                                                 decelerationCurve:
                                                     Curves.easeOut,
                                               ),
@@ -716,8 +698,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                   color:
                                                       kPrimaryLightWhiteColor,
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize:
-                                                      defaultSize * 1.3)),
+                                                  fontSize: defaultSize * 1.3)),
                                     ],
                                   ),
                                 ),
@@ -734,8 +715,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                   padding: EdgeInsets.all(defaultSize * 1.5),
                                   decoration: BoxDecoration(
                                       color: kPrimaryLightBlackColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(8))),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -757,8 +738,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
                                                   fontSize: defaultSize * 1.5,
-                                                  fontWeight:
-                                                      FontWeight.w400),
+                                                  fontWeight: FontWeight.w400),
                                             ),
                                           ),
                                           SizedBox(width: defaultSize * 1.5),
@@ -781,8 +761,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                               style: TextStyle(
                                                   color: kPrimaryWhiteColor,
                                                   fontSize: defaultSize * 1.5,
-                                                  fontWeight:
-                                                      FontWeight.w400),
+                                                  fontWeight: FontWeight.w400),
                                             ),
                                           ),
                                           SizedBox(width: defaultSize * 1.5),
@@ -797,10 +776,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                   widget.note.ky_songNumber,
                                                   style: TextStyle(
                                                     color: kPrimaryWhiteColor,
-                                                    fontSize:
-                                                        defaultSize * 1.5,
-                                                    fontWeight:
-                                                        FontWeight.w400,
+                                                    fontSize: defaultSize * 1.5,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
                                         ],
@@ -831,8 +808,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                 "최고음",
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
-                                                    fontSize:
-                                                        defaultSize * 1.5,
+                                                    fontSize: defaultSize * 1.5,
                                                     fontWeight:
                                                         FontWeight.w400),
                                               ),
@@ -846,11 +822,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                           color:
                                                               kPrimaryWhiteColor,
                                                           fontSize:
-                                                              defaultSize *
-                                                                  1.5,
+                                                              defaultSize * 1.5,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w400),
+                                                              FontWeight.w400),
                                                     ),
                                             ],
                                           ),
@@ -861,8 +835,7 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                 "유튜브 검색",
                                                 style: TextStyle(
                                                     color: kPrimaryWhiteColor,
-                                                    fontSize:
-                                                        defaultSize * 1.5,
+                                                    fontSize: defaultSize * 1.5,
                                                     fontWeight:
                                                         FontWeight.w400),
                                               ),
@@ -871,8 +844,8 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                   onTap: () async {
                                                     Analytics_config()
                                                         .noteDetailViewYoutube(
-                                                            widget.note
-                                                                .tj_title);
+                                                            widget
+                                                                .note.tj_title);
                                                     final url = Uri.parse(
                                                         'https://www.youtube.com/results?search_query= ${widget.note.tj_title} ${widget.note.tj_singer}');
                                                     if (await canLaunchUrl(
@@ -891,11 +864,9 @@ class _SongDetailScreenState extends State<SongDetailScreen>
                                                           color:
                                                               kPrimaryWhiteColor,
                                                           fontSize:
-                                                              defaultSize *
-                                                                  0.9,
+                                                              defaultSize * 0.9,
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w300),
+                                                              FontWeight.w300),
                                                     )
                                                   ])),
                                             ],

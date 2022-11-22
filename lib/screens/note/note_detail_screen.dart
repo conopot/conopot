@@ -206,14 +206,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
 
   @override
   void dispose() {
-    provider.detailDisposeCount += 1;
-    //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
-    if (provider.detailDisposeCount % 3 == 0 &&
-        Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
-            false) {
-      _showInterstitialAd();
-      appOpenFlagFunc();
-    }
     super.dispose();
     _tabController.dispose();
   }
@@ -230,6 +222,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
         Provider.of<YoutubePlayerProvider>(context, listen: false)
             .leaveNoteDetailScreen();
         Navigator.of(context).pop();
+        provider.detailDisposeCount += 1;
+        //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
+        if (provider.detailDisposeCount % 3 == 0 &&
+            Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+                false) {
+          _showInterstitialAd();
+          appOpenFlagFunc();
+        }
         return true;
       },
       child: Scaffold(
@@ -244,6 +244,15 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
             leading: BackButton(
               color: kPrimaryLightWhiteColor,
               onPressed: () async {
+                provider.detailDisposeCount += 1;
+                //3배수의 횟수로 상세정보를 보고 나갈 때, 전면 광고 재생
+                if (provider.detailDisposeCount % 3 == 0 &&
+                    Provider.of<NoteData>(context, listen: false)
+                            .isUserAdRemove() ==
+                        false) {
+                  _showInterstitialAd();
+                  appOpenFlagFunc();
+                }
                 Provider.of<YoutubePlayerProvider>(context, listen: false)
                     .leaveNoteDetailScreen();
                 Navigator.of(context).pop();
