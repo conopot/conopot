@@ -95,7 +95,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
                         onTap: () {
                           showCautionDialog(context);
                         },
-                        child: Icon(Icons.announcement, color: kMainColor)),
+                        child: Icon(Icons.tips_and_updates, color: kMainColor)),
                   ],
                 ),
               ),
@@ -122,7 +122,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
     double screenWidth = SizeConfig.screenWidth;
 
      Widget okButton = Container(
-      width: screenWidth * 0.3,
+      width: screenWidth * 0.25,
       child: ElevatedButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(kMainColor),
@@ -144,7 +144,7 @@ class _MusicBookScreenState extends State<MusicBookScreen>
           Center(
               child: Text("가사 검색시 주의사항 안내",
                   style: TextStyle(
-                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6))),
+                      color: kPrimaryWhiteColor, fontSize: defaultSize * 1.6, fontWeight: FontWeight.w600))),
           SizedBox(height: defaultSize * 2),
           Text("1. 가사 입력시 한글의 경우 띄어쓰기를 정확히 해주세요.",
               style: TextStyle(

@@ -616,7 +616,7 @@ class MusicSearchItemLists extends ChangeNotifier {
 
               results = searchSongList;
             } on SocketException {
-              EasyLoading.showInfo("가사 검색은 인터넷 접속 환경이어야 합니다! 😿");
+              EasyLoading.showToast("인터넷 연결을 확인해주세요.");
             }
           }
         }
@@ -649,7 +649,7 @@ class MusicSearchItemLists extends ChangeNotifier {
               .toList();
         } else if (_dropdwonValue == '가사') {
           EasyLoading.showInfo(
-              "금영 노래 검색은 현재 제공 중이지 않습니다 😿 \n TJ 노래 검색을 이용해주세요!");
+              "금영 가사검색은 서비스 준비중 입니다.\n TJ 노래 검색을 이용해주세요!");
         }
       }
     }

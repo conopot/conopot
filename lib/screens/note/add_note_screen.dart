@@ -27,23 +27,32 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   @override
   Widget build(BuildContext context) {
     ToastContext().init(context);
-    return WillPopScope (
+    return WillPopScope(
       onWillPop: () async {
-        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
-            Navigator.of(context).pop();
-        return false;
+        if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+            .isHomeTab) {
+          Provider.of<YoutubePlayerProvider>(context, listen: false)
+              .openPlayer();
+          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        }
+        Navigator.of(context).pop();
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
-          title:
-              const Text("노래 추가", style: TextStyle(fontWeight: FontWeight.w700)),
+          title: const Text("노래 추가",
+              style: TextStyle(fontWeight: FontWeight.w700)),
           centerTitle: true,
           leading: BackButton(
             color: kPrimaryLightWhiteColor,
             onPressed: () {
-              Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-              Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+              if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  .isHomeTab) {
+                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    .openPlayer();
+                Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    .refresh();
+              }
               Navigator.of(context).pop();
             },
           ),
