@@ -161,8 +161,13 @@ class _PitchResultState extends State<PitchResult> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+            if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .isHomeTab) {
+              Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  .openPlayer();
+              Provider.of<YoutubePlayerProvider>(context, listen: false)
+                  .refresh();
+            }
             // !event : 음역대 측정 결과뷰 - 홈화면으로 이동
             Analytics_config().event('음역대_측정_결과뷰__홈화면으로_이동', {});
             Navigator.of(context).popUntil((route) => route.isFirst);
