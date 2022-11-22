@@ -313,9 +313,11 @@ class _PostListViewState extends State<PostListView>
 
   // 최초로 인기 게시물을 불러오는 함수
   void _firstLoad(int option) async {
-    setState(() {
-      _isFirstLoadRunning = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isFirstLoadRunning = true;
+      });
+    }
     try {
       String? serverURL = dotenv.env['USER_SERVER_URL'];
       // option = 1 인기순, option = 2 최신순
@@ -329,20 +331,24 @@ class _PostListViewState extends State<PostListView>
         },
       );
       var data = json.decode(response.body);
-      if (!data.containsKey('lastPostId') || !data.containsKey('posts') || data == null) throw Exception();
-      setState(() {
-        if (data['lastPostId'] != null) {
-          _lastPostId = data['lastPostId'];
-        }
-        if (data['posts'].isNotEmpty) {
-          for (var e in data['posts']) {
-            _posts.add(Post.fromJson(e));
+      if (!data.containsKey('lastPostId') ||
+          !data.containsKey('posts') ||
+          data == null) throw Exception();
+      if (this.mounted) {
+        setState(() {
+          if (data['lastPostId'] != null) {
+            _lastPostId = data['lastPostId'];
           }
-        } else {
-          throw Exception();
-        }
-        _isFirstLoadRunning = false;
-      });
+          if (data['posts'].isNotEmpty) {
+            for (var e in data['posts']) {
+              _posts.add(Post.fromJson(e));
+            }
+          } else {
+            throw Exception();
+          }
+          _isFirstLoadRunning = false;
+        });
+      }
     } on SocketException catch (e) {
       // 에러처리 (인터넷 연결 등등)
       EasyLoading.showToast("인터넷 연결을 확인해주세요.");
@@ -357,10 +363,12 @@ class _PostListViewState extends State<PostListView>
         _isLoadMoreRunning == true ||
         _hasNextPage == false) return;
 
-    setState(() {
-      // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
-      _isLoadMoreRunning = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        // api 호출시 List Veiew의 하단에 Loading Indicator를 띄운다.
+        _isLoadMoreRunning = true;
+      });
+    }
     try {
       String? serverURL = dotenv.env['USER_SERVER_URL'];
       String URL = (_option == 1)
@@ -376,23 +384,29 @@ class _PostListViewState extends State<PostListView>
       // 새로 받아온 게시물
       final List fetchedPosts = data['posts'];
       if (fetchedPosts.isNotEmpty) {
-        setState(() {
-          _lastPostId = data['lastPostId'];
-          for (var e in fetchedPosts) {
-            _posts.add(Post.fromJson(e));
-          }
-        });
+        if (this.mounted) {
+          setState(() {
+            _lastPostId = data['lastPostId'];
+            for (var e in fetchedPosts) {
+              _posts.add(Post.fromJson(e));
+            }
+          });
+        }
       } else {
-        // 게시물이 더 이상 없을 때
-        setState(() {
-          _hasNextPage = false;
-        });
+        if (this.mounted) {
+          // 게시물이 더 이상 없을 때
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
       }
     } catch (err) {
       // 에러 처리 (인터넷 연결 에러 등등)
     }
-    setState(() {
-      _isLoadMoreRunning = false;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
   }
 }
