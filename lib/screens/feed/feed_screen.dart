@@ -60,8 +60,10 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
-        false) _loadAd();
+    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+        false) {
+      _loadAd();
+    }
   }
 
   @override

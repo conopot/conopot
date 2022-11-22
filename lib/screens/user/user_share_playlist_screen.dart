@@ -90,8 +90,10 @@ class _UserSharePlaylistScreenState extends State<UserSharePlaylistScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() == false)
+    if (Provider.of<NoteData>(context, listen: false).isUserAdRemove() ==
+        false) {
       _loadAd();
+    }
   }
 
   @override
