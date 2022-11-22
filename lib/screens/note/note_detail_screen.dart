@@ -41,6 +41,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
   var scrollController = ScrollController();
   String lyric = "";
   bool internetCheck = true;
+  String? videoId;
 
   void getLyrics(String songNum) async {
     String url =
@@ -183,6 +184,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     Provider.of<NoteData>(context, listen: false).isUserRewarded();
     reward = Provider.of<NoteData>(context, listen: false).rewardFlag;
     _interstitialAd = createInterstitialAd();
+    videoId = Provider.of<MusicSearchItemLists>(context, listen: false)
+        .youtubeURL[widget.note.tj_songNumber];
+    if (videoId == null) {
+      getLyrics(widget.note.tj_songNumber);
+    }
     _tabController = new TabController(length: 3, vsync: this);
     _tabController
       ..addListener(

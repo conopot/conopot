@@ -249,7 +249,8 @@ class NoteData extends ChangeNotifier {
       List<String> videoList,
       Map<String, String> youtubeURL) async {
     noteCount += 1;
-    videoList.add(youtubeURL[songNumber]!);
+    String id = youtubeURL[songNumber] ??= '없음';
+    videoList.add(id);
 
     for (FitchMusic fitchMusic in musicList) {
       if (fitchMusic.tj_songNumber == songNumber) {
