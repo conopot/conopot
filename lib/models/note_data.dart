@@ -1338,6 +1338,9 @@ class NoteData extends ChangeNotifier {
         await storage.write(key: 'notes', value: jsonEncode(notes));
         EasyLoading.showToast("${songNumberList.length}개의 곡을 가져왔습니다");
       }
+      Provider.of<YoutubePlayerProvider>(context, listen: false).youtubeInit(
+          notes,
+          Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL);
     } on FormatException {
       // 백업된 곡이 하나도 없을 때 예외처리
       EasyLoading.showToast("백업된 곡이 없습니다.");

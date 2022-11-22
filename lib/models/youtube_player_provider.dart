@@ -36,6 +36,12 @@ class YoutubePlayerProvider extends ChangeNotifier {
       };
   }
 
+  void checkVideoList() {
+    if (videoList.isEmpty) {
+      
+    }
+  }
+
   void checkAutoPlay() async {
     try {
       var duration = await controller.duration;
