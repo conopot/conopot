@@ -18,7 +18,8 @@ class YoutubePlayerProvider extends ChangeNotifier {
   void youtubeInit(List<Note> notes, Map<String, String> youtubeURL) {
     videoList = [];
     for (var note in notes) {
-      videoList.add(youtubeURL[note.tj_songNumber]!);
+      String id = youtubeURL[note.tj_songNumber] ?? '없음';
+      videoList.add(id);
     }
     controller = YoutubePlayerController(
       params: const YoutubePlayerParams(
