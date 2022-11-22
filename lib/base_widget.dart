@@ -105,7 +105,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                             context,
                                             listen: true)
                                         .isMini
-                                    ? defaultSize * 15
+                                    ? defaultSize * 12
                                     : SizeConfig.screenWidth,
                                 child: PersistentYoutubeVideoPlayer(
                                     controller: _controller)),

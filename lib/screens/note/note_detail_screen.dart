@@ -221,7 +221,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     provider = Provider.of<NoteData>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        Provider.of<YoutubePlayerProvider>(context, listen: false)
+            .leaveNoteDetailScreen();
+        Navigator.of(context).pop();
+        return true;
       },
       child: Scaffold(
           appBar: AppBar(
