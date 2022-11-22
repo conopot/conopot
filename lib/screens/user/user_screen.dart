@@ -155,16 +155,16 @@ class _UserScreenState extends State<UserScreen> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PitchMainScreen(),
-                        ),
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PitchMainScreen(),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: defaultSize * 1.5),
-                        decoration: BoxDecoration(color: kPrimaryLightBlackColor),
+                        decoration:
+                            BoxDecoration(color: kPrimaryLightBlackColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -180,76 +180,76 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     if (loginState == true) SizedBox(height: defaultSize * 1.5),
                     if (loginState)
-                    Container(
-                        decoration:
-                            BoxDecoration(color: kPrimaryLightBlackColor),
-                        child: Column(children: [
-                          (loginState == true)
-                              ? SizedBox(height: defaultSize * 1.5)
-                              : SizedBox.shrink(),
-                          (loginState == true)
-                              ? Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: defaultSize * 1.5),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserSharePlaylistScreen()));
-                                    },
-                                    splashColor: Colors.transparent,
-                                    child: Container(
-                                      child: Row(children: [
-                                        Text("내가 공유한 플레이리스트",
-                                            style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              fontSize: defaultSize * 1.5,
-                                              fontWeight: FontWeight.w500,
-                                            )),
-                                        Spacer(),
-                                        Icon(Icons.chevron_right,
-                                            color: kPrimaryWhiteColor)
-                                      ]),
+                      Container(
+                          decoration:
+                              BoxDecoration(color: kPrimaryLightBlackColor),
+                          child: Column(children: [
+                            (loginState == true)
+                                ? SizedBox(height: defaultSize * 1.5)
+                                : SizedBox.shrink(),
+                            (loginState == true)
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize * 1.5),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserSharePlaylistScreen()));
+                                      },
+                                      splashColor: Colors.transparent,
+                                      child: Container(
+                                        child: Row(children: [
+                                          Text("내가 공유한 플레이리스트",
+                                              style: TextStyle(
+                                                color: kPrimaryWhiteColor,
+                                                fontSize: defaultSize * 1.5,
+                                                fontWeight: FontWeight.w500,
+                                              )),
+                                          Spacer(),
+                                          Icon(Icons.chevron_right,
+                                              color: kPrimaryWhiteColor)
+                                        ]),
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          (loginState == true)
-                              ? SizedBox(height: defaultSize * 2)
-                              : SizedBox.shrink(),
-                          (loginState == true)
-                              ? Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: defaultSize * 1.5),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  UserLikedPlaylistScreen()));
-                                    },
-                                    splashColor: Colors.transparent,
-                                    child: Container(
-                                      child: Row(children: [
-                                        Text("내가 좋아요한 플레이리스트",
-                                            style: TextStyle(
-                                              color: kPrimaryWhiteColor,
-                                              fontSize: defaultSize * 1.5,
-                                              fontWeight: FontWeight.w500,
-                                            )),
-                                        Spacer(),
-                                        Icon(Icons.chevron_right,
-                                            color: kPrimaryWhiteColor)
-                                      ]),
+                                  )
+                                : SizedBox.shrink(),
+                            (loginState == true)
+                                ? SizedBox(height: defaultSize * 2)
+                                : SizedBox.shrink(),
+                            (loginState == true)
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: defaultSize * 1.5),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserLikedPlaylistScreen()));
+                                      },
+                                      splashColor: Colors.transparent,
+                                      child: Container(
+                                        child: Row(children: [
+                                          Text("내가 좋아요한 플레이리스트",
+                                              style: TextStyle(
+                                                color: kPrimaryWhiteColor,
+                                                fontSize: defaultSize * 1.5,
+                                                fontWeight: FontWeight.w500,
+                                              )),
+                                          Spacer(),
+                                          Icon(Icons.chevron_right,
+                                              color: kPrimaryWhiteColor)
+                                        ]),
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                          SizedBox(height: defaultSize * 1.5),
-                        ])),
+                                  )
+                                : SizedBox.shrink(),
+                            SizedBox(height: defaultSize * 1.5),
+                          ])),
                     SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
@@ -327,43 +327,6 @@ class _UserScreenState extends State<UserScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => EtcScreen()));
-                              },
-                              splashColor: Colors.transparent,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultSize * 1.5),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: defaultSize * 1.5),
-                                    Row(children: [
-                                      Text("기타",
-                                          style: TextStyle(
-                                            color: kPrimaryWhiteColor,
-                                            fontSize: defaultSize * 1.5,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.chevron_right_outlined,
-                                        color: kPrimaryWhiteColor,
-                                      )
-                                    ]),
-                                    SizedBox(height: defaultSize * 1.52),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    (loginState == true)
-                        ? Container(
-                            color: kPrimaryLightBlackColor,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
                                         builder: (context) => InviteScreen()));
                               },
                               splashColor: Colors.transparent,
@@ -387,6 +350,43 @@ class _UserScreenState extends State<UserScreen> {
                                       )
                                     ]),
                                     SizedBox(height: defaultSize * 1.5),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    (loginState == true)
+                        ? Container(
+                            color: kPrimaryLightBlackColor,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EtcScreen()));
+                              },
+                              splashColor: Colors.transparent,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: defaultSize * 1.5),
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: defaultSize * 1.5),
+                                    Row(children: [
+                                      Text("기타",
+                                          style: TextStyle(
+                                            color: kPrimaryWhiteColor,
+                                            fontSize: defaultSize * 1.5,
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Spacer(),
+                                      Icon(
+                                        Icons.chevron_right_outlined,
+                                        color: kPrimaryWhiteColor,
+                                      )
+                                    ]),
+                                    SizedBox(height: defaultSize * 1.52),
                                   ],
                                 ),
                               ),
