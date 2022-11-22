@@ -8,6 +8,7 @@ class YoutubePlayerProvider extends ChangeNotifier {
   bool isHome = false;
   bool isMini = true;
   bool isPlaying = false;
+  bool isHomeTab = true;
   int playingIndex = 0;
   List<String> videoList = [];
   late Function refresh;

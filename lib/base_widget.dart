@@ -105,7 +105,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                             context,
                                             listen: true)
                                         .isMini
-                                    ? defaultSize * 12
+                                    ? defaultSize * 8
                                     : SizeConfig.screenWidth,
                                 child: PersistentYoutubeVideoPlayer(
                                     controller: _controller)),
@@ -164,6 +164,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                       )
                                     ]),
                               ),
+                              SizedBox(width: defaultSize),
                               GestureDetector(
                                   onTap: () {
                                     Provider.of<YoutubePlayerProvider>(context,
@@ -238,7 +239,17 @@ class _BaseWidgetState extends State<BaseWidget> {
                                     Icons.skip_next,
                                     color: kPrimaryWhiteColor,
                                   )),
-                              SizedBox(width: defaultSize),
+                              SizedBox(width: defaultSize * 2),
+                              // GestureDetector(
+                              //     onTap: () {
+                              //       Provider.of<YoutubePlayerProvider>(context, listen: false).closePlayer();
+                              //       Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+                              //     },
+                              //     child: Icon(
+                              //       Icons.close,
+                              //       color: kPrimaryWhiteColor,
+                              //     )),
+                              // SizedBox(width: defaultSize)
                             ],
                           ],
                         ),

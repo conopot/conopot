@@ -276,11 +276,15 @@ class _MainScreenState extends State<MainScreen>
                   onTap: (index) {
                     if (index != 0) {
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .isHomeTab = false;
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
                           .closePlayer();
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
                           .refresh();
                     }
                     if (index == 0) {
+                      Provider.of<YoutubePlayerProvider>(context, listen: false)
+                          .isHomeTab = true;
                       Provider.of<YoutubePlayerProvider>(context, listen: false)
                           .openPlayer();
                       Provider.of<YoutubePlayerProvider>(context, listen: false)

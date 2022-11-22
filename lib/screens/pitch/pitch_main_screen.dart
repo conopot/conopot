@@ -5,6 +5,7 @@ import 'package:conopot/models/youtube_player_provider.dart';
 import 'package:conopot/screens/pitch/pitch_choice.dart';
 import 'package:conopot/screens/pitch/pitch_measure.dart';
 import 'package:conopot/config/size_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +25,11 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
     SizeConfig().init(context);
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<YoutubePlayerProvider>(context, listen: false).openPlayer();
-        Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        if (Provider.of<YoutubePlayerProvider>(context, listen: false).isHomeTab) {
+          Provider.of<YoutubePlayerProvider>(context, listen: false)
+              .openPlayer();
+          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        }
         return true;
       },
       child: Scaffold(
@@ -34,6 +38,19 @@ class _PitchMainScreenState extends State<PitchMainScreen> {
             "음역대 측정",
           ),
           centerTitle: true,
+          automaticallyImplyLeading: false,
+          leading: GestureDetector(
+              onTap: () {
+                if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+                    .isHomeTab) {
+                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      .openPlayer();
+                  Provider.of<YoutubePlayerProvider>(context, listen: false)
+                      .refresh();
+                }
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back, color: kPrimaryWhiteColor)),
         ),
         body: SafeArea(
           child: SingleChildScrollView(

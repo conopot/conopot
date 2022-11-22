@@ -90,6 +90,10 @@ class CarouselSliderBanner extends StatelessWidget {
                 .refresh();
             Analytics_config().noteViewBannerMeasureEvent();
           } else {
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .closePlayer();
+            Provider.of<YoutubePlayerProvider>(context, listen: false)
+                .refresh();
             Analytics_config().noteViewBannerNoteSettingEvent();
           }
           Navigator.push(

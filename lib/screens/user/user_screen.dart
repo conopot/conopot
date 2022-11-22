@@ -5,6 +5,7 @@ import 'package:conopot/config/size_config.dart';
 import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
+import 'package:conopot/screens/pitch/pitch_main_screen.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/etc_screen.dart';
@@ -149,6 +150,33 @@ class _UserScreenState extends State<UserScreen> {
                           SizedBox(height: defaultSize * 1.5),
                         ],
                       )),
+                    ),
+                    SizedBox(height: defaultSize * 1.5),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PitchMainScreen(),
+                        ),
+                      );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: defaultSize * 1.5),
+                        decoration: BoxDecoration(color: kPrimaryLightBlackColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: defaultSize * 1.5),
+                            Text('내 음역대 측정하기',
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5)),
+                            SizedBox(height: defaultSize * 1.5),
+                          ],
+                        ),
+                      ),
                     ),
                     if (loginState == true) SizedBox(height: defaultSize * 1.5),
                     Container(
