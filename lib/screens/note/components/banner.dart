@@ -116,12 +116,18 @@ class CarouselSliderBanner extends StatelessWidget {
             flex: 1,
             child: Container(
               margin: EdgeInsets.only(right: defaultSize * 1.5),
-              child: SvgPicture.asset(
-                imageIcon,
-                width: defaultSize * 5,
-                height: defaultSize * 5,
-                fit: BoxFit.scaleDown,
-              ),
+              child: (itemIndex == 0)
+                  ? Image.asset("assets/images/people.png",
+                      width: defaultSize * 5, height: defaultSize * 5)
+                  : (itemIndex == 1)
+                      ? Image.asset("assets/images/singstagram.png",
+                          width: defaultSize * 5, height: defaultSize * 5)
+                      : SvgPicture.asset(
+                          imageIcon,
+                          width: defaultSize * 5,
+                          height: defaultSize * 5,
+                          fit: BoxFit.scaleDown,
+                        ),
             ),
           ),
           Expanded(
