@@ -99,7 +99,7 @@ class _BaseWidgetState extends State<BaseWidget> {
                                             context,
                                             listen: true)
                                         .isMini
-                                    ? defaultSize * 13
+                                    ? defaultSize * 6
                                     : SizeConfig.defaultSize * 20,
                                 width: Provider.of<YoutubePlayerProvider>(
                                             context,
