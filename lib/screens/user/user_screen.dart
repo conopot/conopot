@@ -179,6 +179,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     if (loginState == true) SizedBox(height: defaultSize * 1.5),
+                    if (loginState)
                     Container(
                         decoration:
                             BoxDecoration(color: kPrimaryLightBlackColor),
@@ -249,7 +250,7 @@ class _UserScreenState extends State<UserScreen> {
                               : SizedBox.shrink(),
                           SizedBox(height: defaultSize * 1.5),
                         ])),
-                    if (loginState) SizedBox(height: defaultSize * 1.5),
+                    SizedBox(height: defaultSize * 1.5),
                     Container(
                       color: kPrimaryLightBlackColor,
                       child: IntrinsicHeight(
