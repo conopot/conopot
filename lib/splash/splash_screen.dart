@@ -30,7 +30,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void initYoutube() async{
+  void initYoutube() async {
     List<Note> notes = Provider.of<NoteData>(context, listen: false).notes;
     Map<String, String> youtubeURL =
         Provider.of<MusicSearchItemLists>(context, listen: false).youtubeURL;
@@ -151,6 +151,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (prefs.getBool('first_run') ?? true) {
       FlutterSecureStorage storage = FlutterSecureStorage();
       await storage.delete(key: 'userVersion');
+      await storage.delete(key: 'tutorial');
       prefs.setBool('first_run', false);
     }
 
