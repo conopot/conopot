@@ -11,7 +11,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/note/add_note_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
-import 'package:conopot/screens/recommend/components/%08timbre_screen.dart';
+import 'package:conopot/screens/recommend/components/timbre_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -235,9 +235,9 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                                   .clickRecommendationPitchDetectionButtonEvent();
 
                               Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => TimbreScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TimbreScreen()));
                             },
                             child: Container(
                               padding: EdgeInsets.fromLTRB(defaultSize * 1.5,

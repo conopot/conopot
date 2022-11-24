@@ -6,7 +6,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
-import 'package:conopot/screens/recommend/components/%08timbre_screen.dart';
+import 'package:conopot/screens/recommend/components/timbre_screen.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/etc_screen.dart';
