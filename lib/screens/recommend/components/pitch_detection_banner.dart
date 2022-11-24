@@ -221,7 +221,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                       ],
                     ),
                   ),
-                  SizedBox(height: defaultSize * 3.3),
+                  SizedBox(height: defaultSize * 2),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
