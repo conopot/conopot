@@ -206,7 +206,7 @@ class _UserScreenState extends State<UserScreen> {
                             SizedBox(height: defaultSize * 1.5),
                             Row(
                               children: [
-                                Text('내 음역대 측정하기',
+                                Text('닮은 꼴 목소리찾기',
                                     style: TextStyle(
                                         color: kPrimaryWhiteColor,
                                         fontSize: defaultSize * 1.5)),

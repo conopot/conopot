@@ -106,10 +106,12 @@ class _InviteScreenState extends State<InviteScreen> {
     double defaultSize = SizeConfig.defaultSize;
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<YoutubePlayerProvider>(context, listen: false)
-                .openPlayer();
-            Provider.of<YoutubePlayerProvider>(context, listen: false)
-                .refresh();
+        if (Provider.of<YoutubePlayerProvider>(context, listen: false)
+            .isHomeTab) {
+          Provider.of<YoutubePlayerProvider>(context, listen: false)
+              .openPlayer();
+          Provider.of<YoutubePlayerProvider>(context, listen: false).refresh();
+        }
         return true;
       },
       child: Scaffold(
@@ -220,7 +222,8 @@ class _InviteScreenState extends State<InviteScreen> {
                           size: defaultSize * 2,
                         ),
                         onTap: () {
-                          Clipboard.setData(ClipboardData(text: userInviteCode));
+                          Clipboard.setData(
+                              ClipboardData(text: userInviteCode));
                           EasyLoading.showToast("초대 코드가 복사되었습니다");
                         },
                       ),
