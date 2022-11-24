@@ -6,6 +6,7 @@ import 'package:conopot/models/music_search_item_list.dart';
 import 'package:conopot/models/note.dart';
 import 'package:conopot/models/note_data.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/screens/recommend/components/%08timbre_screen.dart';
 import 'package:conopot/screens/user/components/channel_talk.dart';
 import 'package:conopot/screens/user/components/notice.dart';
 import 'package:conopot/screens/user/etc_screen.dart';
@@ -60,7 +61,8 @@ class _UserScreenState extends State<UserScreen> {
               ),
               body: SafeArea(
                 child: ListView(
-                  padding: EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.2),
+                  padding:
+                      EdgeInsets.only(bottom: SizeConfig.screenHeight * 0.2),
                   children: [
                     Container(
                       padding: EdgeInsets.all(defaultSize * 1.5),
@@ -170,10 +172,50 @@ class _UserScreenState extends State<UserScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: defaultSize * 1.5),
-                            Text('내 음역대 측정하기',
-                                style: TextStyle(
-                                    color: kPrimaryWhiteColor,
-                                    fontSize: defaultSize * 1.5)),
+                            Row(
+                              children: [
+                                Text('내 음역대 측정하기',
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.5)),
+                                Spacer(),
+                                Icon(Icons.chevron_right,
+                                    color: kPrimaryWhiteColor),
+                                SizedBox(width: defaultSize * 1.5)
+                              ],
+                            ),
+                            SizedBox(height: defaultSize * 1.5),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TimbreScreen()));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: defaultSize * 1.5),
+                        decoration:
+                            BoxDecoration(color: kPrimaryLightBlackColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: defaultSize * 1.5),
+                            Row(
+                              children: [
+                                Text('내 음역대 측정하기',
+                                    style: TextStyle(
+                                        color: kPrimaryWhiteColor,
+                                        fontSize: defaultSize * 1.5)),
+                                Spacer(),
+                                Icon(Icons.chevron_right,
+                                    color: kPrimaryWhiteColor),
+                                SizedBox(width: defaultSize * 1.5)
+                              ],
+                            ),
                             SizedBox(height: defaultSize * 1.5),
                           ],
                         ),

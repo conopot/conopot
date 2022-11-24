@@ -11,6 +11,7 @@ import 'package:conopot/models/note_data.dart';
 import 'package:conopot/models/pitch_item.dart';
 import 'package:conopot/screens/note/add_note_screen.dart';
 import 'package:conopot/screens/pitch/pitch_main_screen.dart';
+import 'package:conopot/screens/recommend/components/%08timbre_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,7 +33,7 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
   double defaultSize = SizeConfig.defaultSize;
   int _current = 0;
   final CarouselController _controller = CarouselController();
-  List<String> bannerList = ["Item1", "Item2"];
+  List<String> bannerList = ["Item1", "Item2", "Item3"];
   final storage = new FlutterSecureStorage();
 
   @override
@@ -164,6 +165,101 @@ class _PitchDetectionBannerState extends State<PitchDetectionBanner> {
                       Spacer(),
                       Image.asset(
                         "assets/images/ai.png",
+                        width: defaultSize * 10,
+                        height: defaultSize * 10,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: defaultSize),
+              padding: EdgeInsets.all(defaultSize * 2),
+              decoration: BoxDecoration(
+                  color: kPrimaryLightBlackColor,
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "나와 음색이 비슷한 가수는 누구일까?",
+                    style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontSize: defaultSize * 1.7,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: defaultSize * 0.5),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "지금 바로 ",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 2.3,
+                                fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: "닮은꼴 ",
+                            style: TextStyle(
+                                color: kMainColor,
+                                fontSize: defaultSize * 2.3,
+                                fontWeight: FontWeight.w600)),
+                        TextSpan(
+                            text: "목소리를 찾아 보세요!",
+                            style: TextStyle(
+                                color: kPrimaryWhiteColor,
+                                fontSize: defaultSize * 2.3,
+                                fontWeight: FontWeight.w600))
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: defaultSize * 3.3),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              //!evnet: 추천_뷰__음역대 측정
+                              Analytics_config()
+                                  .clickRecommendationPitchDetectionButtonEvent();
+
+                              Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TimbreScreen()));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(defaultSize * 1.5,
+                                  defaultSize, defaultSize * 1.5, defaultSize),
+                              decoration: BoxDecoration(
+                                  color: kMainColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8))),
+                              child: Text(
+                                "찾아보러 가기",
+                                style: TextStyle(
+                                    color: kPrimaryWhiteColor,
+                                    fontSize: defaultSize * 1.5,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Spacer(),
+                      Image.asset(
+                        "assets/images/smile.png",
                         width: defaultSize * 10,
                         height: defaultSize * 10,
                       )
